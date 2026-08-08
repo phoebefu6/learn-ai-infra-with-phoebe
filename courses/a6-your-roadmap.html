@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leader session 6 · Your platform roadmap - learn ai infra with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-infra-with-phoebe</a> / Leader session 6 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Infra with Phoebe · Leader track · Session 6 of 6</div>
+    <h1>Your platform <span class="accent">roadmap</span></h1>
+    <p class="sub">Five sessions of layers, costs, evidence and failures come down to one artifact: the order you fund things in, and the gates you refuse to pass without. Tonight you write it. You also get the diagnostic that tells you whether the platform you already own is quietly degrading, and the five questions that separate a real platform from a good demo.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Leader track</span>
+      <span class="chip audience">CDAIOs · heads of data · platform sponsors</span>
+      <span class="chip audience">No code, decisions only</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:5">3-18 · Sequencing that avoids shelfware</span>
+      <span class="a3" style="flex:8">18-42 · Workshop: your roadmap</span>
+      <span class="a4" style="flex:1">42-45 · Close</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>What you are leaving with</h2>
+    </div>
+    <p class="lede">Not a tool list. A funding sequence with gates on it, a quarterly self-check against published degradation indicators, and a short set of questions you can ask in any vendor meeting without preparation. The whole course has been arguing one thing: the expensive mistakes in this field are ordering mistakes, not selection mistakes. Tonight is where that argument becomes your plan.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - read after class</span>
+      <span class="pill inkpill">Official sources covered</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      Six sequencing rules with the evidence behind each one, a four-quarter roadmap shape with a gate at every boundary, five swamp indicators you can measure this quarter, five vendor questions that cannot be answered with a demo, and the Michelin finding on why federation outperformed mandate.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: SEQUENCING ============ -->
+  <section class="section" id="sequencing">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · the funding order, with the evidence for each rule</span>
+      <h2>Sequencing that avoids shelfware <span class="tag concept">12 min live</span></h2>
+    </div>
+    <p class="lede">Six rules. Each one is a decision a sponsor makes, each one has a source behind it from earlier in this course, and each one is regularly broken in the same predictable way. Read them as constraints on the order of spend, not as a maturity model.</p>
+
+    <div class="steps">
+      <div class="step"><p><strong>Storage and catalog first, even though they unblock nobody.</strong> No one's job title is "uses the object store," so these are the easiest layers to defer and the most expensive to retrofit. Everything above them inherits whatever you decided here, including your exit cost.</p></div>
+      <div class="step"><p><strong>One persona fully unblocked beats five half-served.</strong> A data engineer who can actually ship is a working reference for the next funding round. Five personas at 60% produce five sets of complaints and no proof.</p></div>
+      <div class="step"><p><strong>Semantic layer before self-serve, always.</strong> This is the rule the whole course exists to teach, and it is the one with a measurement attached: <strong>9.50% accuracy on an empty configuration, 69.23% once column descriptions existed.</strong> Same product, same benchmark. Buying the top layer first does not fail loudly - it answers confidently and wrongly.</p></div>
+      <div class="step"><p><strong>Fund the metadata work explicitly.</strong> It is the real project. The licence is the small number, and the descriptions, ownership and definitions are the part nobody scopes, which is exactly why it does not get done.</p></div>
+      <div class="step"><p><strong>Every layer gets a named owner or it decays.</strong> Birmingham's audit found process failures - governance, oversight, vendor management - not technical ones. Ownership is the cheapest control in this entire course and the one most often left to "we will sort that out later."</p></div>
+      <div class="step"><p><strong>Measure adoption per persona, not platform uptime.</strong> Uptime is a number your platform team can hit while nobody uses the thing. Adoption per persona is the only metric that notices shelfware early enough to act on it.</p></div>
+    </div>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A four-quarter platform roadmap with a gate after each quarter, and a red dashed detour branching off early labelled buy self-serve first, leading to a dead end of confidently wrong answers.">
+        <style>
+          .r6H { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .r6T { font: 700 14px Inter, sans-serif; fill: #FFFFFF; }
+          .r6P { font: 400 11.5px Inter, sans-serif; fill: #FFFFFF; opacity: .92; }
+          .r6G { font: 700 11.5px Inter, sans-serif; fill: #1E293B; }
+          .r6R { font: 700 13px Inter, sans-serif; fill: #991B1B; }
+          .r6Rs { font: 400 12px Inter, sans-serif; fill: #991B1B; }
+          .r6X { font: 400 12px Inter, sans-serif; fill: #64748B; }
+          .r6N { font: 600 12px Inter, sans-serif; fill: #3F6212; }
+        </style>
+        <text class="r6H" x="40" y="26">The order that works, and the shortcut that quietly does not.</text>
+
+        <rect x="40" y="56" width="190" height="110" rx="8" fill="#1E293B"/>
+        <text class="r6T" x="56" y="84">Q1 · foundations</text>
+        <text class="r6P" x="56" y="110">storage + catalog</text>
+        <text class="r6P" x="56" y="132">0 personas unblocked</text>
+        <rect x="250" y="56" width="190" height="110" rx="8" fill="#334155"/>
+        <text class="r6T" x="266" y="84">Q2 · pipelines</text>
+        <text class="r6P" x="266" y="110">ingest + orchestrate</text>
+        <text class="r6P" x="266" y="132">data engineer working</text>
+        <rect x="460" y="56" width="190" height="110" rx="8" fill="#334155"/>
+        <text class="r6T" x="476" y="84">Q3 · semantics</text>
+        <text class="r6P" x="476" y="110">engine + metric layer</text>
+        <text class="r6P" x="476" y="132">analyst working</text>
+        <rect x="670" y="56" width="190" height="110" rx="8" fill="#334155"/>
+        <text class="r6T" x="686" y="84">Q4 · self-serve</text>
+        <text class="r6P" x="686" y="110">governed talk-to-data</text>
+        <text class="r6P" x="686" y="132">clients working</text>
+
+        <path d="M 233 105 L 247 111 L 233 117 Z" fill="#84CC16"/>
+        <path d="M 443 105 L 457 111 L 443 117 Z" fill="#84CC16"/>
+        <path d="M 653 105 L 667 111 L 653 117 Z" fill="#84CC16"/>
+
+        <rect x="40" y="178" width="190" height="48" rx="7" fill="#D9F99D"/>
+        <text class="r6G" x="56" y="198">Gate: every layer has</text>
+        <text class="r6G" x="56" y="216">a named owner</text>
+        <rect x="250" y="178" width="190" height="48" rx="7" fill="#D9F99D"/>
+        <text class="r6G" x="266" y="198">Gate: assets, not</text>
+        <text class="r6G" x="266" y="216">green task runs</text>
+        <rect x="460" y="178" width="190" height="48" rx="7" fill="#D9F99D"/>
+        <text class="r6G" x="476" y="198">Gate: metrics agreed</text>
+        <text class="r6G" x="476" y="216">before self-serve</text>
+        <rect x="670" y="178" width="190" height="48" rx="7" fill="#D9F99D"/>
+        <text class="r6G" x="686" y="198">Gate: adoption per</text>
+        <text class="r6G" x="686" y="216">persona, not uptime</text>
+
+        <line x1="135" y1="226" x2="135" y2="256" stroke="#991B1B" stroke-width="2" stroke-dasharray="5 4"/>
+        <path d="M 128 254 L 142 254 L 135 266 Z" fill="#991B1B"/>
+        <text class="r6Rs" x="152" y="250">detour: buy self-serve first</text>
+
+        <rect x="40" y="272" width="390" height="86" rx="8" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="2"/>
+        <text class="r6R" x="58" y="298">Dead end: confidently wrong answers</text>
+        <text class="r6Rs" x="58" y="322">9.50% accuracy on an empty configuration,</text>
+        <text class="r6Rs" x="58" y="344">and nothing flags a plausible wrong number</text>
+
+        <rect x="460" y="272" width="380" height="86" rx="8" fill="#F8FAFC" stroke="#334155" stroke-width="2"/>
+        <text class="r6H" x="478" y="298">Why the detour is tempting</text>
+        <text class="r6X" x="478" y="322">it is the only layer a sponsor can see,</text>
+        <text class="r6X" x="478" y="344">so it is the one that gets funded first</text>
+
+        <rect x="40" y="370" width="14" height="14" rx="3" fill="#84CC16"/>
+        <text class="r6N" x="64" y="382">Gates are decisions you can defend in a budget review. That is what makes them gates.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - four quarters, four gates, and the shortcut that ends in confident wrong answers</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why the gates matter more than the quarters<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The quarters will slip. Every roadmap's quarters slip, and a sponsor who defends dates rather than gates spends the year losing an argument. The gates are the part that must not move, because each one is the condition that makes the next quarter worth funding at all.</p>
+        <ul>
+          <li><strong>A gate is a sentence you can say in a budget meeting.</strong> "We are not opening self-serve until the twenty metrics finance argues about are defined and owned" is defensible. "Q3" is not.</li>
+          <li><strong>A gate converts a vague risk into a visible decision.</strong> If the business chooses to pass a gate early, that is legitimate - but it is now a recorded choice with a named owner, not an accident discovered eighteen months later.</li>
+          <li><strong>Gates make shelfware loud.</strong> A layer that cannot pass its adoption gate is a layer to stop paying for, and that conversation is much easier while the renewal is still ahead of you.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The uncomfortable counterweight to building this yourself<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>One finding deserves to sit next to your roadmap rather than be quietly left out of it. <strong>MIT's Project NANDA (August 2025) reported that 95% of enterprise generative-AI pilots deliver no measurable P&amp;L return.</strong> State the sample size whenever you quote it, because it is thin: 52 executive interviews, 153 leader surveys and 300 public deployments. That is a directional finding, not a measurement.</p>
+        <p>Its least-quoted result is the one that belongs in a roadmap discussion: <strong>buying from specialist vendors succeeded roughly 67% of the time, while internal builds succeeded at about a third of that rate.</strong> If you are proposing to build, that number is the objection you should raise yourself, before someone else does.</p>
+        <p>The honest reconciliation with everything else in this course: buy the layers where a specialist has a real product, build only where your own semantics make you genuinely different, and be suspicious of any plan where the build list is longer than the buy list.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: THE DIAGNOSTIC ============ -->
+  <section class="section" id="diagnostic">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · workshop · covers arXiv 2606.08266, a 15-year data-lake retrospective</span>
+      <h2>Is your platform already degrading? <span class="tag concept">12 min live</span></h2>
+    </div>
+    <p class="lede">An academic retrospective on fifteen years of data lakes gives the clearest available account of how a funded platform turns into an archive nobody queries. Its central idea is <strong>governance debt</strong>: the deferred work of ownership, metadata and quality, which compounds exactly like technical debt and is even less visible on a budget line.</p>
+
+    <div class="callout tip">
+      <strong>What this source is, precisely</strong>
+      A qualitative synthesis of 64 documentary sources plus roughly 500 field reality checks across Morocco and West Africa, covering 2010 to 2025. It is <strong>qualitative and regional - not a survey</strong>, and the percentages below are diagnostic thresholds the authors propose, not measured population statistics. Use them as a checklist you run on your own estate, not as an industry benchmark to quote.
+    </div>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The five-stage degradation, and where organizations recognize themselves<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The pattern the authors describe runs in one direction, and each stage looks locally reasonable at the time.</p>
+        <div class="steps">
+          <div class="step"><p><strong>Rapid ingestion.</strong> Land everything, decide later. Genuinely the right call for a while, and it is measured as progress.</p></div>
+          <div class="step"><p><strong>Governance deferral.</strong> Ownership, descriptions and quality checks are postponed because nothing is visibly broken yet.</p></div>
+          <div class="step"><p><strong>Trust erosion.</strong> Two teams get different answers from the same lake. People start caveating numbers in meetings.</p></div>
+          <div class="step"><p><strong>Retreat to warehouses.</strong> Teams quietly rebuild curated copies they can trust. Spend goes up, the lake's usage goes down, and nobody reports this as a failure.</p></div>
+          <div class="step"><p><strong>Archive state.</strong> The platform still runs and still bills. It is now storage with a login page.</p></div>
+        </div>
+        <p>Notice that the loudest symptom - the retreat - arrives two stages after the actual cause. By the time a sponsor sees duplicated warehouses appearing, the decision that produced them is roughly two years old.</p>
+      </div>
+    </details>
+
+    <p>The same work proposes five indicators that can be measured against a real estate rather than argued about. Run them this quarter. They need a metadata query and an access log, not a consulting engagement.</p>
+
+    <table class="clean">
+      <thead>
+        <tr><th>Indicator</th><th>Warning threshold</th><th>What it is really telling you</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Datasets without an owner</td><td><strong>&gt;50%</strong></td><td>Nobody is accountable for correctness. Every quality question becomes an investigation.</td></tr>
+        <tr><td>Metadata completeness</td><td><strong>&lt;40%</strong></td><td>The layer above cannot work. This is the same deficit that produced 9.50% instead of 69.23%.</td></tr>
+        <tr><td>Dormant datasets</td><td><strong>&gt;40%</strong></td><td>You are paying storage and attention on data no decision depends on.</td></tr>
+        <tr><td>Duplication</td><td><strong>&gt;20%</strong></td><td>Teams have already started rebuilding their own trusted copies. Stage four is under way.</td></tr>
+        <tr><td>Automated quality validation</td><td><strong>none</strong></td><td>Every quality problem is found by a person, downstream, usually in a meeting.</td></tr>
+      </tbody>
+    </table>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What to do with a bad score<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A bad score is not a reason to replatform, and the reflex to do so is how organizations pay twice for the same governance debt. Three moves in order:</p>
+        <ul>
+          <li><strong>Assign ownership before doing anything else.</strong> It is the cheapest of the five and it unblocks the other four, because an unowned dataset has nobody to ask about its metadata.</li>
+          <li><strong>Retire the dormant tier deliberately.</strong> A dormant dataset with no owner and no queries is a candidate for archive, and the exercise usually pays for a chunk of the metadata work.</li>
+          <li><strong>Put metadata completeness on the same report as spend.</strong> If it is not next to a cost number, it is not a management metric, and it will lose to whatever is.</li>
+        </ul>
+        <p>Then re-measure in a quarter. These five indicators are cheap enough to run repeatedly, which is the property that makes them useful - a diagnostic you run once is an opinion.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: VENDOR QUESTIONS + MICHELIN ============ -->
+  <section class="section" id="grilling">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · workshop · covers Michelin's 3-year retrospective, 2022-05-20</span>
+      <h2>Five questions, and the federation lesson <span class="tag concept">10 min live</span></h2>
+    </div>
+    <p class="lede">These five questions take about ninety seconds to ask and cannot be answered with a demo. Ask them in that order. The pattern of what a vendor answers precisely and what they answer warmly tells you most of what the evaluation would have told you in six weeks.</p>
+
+    <table class="clean">
+      <thead>
+        <tr><th>Ask this</th><th>What a good answer looks like</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>"Show me the accuracy number and the benchmark."</strong></td><td>A figure, a named benchmark, and a published method. Most of this category publishes no accuracy figure at all - treat that absence as informative rather than neutral.</td></tr>
+        <tr><td><strong>"What is the egress cost of leaving?"</strong></td><td>A rate, not a reassurance. Reading your own data out is a metered line item on some platforms and free on others, and it decides whether your exit is real.</td></tr>
+        <tr><td><strong>"Is licensing per used unit or per installed unit?"</strong></td><td>Precision, immediately. Per-installed-GPU licensing is the line first-pass budgets miss, and the gap between used and installed is where surprise renewals live.</td></tr>
+        <tr><td><strong>"What stops a team going around this control?"</strong></td><td>Architecture, not policy. If the honest answer is that nothing technically prevents it, the control governs the people who were already compliant.</td></tr>
+        <tr><td><strong>"Which of my eight layers does this actually fill?"</strong></td><td>Two or three named layers, with the rest disclaimed. A product that claims all eight is describing a category, not a capability.</td></tr>
+      </tbody>
+    </table>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Michelin: federation beat mandate, with a number<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Michelin published a three-year retrospective on their own blog in May 2022, and it is the most honest data-organization retro in the source set because it leads with what went wrong.</p>
+        <ul>
+          <li><strong>Local teams bypassed the central tools and built redundant BI.</strong> Not a rumour and not an outside assessment - their own account of what happened.</li>
+          <li><strong>Michelin chose federation over mandate.</strong> Rather than enforcing central tooling, they made the central data products good enough to be worth adopting.</li>
+          <li><strong>The result: 60% of the data used in local solutions came from central products by year two.</strong> That is adoption, measured, without a mandate.</li>
+          <li>They also reported that semantic alignment across domains was harder than expected, and that initially they could measure only platform usage, not the quality of individual data products.</li>
+        </ul>
+        <p>The leadership lesson is uncomfortable and specific: <strong>a mandate makes bypass invisible, while federation makes adoption measurable.</strong> If teams are going around your platform today, the productive question is what your platform would have to be for them to choose it - not which policy would forbid the alternative. And it connects directly back to the chokepoint test: a control people can route around is a suggestion, so make the compliant path the easy one.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Worth pairing with the original definition of data mesh, which is routinely dropped from the summaries: an intentionally designed distributed architecture, <strong>under centralized governance and standardization for interoperability</strong>, enabled by a shared self-serve infrastructure. Most "data mesh failed" stories are stories about organizations that kept the decentralization and discarded the governance and the shared platform - which is to say, they did not do the thing that failed.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Writing your roadmap: the one-page shape<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Take fifteen minutes and write this. One page, four rows, and it will survive contact with a budget committee better than any deck you commission.</p>
+        <ul>
+          <li><strong>Per quarter:</strong> which layers get funded, which persona is fully unblocked by the end of it, and the gate that must be passed before the next quarter starts.</li>
+          <li><strong>One named owner per layer.</strong> A person, not a team. If a layer has no candidate owner, that is the item to fix before the funding request, not after.</li>
+          <li><strong>The metadata line, costed separately from the licence.</strong> Make it visible enough that cutting it is a decision somebody has to defend.</li>
+          <li><strong>The adoption measure per persona</strong>, and the date you first report it. Not uptime.</li>
+          <li><strong>Your five swamp indicators, with today's numbers.</strong> A baseline you can re-run in ninety days is what turns this page from a plan into a management instrument.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 4: WHERE NEXT ============ -->
+  <section class="section" id="where-next">
+    <div class="section-kicker">
+      <span class="klabel">Part 4 · self-study</span>
+      <h2>Where to go from here <span class="tag exercise">◐ read after class</span></h2>
+    </div>
+    <p class="lede">This track was deliberately decision-only. Three places to send the work next, depending on who picks it up.</p>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Three onward paths<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>The practitioner track (b1-b10), for whoever builds this.</strong> Same eight layers, same chokepoint frame, but with the rate cards, the format and catalog war, orchestration semantics and a costed reference architecture as the capstone. Send the person who will own the plan, and ask them to bring the b10 architecture back to you.</li>
+          <li><strong>learn-data-governance, for the policy layer.</strong> This course names ownership, lineage and access as gates but does not teach the policy craft behind them. That is where the ownership model and the regulatory obligations get built properly.</li>
+          <li><strong>learn-ai-evals, for measuring the AI layers.</strong> Everything above the semantic layer needs measurement you can defend, and the gateway is where production traffic becomes an evaluation set. If your roadmap has a Q4 self-serve gate, that is the course that tells you how to test whether you have passed it.</li>
+        </ul>
+        <p>One closing note on all three. The through-line of this track has been that ordering beats selection, and evidence beats confidence. Every number on these six pages carried a source and a date, and where the evidence did not exist - as with published data-platform failures - the honest move was to say so rather than to fill the gap. Hold your own reporting to that standard and most of the sequencing takes care of itself.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Official sources covered</h2>
+    </div>
+    <p class="lede">This session is the synthesis, so it draws on material introduced across the whole track. Sample sizes and scope limits are stated wherever a number is used, and vendor-authored material is labelled. This page covers:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">arXiv 2606.08266 - "What Went Wrong with Data Lakes? A 15-Year Reality Check"</span><span class="note">Part 2 · governance debt, the five-stage degradation, the swamp indicators · qualitative and regional, not a survey</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Michelin data organization retrospective (2022-05-20, own blog)</span><span class="note">Part 3 · redundant local BI, federation over mandate, 60% central-product usage by year two</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Airbnb engineering blog - Dataportal, Minerva, Metis</span><span class="note">Part 1 · the sequence behind the roadmap shape · covered in full in a5</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Microsoft ISE evaluation of Databricks Genie on LiveSQLBench (2026-05-07)</span><span class="note">Part 1 · the 9.50% to 69.23% evidence behind sequencing rule three</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">MIT Project NANDA (Aug 2025) - 52 interviews, 153 surveys, 300 public deployments</span><span class="note">Part 1 · the build-versus-buy counterweight · thin sample, state it every time</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · Your board wants self-serve analytics live next quarter. The semantic layer is not built. What does the sequencing rule say, and on what evidence?</p>
+      <button class="qopt" type="button">A · Ship self-serve now and add the semantic layer once users report problems</button>
+      <button class="qopt" type="button">B · Semantic layer before self-serve, always - the same product measured 9.50% accuracy on an empty configuration and 69.23% once column descriptions existed</button>
+      <button class="qopt" type="button">C · Buy a more capable model, which removes the need for the semantic layer</button>
+      <p class="qwhy">The bottleneck is semantic context, not the model, and the failure mode is not an error message - it is plausible SQL carrying wrong business logic, which nothing flags. Shipping first does not surface problems faster, it hides them in decisions.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">2 · Which of these is one of the published swamp indicators, and what is the correct caveat when you quote it?</p>
+      <button class="qopt" type="button">A · More than 50% of datasets lacking an owner - and it comes from a qualitative, regional retrospective, so it is a threshold to run on your own estate, not an industry statistic</button>
+      <button class="qopt" type="button">B · More than 85% of big data projects fail, from a widely cited analyst figure</button>
+      <button class="qopt" type="button">C · Fewer than 10% of datasets are queried monthly, from a vendor catalog survey</button>
+      <p class="qwhy">The five indicators are: over 50% of datasets without ownership, under 40% metadata completeness, over 40% dormant datasets, over 20% duplication, and no automated quality validation. They come from a qualitative synthesis of 64 sources plus about 500 field reality checks in Morocco and West Africa, 2010-2025.</p>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">3 · Michelin found local teams bypassing central tools and building redundant BI. What did they do, and what happened?</p>
+      <button class="qopt" type="button">A · They mandated the central platform and enforced it through policy</button>
+      <button class="qopt" type="button">B · They decentralized fully and shut down the central data products</button>
+      <button class="qopt" type="button">C · They chose federation over mandate, and by year two 60% of the data used in local solutions came from central products</button>
+      <p class="qwhy">A mandate makes bypass invisible; federation makes adoption measurable. Michelin also reported that semantic alignment across domains was harder than expected, and that at first they could measure only platform usage rather than the quality of individual data products.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Leader session 6 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>The funding order</b><span>Storage and catalog first, then pipelines, then semantics, then self-serve. One persona fully unblocked beats five half-served.</span></div>
+      <div class="cheat-item"><b>The rule with a number</b><span>Semantic layer before self-serve, always. 9.50% empty configuration versus 69.23% with column descriptions.</span></div>
+      <div class="cheat-item"><b>Fund the real project</b><span>The metadata work is the project; the licence is the small number. Cost it as a separate line so cutting it is a defended decision.</span></div>
+      <div class="cheat-item"><b>Gates, not quarters</b><span>Named owner per layer · assets not green task runs · metrics agreed before self-serve · adoption per persona, not uptime.</span></div>
+      <div class="cheat-item"><b>Governance debt</b><span>Rapid ingestion → governance deferral → trust erosion → retreat to warehouses → archive state. The symptom lags the cause by about two stages.</span></div>
+      <div class="cheat-item"><b>The five swamp indicators</b><span>&gt;50% unowned · &lt;40% metadata complete · &gt;40% dormant · &gt;20% duplicated · no automated quality validation. Qualitative and regional - run them, do not quote them.</span></div>
+      <div class="cheat-item"><b>The five vendor questions</b><span>Accuracy and benchmark · egress cost of leaving · per used or per installed unit · what stops a bypass · which of my eight layers.</span></div>
+      <div class="cheat-item"><b>Federation beat mandate</b><span>Michelin: local teams built redundant BI, so they made central products worth choosing. 60% of local-solution data came from central products by year two.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Leader session 6 of 6 · learn-ai-infra-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="a5-launches-and-failures.html">← a5 · Real launches and honest failures</a> &nbsp;·&nbsp; <a href="../index.html">All sessions</a> &nbsp;·&nbsp; <a href="../index.html">Back to all sessions →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=2"></script>
+</body>
+</html>

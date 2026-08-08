@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practitioner session 4 · Ingestion + orchestration - learn ai infra with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-infra-with-phoebe</a> / Practitioner session 4 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Infra with Phoebe · Practitioner track · Session 4 of 10</div>
+    <h1>Task graphs, <span class="accent">asset graphs</span></h1>
+    <p class="sub">Layer three is where data starts arriving reliably, on schedule, observably - and where the first data engineer finally gets unblocked. The tool choice here looks like a taste question about Python style. It is not. Airflow, Dagster and Prefect disagree about what a pipeline <em>is</em>, and that disagreement decides what the word "green" means when you are paged at 3am. Tonight you pick by failure semantics instead of by star count.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Practitioner track</span>
+      <span class="chip audience">Platform · DE · architects</span>
+      <span class="chip audience">Vendor-neutral · real rate cards</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:5">3-18 · Task graphs vs asset graphs</span>
+      <span class="a3" style="flex:8">18-42 · Build-along: choose by failure semantics</span>
+      <span class="a4" style="flex:1">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we are in the stack</h2>
+    </div>
+    <p class="lede">b2 gave you durable bytes in an open table format. b3 gave you a catalog that decides who may read them and in what order commits land. Neither of those moves a single row on its own. <strong>Layer three is the layer that makes data arrive</strong> - reliably, on a schedule, and observably enough that somebody notices when it does not. It is also the first layer in the ladder that unblocks a named human: the data engineer starts working here, three layers and roughly $2,178 a month into the build.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - read after class</span>
+      <span class="pill inkpill">Official sources covered</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      Why Airflow 3.0 was a security break rather than a feature release, what a materialization means that a green task cannot mean, the one question that actually picks your orchestrator (what does failure mean in your pipeline?), and a working habit of checking vendor stat blocks against the source API.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: AIRFLOW ============ -->
+  <section class="section" id="airflow">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the Apache Airflow docs and the 3.0 release announcement (2025-04-22)</span>
+      <h2>Airflow 3 and the security break <span class="tag concept">7 min live</span></h2>
+    </div>
+    <p class="lede">Airflow describes itself, in its own docs, as "an open-source platform for developing, scheduling, and monitoring <strong>batch-oriented</strong> workflows." Hold on to the word batch-oriented - it is the honest scope statement that most comparison blogs quietly drop. Airflow is the default because it got there first and because the provider ecosystem is enormous, not because its programming model won an argument.</p>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The 3.0 break was about security, not features<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Airflow 3.0, released 2025-04-22, is the first architectural break in five years - and the reason is security, not features.</strong> That framing matters because it tells you what was structurally wrong with the previous design.</p>
+        <p>The change is the <strong>Task Execution Interface plus the Task SDKs</strong>: tasks no longer need direct access to the metadata database. Read that as an architecture statement rather than a release note. In Airflow 2, running a task meant handing that task a live connection to the system of record for every DAG, every connection and every variable in your deployment. Every worker was inside the blast radius. Remove that dependency and two things become possible that were previously unsafe:</p>
+        <ul>
+          <li><strong>Multi-cloud execution</strong> - workers in a network that cannot reach your metadata database.</li>
+          <li><strong>Untrusted-tenant execution</strong> - running somebody else's task code without handing them the keys to the platform.</li>
+        </ul>
+        <p>This is the chokepoint lesson from b1 applied to orchestration. The metadata database was the narrow waist, and in Airflow 2 the waist was reachable from everywhere.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>DAG versioning, and what the top feature request tells you<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>3.0 also shipped DAG Versioning. The behaviour, stated plainly: <strong>"A DAG will run through to completion based on the version at start, even if a new version has been uploaded."</strong></p>
+        <p>Read the feature backwards and it becomes a diagnosis. This was the top survey request for years, which tells you the real, lived pain of task-centric orchestration: <strong>a long-running DAG mutating mid-flight because somebody pushed to main.</strong> Half your run executed yesterday's logic and half executed today's, the UI showed green throughout, and the resulting table is a blend nobody can describe.</p>
+        <p>Notice that this is not a bug anyone introduced. It is what happens when the unit of execution is a task and the definition of the graph is whatever file happens to be on disk when the scheduler next looks. Part 2 is about an orchestrator that took a different swing at the same problem.</p>
+        <div class="callout tip">
+          <strong>The evaluation question this hands you</strong>
+          For any orchestrator you are considering: what exactly is pinned when a run starts - the code, the graph shape, the container image, the input data versions? Anything not pinned can change under a long run, and the UI will not tell you it did.
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The adoption numbers, and who counted them<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Project-published adoption figures (Apache Software Foundation, 2025-04-22):</p>
+        <ul>
+          <li><strong>30M monthly downloads</strong> - 30x since 2020.</li>
+          <li><strong>80,000 organizations</strong>, up from 25,000.</li>
+          <li><strong>30% use it for MLOps</strong>, <strong>10% for GenAI</strong> workflows.</li>
+        </ul>
+        <p>Those come from the project itself, which is the strongest provenance available for an open-source project. The survey behind the workload split deserves a label though.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p><strong>Disclosure you should repeat every time you quote it: the Airflow Survey 2025 - 5,818 responses from 122 countries - is sponsored and run by Astronomer, the commercial Airflow vendor.</strong> That does not make it false, and the sample is genuinely large. It does mean the respondent pool skews toward people who are engaged enough with commercial Airflow to answer a vendor survey, and that a vendor chose which questions were asked. Quote the number with the sponsor attached, or do not quote it. This course also does not use the version-adoption percentages from that report, because they appear in Astronomer's write-up rather than on the ASF page.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: ASSETS ============ -->
+  <section class="section" id="assets">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the Dagster and Prefect documentation</span>
+      <h2>What green actually means <span class="tag concept">8 min live</span></h2>
+    </div>
+    <p class="lede">Dagster is asset-centric. Its docs define an asset definition as <strong>"a description, in code, of an asset that should exist and how to produce and update that asset."</strong> That sentence reads like a modelling preference. It is not. It changes what failure <em>means</em>, and once you see it you cannot unsee it in an Airflow UI.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The same pipeline drawn twice: on the left as a task graph of four green tasks that exited zero, on the right as an asset graph of four named tables with versions and named upstream inputs.">
+        <style>
+          .o4T { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .o4N { font: 700 12.5px Inter, sans-serif; fill: #FFFFFF; }
+          .o4S { font: 400 11px Inter, sans-serif; fill: #FFFFFF; opacity: .88; }
+          .o4G { font: 700 12.5px Inter, sans-serif; fill: #84CC16; }
+          .o4V { font: 700 11px Inter, sans-serif; fill: #D9F99D; }
+          .o4X { font: 400 12px Inter, sans-serif; fill: #64748B; }
+        </style>
+        <rect x="20" y="14" width="410" height="340" rx="10" fill="#F8FAFC"/>
+        <rect x="450" y="14" width="410" height="340" rx="10" fill="#F8FAFC"/>
+        <text class="o4T" x="42" y="40">Task graph · what ran</text>
+        <text class="o4T" x="472" y="40">Asset graph · what exists</text>
+
+        <rect x="44" y="56" width="362" height="48" rx="7" fill="#334155"/>
+        <text class="o4G" x="60" y="78">✓</text>
+        <text class="o4N" x="78" y="78">extract_orders</text>
+        <text class="o4S" x="60" y="95">exited 0 in 42s</text>
+        <path d="M225 104 L225 122" stroke="#64748B" stroke-width="2" marker-end="url(#o4arrow)"/>
+        <rect x="44" y="122" width="362" height="48" rx="7" fill="#334155"/>
+        <text class="o4G" x="60" y="144">✓</text>
+        <text class="o4N" x="78" y="144">transform_orders</text>
+        <text class="o4S" x="60" y="161">exited 0 in 6m 10s</text>
+        <path d="M225 170 L225 188" stroke="#64748B" stroke-width="2" marker-end="url(#o4arrow)"/>
+        <rect x="44" y="188" width="362" height="48" rx="7" fill="#334155"/>
+        <text class="o4G" x="60" y="210">✓</text>
+        <text class="o4N" x="78" y="210">load_orders</text>
+        <text class="o4S" x="60" y="227">exited 0 in 1m 55s</text>
+        <path d="M225 236 L225 254" stroke="#64748B" stroke-width="2" marker-end="url(#o4arrow)"/>
+        <rect x="44" y="254" width="362" height="48" rx="7" fill="#334155"/>
+        <text class="o4G" x="60" y="276">✓</text>
+        <text class="o4N" x="78" y="276">refresh_summary</text>
+        <text class="o4S" x="60" y="293">exited 0 in 28s</text>
+        <text class="o4X" x="44" y="330">All green. Which tables exist? Not stated.</text>
+
+        <rect x="474" y="56" width="362" height="48" rx="7" fill="#1E293B"/>
+        <text class="o4N" x="490" y="78">orders_raw</text>
+        <text class="o4V" x="700" y="78">v42 · 04:12</text>
+        <text class="o4S" x="490" y="95">materialized from: source extract</text>
+        <path d="M655 104 L655 122" stroke="#64748B" stroke-width="2" marker-end="url(#o4arrow)"/>
+        <rect x="474" y="122" width="362" height="48" rx="7" fill="#1E293B"/>
+        <text class="o4N" x="490" y="144">orders_clean</text>
+        <text class="o4V" x="700" y="144">v41 · 04:19</text>
+        <text class="o4S" x="490" y="161">materialized from: orders_raw v42</text>
+        <path d="M655 170 L655 188" stroke="#64748B" stroke-width="2" marker-end="url(#o4arrow)"/>
+        <rect x="474" y="188" width="362" height="48" rx="7" fill="#1E293B"/>
+        <text class="o4N" x="490" y="210">orders_mart</text>
+        <text class="o4V" x="700" y="210">v41 · 04:21</text>
+        <text class="o4S" x="490" y="227">materialized from: orders_clean v41</text>
+        <path d="M655 236 L655 254" stroke="#64748B" stroke-width="2" marker-end="url(#o4arrow)"/>
+        <rect x="474" y="254" width="362" height="48" rx="7" fill="#1E293B"/>
+        <text class="o4N" x="490" y="276">daily_summary</text>
+        <text class="o4V" x="700" y="276">v41 · 04:22</text>
+        <text class="o4S" x="490" y="293">materialized from: orders_mart v41</text>
+        <text class="o4X" x="474" y="330">Every row is a fact about a table.</text>
+
+        <text class="o4X" x="20" y="378">Same pipeline, two models of success: "the code exited zero" versus "this table exists at this version."</text>
+        <defs>
+          <marker id="o4arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M0 0 L10 5 L0 10 z" fill="#64748B"/>
+          </marker>
+        </defs>
+      </svg>
+      <figcaption>🔍 Click to zoom - what does green mean? Two orchestrators, two different answers</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The key insight: lineage as a by-product<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The asset model changes what failure means.</strong> In a task graph, green means <em>the code exited zero</em>. That is a statement about a process, and it is compatible with an empty output table, a partial load, or yesterday's data written twice.</p>
+        <p>In an asset graph, a materialization means <strong>"this table now exists at this version, from these upstream inputs."</strong> That is a statement about the world. And it has a consequence most teams do not expect when they adopt Dagster:</p>
+        <p><strong>Lineage stops being a separate catalog project and becomes a by-product of the orchestrator.</strong> If every run declares which named artifact it produced and which named artifacts it read, the graph you needed a lineage tool to reconstruct is simply the definition you already wrote. Compare that with the b3 pattern, where lineage is inferred after the fact by parsing query logs and hoping.</p>
+        <p>This is the single strongest reason to consider Dagster, and it is not a UI argument.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Dagster deprecated its own founding primitive<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Dagster launched around <em>ops</em> - composable computations wired into graphs. Its own documentation now says ops <strong>"have largely been replaced by assets."</strong></p>
+        <p>Two things follow, and the second one costs people real time:</p>
+        <ul>
+          <li><strong>The team changed its mind in public</strong>, which is a reasonable signal of intellectual honesty and also a signal that the category is still moving.</li>
+          <li><strong>Older Dagster tutorials actively mislead.</strong> A 2021 blog post teaching ops and graphs is not merely dated, it teaches a primitive the vendor has since demoted. Check the publication date on every Dagster tutorial before you follow it, and prefer the current docs.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Prefect: the graph is discovered at runtime<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Prefect's own line is that it <strong>"turns your Python functions into production-grade data pipelines."</strong> Flows and tasks are decorated Python functions, and the structural claim is this: workflows <strong>"can branch, loop, and create tasks at runtime, rather than DAGs declared up front."</strong></p>
+        <p>That is a genuinely different position, not a syntax preference. Airflow and Dagster both want a graph they can see before anything runs. Prefect is comfortable with a graph that only exists once the code is executing - which is exactly right for fan-out over a list whose length you do not know until you query it, and exactly wrong when you want to validate a change in CI.</p>
+        <p>One historical note so you can read old material: "negative engineering" was Prefect's founding thesis - the idea that most pipeline code exists to handle failure rather than to do work. It is absent from the current site. Treat it as history, not as current positioning.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: BUILD-ALONG ============ -->
+  <section class="section" id="choosing">
+    <div class="section-kicker">
+      <span class="klabel">Build-along · choose by failure semantics</span>
+      <h2>Choosing honestly <span class="tag demo">★ 24 min · everyone does it</span></h2>
+    </div>
+    <p class="lede">Open a text file and list your five most important pipelines. For each one, answer a single question before you look at any tool: <strong>when this pipeline succeeds, what exists that did not exist before?</strong> If the answer is a named table at a version, you are in asset territory. If the answer is "an email went out" or "a payment posted," you are not. That one question does more work than any feature matrix.</p>
+
+    <table class="clean">
+      <thead>
+        <tr><th>Tool</th><th>Mental model</th><th>Strongest when</th><th>The honest cost</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Airflow</strong></td>
+          <td>a scheduled graph of tasks</td>
+          <td>you need a connector to something obscure, and you need to hire people who already know it</td>
+          <td>green means exited zero; the moat is the provider ecosystem and the hiring pool, <strong>not the programming model</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Dagster</strong></td>
+          <td>a graph of assets that should exist</td>
+          <td>pipelines produce durable named artifacts and you want lineage without a second project</td>
+          <td>the asset model only pays off when there are durable named artifacts; for workflows whose output is a side effect you are forcing an asset shape onto a genuine task</td>
+        </tr>
+        <tr>
+          <td><strong>Prefect</strong></td>
+          <td>Python functions, graph discovered at runtime</td>
+          <td>fan-out and branching depend on data you only have at execution time</td>
+          <td>the runtime-discovered graph buys real dynamism and costs static analysability - <strong>you cannot fully validate before it runs</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="steps">
+      <div class="step"><p><strong>Sort your five pipelines into artifact or side effect.</strong> An artifact is a table, a file, a model, a feature set - something with a name and a version. A side effect is an API call, a notification, a payment posted. Most real platforms have both, which is why most real platforms end up running more than one orchestrator whatever the standardisation memo says.</p></div>
+      <div class="step"><p><strong>For each artifact pipeline, write what "done" should assert.</strong> Not "the job ran" but "orders_mart exists at today's date, built from orders_clean v41." If you cannot write that sentence, the asset model will not help you yet - the missing piece is naming, not tooling.</p></div>
+      <div class="step"><p><strong>For each side-effect pipeline, check whether it is idempotent.</strong> Asset semantics assume re-running produces the same artifact. Re-running a payment does not. This is the cleanest line in the whole decision.</p></div>
+      <div class="step"><p><strong>Now check what your candidate pins at run start.</strong> Airflow 3 pins the DAG version. Ask the same of everything else you shortlist, and ask specifically about a run that takes four hours while somebody merges to main.</p></div>
+      <div class="step"><p><strong>Last, and only last, look at popularity - and read it correctly.</strong> The table below is real data from the GitHub API, and it still does not mean what people use it to mean.</p></div>
+    </div>
+
+    <table class="clean">
+      <thead>
+        <tr><th>Repository</th><th>Stars</th><th>Forks</th><th>Forks per star</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>apache/airflow</td><td>46,403</td><td>17,536</td><td><strong>0.38</strong></td></tr>
+        <tr><td>PrefectHQ/prefect</td><td>23,565</td><td>2,446</td><td>0.10</td></tr>
+        <tr><td>dagster-io/dagster</td><td>15,940</td><td>2,231</td><td>0.14</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout tip">
+      <strong>State this explicitly whenever you show a star count</strong>
+      <strong>Stars are a weak proxy.</strong> They are cumulative, they never decay, and they reward age - Airflow has roughly a three-year head start on the others, so a chunk of that lead is calendar, not preference. A star also costs one click from someone who never installed the thing. <strong>Fork ratio is the better signal</strong>, because forking usually means somebody actually cloned it to run or modify it: Airflow's 0.38 forks per star against 0.10 to 0.14 for the others is a real difference in engagement depth, not just in audience size. Figures fetched from the GitHub API on 2026-08-07.
+    </div>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>A critical-reading exercise you can run in ninety seconds.</strong> Prefect's site claims <strong>"50.7k+ GitHub stars."</strong> The GitHub API says the PrefectHQ/prefect repository has <strong>23,565</strong>. The gap is presumably an organization-wide aggregate across every repo they own, which is a defensible thing to count and a misleading thing to label. Cube's homepage runs the same pattern in the other direction, claiming 18,000 stars when the repo has 20,564 - a stale number nobody updated. The lesson is not that these vendors are dishonest. It is that <strong>vendor stat blocks are frozen marketing artifacts, not telemetry</strong>, and checking one against its own public API takes less time than reading the paragraph around it.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 30 min total</span></h2>
+    </div>
+    <ul>
+      <li>Take your longest-running production DAG and find out what happens today if someone merges a change to it mid-run. If you cannot answer from documentation, you have found an unpinned dependency.</li>
+      <li>Open your orchestrator's UI and pick any green run from last week. Write down what you can prove exists because it is green. Then check whether it is true.</li>
+      <li>Classify your pipelines into artifact-producing and side-effect-producing. Count them. The ratio tells you honestly whether an asset-centric tool fits your actual work or only your aspirations.</li>
+      <li>Pick any vendor page in your current shortlist and verify one number on it against the primary source - GitHub API, the project's own release notes, a billing feed. Note how long it took and whether the number held.</li>
+      <li>If you run Airflow 2, list which of your workers currently have network reach to the metadata database. That list is your blast radius, and it is the thing 3.0 exists to shrink.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Official sources covered</h2>
+    </div>
+    <p class="lede">Every definition on this page is quoted from the project's own documentation, and every number carries its fetch date. Where a source has a commercial sponsor, the sponsor is named next to the number rather than in a footnote. This page covers:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Apache Airflow documentation and the Airflow 3.0 release announcement (2025-04-22)</span><span class="note">Batch-oriented scope · the Task Execution Interface · DAG Versioning</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Dagster documentation - asset definitions and the ops deprecation</span><span class="note">The asset model and why older tutorials mislead</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Prefect documentation - flows, tasks, runtime-created graphs</span><span class="note">Dynamism against static analysability</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">GitHub REST API repository statistics (fetched 2026-08-07)</span><span class="note">Stars and forks for airflow, prefect, dagster · the fork-ratio reading</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Airflow Survey 2025 - 5,818 responses, 122 countries</span><span class="note">Sponsored and run by Astronomer, the commercial Airflow vendor · version-adoption percentages deliberately not used</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">1 · Airflow 3.0 was the first architectural break in five years. What drove it?</p>
+      <button class="qopt" type="button">A · A rewrite of the scheduler for throughput on very large DAGs</button>
+      <button class="qopt" type="button">B · The new React and FastAPI user interface</button>
+      <button class="qopt" type="button">C · Security: the Task Execution Interface and Task SDKs mean tasks no longer need direct metadata-database access, which unlocks multi-cloud and untrusted-tenant execution</button>
+      <p class="qwhy">In Airflow 2 every worker held a live connection to the system of record for the whole deployment, so every worker sat inside the blast radius. Removing that dependency is what makes it safe to run tasks in a network that cannot reach the metadata database, or to run code you do not fully trust.</p>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">2 · In an asset graph, a materialization asserts something a green task cannot. What?</p>
+      <button class="qopt" type="button">A · That the code completed faster than its previous run</button>
+      <button class="qopt" type="button">B · That this table now exists at this version, from these upstream inputs - a statement about the world, not about a process</button>
+      <button class="qopt" type="button">C · That every downstream consumer has been notified</button>
+      <p class="qwhy">Green in a task graph means the code exited zero, which is compatible with an empty table, a partial load, or yesterday's data written twice. Because a materialization names the artifact and its inputs, lineage stops being a separate catalog project and becomes a by-product of the orchestrator.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · A shortlist doc ranks orchestrators by GitHub stars. What is the correction?</p>
+      <button class="qopt" type="button">A · Stars are a weak proxy - cumulative, never decaying, and rewarding age; fork ratio is the better signal, and Airflow's three-year head start explains part of its lead</button>
+      <button class="qopt" type="button">B · Stars are fine as long as they are refreshed monthly</button>
+      <button class="qopt" type="button">C · Stars should be replaced by the number of contributors, which is unambiguous</button>
+      <p class="qwhy">Airflow 46,403 stars and 17,536 forks is 0.38 forks per star, against 0.10 to 0.14 for Prefect and Dagster - forking implies somebody cloned it to run or change it. And check the vendor's own figure against the API: Prefect's site claims "50.7k+" while the repo shows 23,565.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Practitioner session 4 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Airflow, in its own words</b><span>"An open-source platform for developing, scheduling, and monitoring batch-oriented workflows." Batch-oriented is the honest scope.</span></div>
+      <div class="cheat-item"><b>Why 3.0 broke five years of stability</b><span>Security. Task Execution Interface + Task SDKs remove tasks' direct metadata-DB access, unlocking multi-cloud and untrusted tenants.</span></div>
+      <div class="cheat-item"><b>DAG versioning as a diagnosis</b><span>"A DAG will run through to completion based on the version at start." Top request for years = long runs mutating mid-flight.</span></div>
+      <div class="cheat-item"><b>The asset definition</b><span>"A description, in code, of an asset that should exist and how to produce and update that asset."</span></div>
+      <div class="cheat-item"><b>The key insight</b><span>Green = exited zero. A materialization = this table exists at this version from these inputs. Lineage becomes a by-product.</span></div>
+      <div class="cheat-item"><b>Dagster demoted its own primitive</b><span>Ops "have largely been replaced by assets" - so older Dagster tutorials actively mislead. Check the date first.</span></div>
+      <div class="cheat-item"><b>The three honest costs</b><span>Assets need durable named artifacts · Prefect's runtime graph is not statically analysable · Airflow's moat is providers and hiring.</span></div>
+      <div class="cheat-item"><b>Stars, read correctly</b><span>airflow 46,403/17,536 · prefect 23,565/2,446 · dagster 15,940/2,231 (2026-08-07). Weak proxy; fork ratio 0.38 vs 0.10-0.14.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Practitioner session 4 of 10 · learn-ai-infra-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="b3-catalog-governance.html">← b3 · Catalog, lineage, governance</a> &nbsp;·&nbsp; <a href="../index.html">All sessions</a> &nbsp;·&nbsp; <a href="b5-lakehouse-engine.html">Next: The lakehouse engine →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=2"></script>
+</body>
+</html>

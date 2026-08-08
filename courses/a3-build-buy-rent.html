@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leader session 3 · Build vs buy vs rent - learn ai infra with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-infra-with-phoebe</a> / Leader session 3 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Infra with Phoebe · Leader track · Session 3 of 6</div>
+    <h1>Build, buy, or rent - <span class="accent">and who wrote the answer</span></h1>
+    <p class="sub">You are about to be handed a total-cost-of-ownership model. Before you read a single row of it, read the byline. Seven of the nine top-ranking public GPU TCO analyses are published by GPU cloud providers or infrastructure vendors, and every one of the nine concludes "rent." That is not a conspiracy and it does not make them wrong. It makes them a captured literature, and knowing that changes how you read every number in this session - including the depreciation assumption that quietly decides the whole answer.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Leader track</span>
+      <span class="chip audience">CDAIOs · heads of data · platform sponsors</span>
+      <span class="chip audience">No code, decisions only</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:5">3-18 · The captured literature</span>
+      <span class="a3" style="flex:8">18-42 · Depreciation and the honest counterweight</span>
+      <span class="a4" style="flex:1">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>What this session is really about</h2>
+    </div>
+    <p class="lede">Sessions a1 and a2 gave you the eight layers and the persona map. This one is the money decision that sits underneath all of them: do you own the metal, buy a managed platform, or rent capacity by the hour. The honest answer for your organization depends on numbers nobody has published neutrally, on an accounting assumption two of the largest technology companies on earth publicly disagreed about in the same year, and on a base rate for internal builds that is worse than most sponsors think. Those three things are the session. There is no calculator at the end, because a calculator would be the fourth vendor model.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - read after class</span>
+      <span class="pill inkpill">Official sources covered</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      Three things you can use in a steering committee this week: the reason every TCO deck you have been shown reaches the same conclusion, the one assumption to interrogate first in any ownership model, and the published base rate for internal builds versus vendor purchases - with its sample size, so you quote it honestly.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: THE CAPTURED LITERATURE ============ -->
+  <section class="section" id="literature">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · read the byline before the spreadsheet</span>
+      <h2>The finding is about the literature <span class="tag concept">15 min live</span></h2>
+    </div>
+    <p class="lede">We went looking for a defensible build-versus-rent break-even point. What we found instead was a fact about who is allowed to publish one. Of the nine top-ranking public GPU TCO analyses, <strong>seven are published by GPU cloud providers or infrastructure vendors</strong>, and all nine conclude "rent." No peer-reviewed model and no neutral-consultancy public model exists. Teach that as the finding, because it is more useful than any break-even number those nine papers contain.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 410" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Citation map of nine public GPU total-cost-of-ownership analyses. Seven are shaded as vendor-published, all nine arrows converge on a single conclusion of rent, and the box for an independent or peer-reviewed model is empty.">
+        <defs>
+          <marker id="b3-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#3F6212"/>
+          </marker>
+        </defs>
+        <style>
+          .b3T { font: 700 14px Inter, sans-serif; fill: #1E293B; }
+          .b3V { font: 600 11.5px Inter, sans-serif; fill: #FFFFFF; }
+          .b3N { font: 600 11.5px Inter, sans-serif; fill: #1E293B; }
+          .b3R { font: 700 15px Inter, sans-serif; fill: #1E293B; }
+          .b3Rs { font: 600 11.5px Inter, sans-serif; fill: #3F6212; }
+          .b3E { font: 700 11.5px Inter, sans-serif; fill: #991B1B; }
+          .b3Es { font: 400 11px Inter, sans-serif; fill: #991B1B; }
+          .b3X { font: 400 11.5px Inter, sans-serif; fill: #64748B; }
+        </style>
+        <text class="b3T" x="30" y="26">Nine top-ranking public GPU TCO analyses. Seven vendor-published. Nine conclude rent.</text>
+
+        <rect x="30" y="52" width="380" height="28" rx="6" fill="#334155"/>
+        <text class="b3V" x="46" y="71">1 · GPU cloud provider · concludes rent</text>
+        <rect x="30" y="84" width="380" height="28" rx="6" fill="#334155"/>
+        <text class="b3V" x="46" y="103">2 · GPU cloud provider · concludes rent</text>
+        <rect x="30" y="116" width="380" height="28" rx="6" fill="#334155"/>
+        <text class="b3V" x="46" y="135">3 · GPU cloud provider · concludes rent</text>
+        <rect x="30" y="148" width="380" height="28" rx="6" fill="#334155"/>
+        <text class="b3V" x="46" y="167">4 · GPU cloud provider · concludes rent</text>
+        <rect x="30" y="180" width="380" height="28" rx="6" fill="#334155"/>
+        <text class="b3V" x="46" y="199">5 · infrastructure vendor · concludes rent</text>
+        <rect x="30" y="212" width="380" height="28" rx="6" fill="#334155"/>
+        <text class="b3V" x="46" y="231">6 · infrastructure vendor · concludes rent</text>
+        <rect x="30" y="244" width="380" height="28" rx="6" fill="#334155"/>
+        <text class="b3V" x="46" y="263">7 · infrastructure vendor · concludes rent</text>
+        <rect x="30" y="276" width="380" height="28" rx="6" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="b3N" x="46" y="295">8 · unaffiliated write-up · concludes rent</text>
+        <rect x="30" y="308" width="380" height="28" rx="6" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="b3N" x="46" y="327">9 · unaffiliated write-up · concludes rent</text>
+
+        <path d="M412,66 L548,195" stroke="#64748B" stroke-width="1.2" fill="none"/>
+        <path d="M412,98 L548,195" stroke="#64748B" stroke-width="1.2" fill="none"/>
+        <path d="M412,130 L548,195" stroke="#64748B" stroke-width="1.2" fill="none"/>
+        <path d="M412,162 L548,195" stroke="#64748B" stroke-width="1.2" fill="none"/>
+        <path d="M412,194 L548,195" stroke="#64748B" stroke-width="1.2" fill="none"/>
+        <path d="M412,226 L548,195" stroke="#64748B" stroke-width="1.2" fill="none"/>
+        <path d="M412,258 L548,195" stroke="#64748B" stroke-width="1.2" fill="none"/>
+        <path d="M412,290 L548,195" stroke="#64748B" stroke-width="1.2" fill="none"/>
+        <path d="M412,322 L548,195" stroke="#64748B" stroke-width="1.2" fill="none"/>
+        <path d="M548,195 L596,195" stroke="#3F6212" stroke-width="3" fill="none" marker-end="url(#b3-arrow)"/>
+
+        <rect x="604" y="150" width="246" height="88" rx="8" fill="#84CC16"/>
+        <text class="b3R" x="622" y="182">Conclusion: RENT</text>
+        <text class="b3Rs" x="622" y="204">9 of 9 · and 7 of them</text>
+        <text class="b3Rs" x="622" y="222">are vendor-published</text>
+
+        <rect x="604" y="262" width="246" height="96" rx="8" fill="#FEF2F2" stroke="#FCA5A5" stroke-dasharray="5 4"/>
+        <text class="b3E" x="622" y="290">Independent or</text>
+        <text class="b3E" x="622" y="308">peer-reviewed model</text>
+        <text class="b3Es" x="622" y="330">none found in the</text>
+        <text class="b3Es" x="622" y="346">public literature</text>
+
+        <text class="b3X" x="30" y="386">Break-even claims of 50-70% sustained utilization are all vendor-sourced: directional, not measured.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - who published the nine analyses, and the box that stayed empty</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The number everyone quotes, and where it comes from<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The commonly cited break-even for owning GPUs rather than renting them is <strong>50-70% sustained utilization</strong>. If your fleet runs above that band year-round, ownership wins; below it, rent. It is a clean rule, it is easy to remember, and every source we could find for it is a vendor.</p>
+        <p>That does not make it false. Vendors have the best telemetry in the industry and a real interest in being right about capacity. But it means the number is <strong>directional, not measurement</strong>. Treat it the way you would treat a supplier's own estimate of how much you should buy from them: useful input, not evidence.</p>
+        <p>Two practical consequences for you in a steering meeting:</p>
+        <ul>
+          <li>When someone puts a break-even threshold on a slide, ask for the source. If the answer is a vendor blog, the slide is a starting hypothesis, not a finding.</li>
+          <li>Ask what utilization your organization actually sustains today, measured, not planned. Almost nobody knows, and that ignorance is usually the real decision blocker rather than the threshold itself.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The critique that matters: on-demand is the wrong baseline<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Here is the single most useful thing in this session. Vendor break-even thresholds are almost always quoted against <strong>on-demand</strong> rental rates - the most expensive way anyone actually buys GPU capacity. Nobody running a sustained fleet pays on-demand for a year.</p>
+        <p>Re-run the same comparison against a committed rate and the ownership case degrades sharply. AWS's own Savings Plan feed (fetched 2026-08-07) prices p5.48xlarge at 3-year all-upfront as <strong>$2.587 per GPU-hour</strong>, against an on-demand rate of <strong>$6.88</strong>. That is a 62% reduction, and it applies to exactly the steady, high-utilization workload that ownership models are built to justify.</p>
+        <p>The point is not that reserved instances always win. The point is that <strong>almost no vendor analysis runs that comparison at all</strong>, and the omission is the tell. If someone shows you a build case and the rental column says on-demand, they have compared your best-case ownership scenario against the buyer's worst-case rental scenario.</p>
+        <div class="callout tip">
+          <strong>The one question to ask</strong>
+          "Which rental rate is in this model - on-demand, or a committed three-year rate?" If the answer is on-demand, the model has not been run yet. Ask for it again with the committed rate and see whether the recommendation survives.
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What a neutral-ish capex number looks like<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The closest thing to an independent build-side number in circulation comes from SemiAnalysis, which prices a 1,024-GPU H100 cluster at roughly <strong>$35,375 to $39,750 of capex per GPU, all-in including network</strong>. Treat it as the best available anchor with a stated caveat: SemiAnalysis sells research to the industry it covers, which makes it independent-ish rather than independent.</p>
+        <p>Use it the way an auditor would use a comparable: as a sanity check on whatever number your own procurement process produces. If a build proposal lands far under that range, ask what has been left out of it - network fabric, power, cooling, and facility work are the usual omissions, and layer six of the stack is where they hide.</p>
+        <p>Two structural costs that rarely appear in a first-pass build case, both covered in detail in a4: <strong>per-installed-GPU software licensing</strong>, and the physical envelope. A DGX B300 draws roughly 14 kW in 10U. The facility constrains you long before the budget does, and facility work is a capital programme with its own timeline.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: DEPRECIATION ============ -->
+  <section class="section" id="depreciation">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · the assumption that decides the answer</span>
+      <h2>Depreciation is contested, publicly <span class="tag concept">12 min live</span></h2>
+    </div>
+    <p class="lede">Every ownership model rests on one input: how many years the hardware is useful. Change that number from three to six and you halve the annual cost of ownership without touching a single price. It is the most sensitive assumption in the model and the least discussed in the room, and the companies with the most GPUs on earth are publicly disagreeing about it right now.</p>
+
+    <table class="clean">
+      <thead>
+        <tr><th>Who</th><th>Useful life assumed</th><th>Position and interest</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>CoreWeave</td><td><strong>6 years</strong> (raised from 5)</td><td>GPU cloud operator · longer life flatters its own economics</td></tr>
+        <tr><td>Nebius</td><td><strong>4 years</strong></td><td>GPU cloud operator · same business, different judgement</td></tr>
+        <tr><td>Amazon</td><td><strong>6 to 5 years</strong> on a subset, effective 2025-01-01</td><td>Shortened it, a <strong>$700M cut to operating income</strong></td></tr>
+        <tr><td>Meta</td><td><strong>Extended</strong> its estimate in 2025</td><td>Moved the opposite way, same year, same technology</td></tr>
+        <tr><td>Nvidia</td><td><strong>4 to 6 years</strong></td><td>Long-interested · sells the hardware being depreciated</td></tr>
+        <tr><td>Michael Burry</td><td><strong>2 to 3 years</strong></td><td>Short-interested · held ~$1.1B notional in puts</td></tr>
+      </tbody>
+    </table>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Amazon and Meta moved in opposite directions in the same year<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Read the middle two rows of that table together, because they are the whole lesson. In 2025, under the same generation of accelerators, in the same market, with roughly comparable engineering sophistication, <strong>Amazon shortened its useful-life estimate on a subset of equipment from six years to five, taking a $700M cut to operating income - and Meta extended its estimate.</strong></p>
+        <p>Both disclosures are public and both are defensible. That is exactly why it matters. It is proof, from the two organizations best placed to know, that <strong>useful life is management judgement, not a physical constant</strong>. There is no correct answer waiting to be discovered by better analysis.</p>
+        <p>So the question in your own model is not "what is the right depreciation schedule?" It is:</p>
+        <ul>
+          <li>What schedule is this model using, and who chose it?</li>
+          <li>What does the recommendation look like at both ends of the published range - three years and six?</li>
+          <li>If the answer flips somewhere inside that range, the decision is being made by an accounting assumption rather than by an operational fact, and it should be escalated as such.</li>
+        </ul>
+        <p>We are deliberately not settling this. A course that told you "use five years" would be adding a tenth captured source to a literature of nine.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Reading interested parties without dismissing them<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Two of the six positions in the table come from parties with an obvious financial stake in the direction of their own argument. Nvidia, arguing four to six years, sells the hardware. Michael Burry, arguing two to three, held around $1.1B notional in put options while making the case.</p>
+        <p>The lazy move is to discard both. The better move is to notice that they <strong>bracket the range</strong>, and that the operators sitting inside that bracket - Nebius at four, Amazon at five, CoreWeave at six - land closer to each other than to either advocate. When interested parties on opposite sides define the outer bounds and disinterested-ish operators cluster in the middle, the middle is where your sensitivity analysis should live.</p>
+        <p>Carry the habit across to vendor selection generally. "Who benefits if I believe this?" is not cynicism, it is the same diligence you already apply to a supplier's delivery estimate.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: THE HONEST COUNTERWEIGHT ============ -->
+  <section class="section" id="counterweight">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · the base rate you are betting against</span>
+      <h2>The honest counterweight to building <span class="tag concept">12 min live</span></h2>
+    </div>
+    <p class="lede">You came into this session ready to be sceptical of vendor TCO models, and you should be. Now here is the discipline applied in the other direction, because a leader planning to build a platform is also making a claim that needs evidence. The most-quoted study in enterprise AI right now has a headline finding everyone repeats and a second finding almost nobody does. The second one is about you.</p>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>MIT Project NANDA, August 2025.</strong> The headline: <strong>95% of enterprise generative-AI pilots deliver no measurable profit-and-loss return.</strong> The finding that rarely travels with it: <strong>buying from specialist vendors succeeded around 67% of the time, while internal builds succeeded at roughly one third of that rate.</strong> The methodology is thin and must be stated every time it is quoted: <strong>52 executive interviews, 153 leader surveys, and 300 public deployments.</strong> That is a small, non-random sample carrying an enormous amount of citation weight.</p>
+    </div>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>How to quote this without becoming part of the problem<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The 95% number has been laundered into a permanent statistic in roughly twelve months, which is exactly how "85% of big data projects fail" happened a decade ago. This course refuses to cite that one at all, and the way to avoid repeating the mistake with NANDA is mechanical: <strong>state the sample size in the same breath as the number, every single time.</strong></p>
+        <p>Say it like this: "MIT's NANDA study, which is 52 executive interviews, 153 leader surveys and 300 public deployments, found 95% of pilots showed no measurable P&amp;L return." It takes four extra seconds and it does two things at once. It keeps you honest, and it signals to everyone in the room that you read the methodology - which is a more useful reputation than being the person with the scariest slide.</p>
+        <p>The buy-versus-build split deserves the same treatment, and it is the more actionable of the two findings. A roughly 67% success rate for specialist-vendor purchases against roughly one third of that for internal builds is a base rate. It is not a prohibition.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What "know your base rate" means in a funding conversation<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Build proposals fail in review for one of two reasons: the sponsor has never heard the base rate, or the sponsor has heard it and cannot articulate why this build is different. The first is fixable in a meeting. The second is the actual work.</p>
+        <p>Specific reasons a build can beat the base rate, each of which is checkable:</p>
+        <ul>
+          <li><strong>No vendor fills the layer.</strong> Genuinely novel requirements exist. Most are not, but some are, and this is the strongest ground.</li>
+          <li><strong>The chokepoint must be yours.</strong> If a layer's narrow waist determines your regulatory position or your negotiating power, owning it is a strategic decision rather than a cost decision, and it should be argued that way.</li>
+          <li><strong>The economics genuinely invert at your volume.</strong> Provable with your own billing data, not with a vendor model.</li>
+          <li><strong>You already run and staff the capability.</strong> A team that has operated this class of system before is the single strongest predictor available.</li>
+        </ul>
+        <p>If none of those four apply, you are betting against a published base rate with nothing specific to point at. That is worth knowing before the money is committed rather than eighteen months after.</p>
+        <div class="callout tip">
+          <strong>The honest read</strong>
+          The lesson is not "never build." It is: know the base rate you are betting against, and be specific about why you differ. A build case that names its reason survives a change of sponsor. One that rests on preference does not.
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why "rent" and "buy" are not the same recommendation<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The nine TCO analyses conclude "rent," meaning rent compute. The NANDA finding is about "buy," meaning purchase a finished capability from a specialist vendor. These get collapsed in conversation and they are different decisions on different layers.</p>
+        <p>Renting compute is a decision about layer six: capacity, utilization, and depreciation. Buying a capability is a decision about layers five, seven and eight: whether your organization builds the semantic layer, the gateway and the self-serve experience itself, or purchases products that fill those jobs. It is entirely coherent to rent all your compute and build your own semantic layer, or to own a GPU fleet and buy every application on top of it.</p>
+        <p>Session a6 turns this into a layer-by-layer sequencing decision. For now, hold the distinction: <strong>rent-versus-own is about the metal, buy-versus-build is about the capability</strong>, and the evidence bases for the two are completely separate.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 30 min total</span></h2>
+    </div>
+    <ul>
+      <li>Take the most recent TCO or business case that landed on your desk. Find the byline on every external source in it and mark which are vendor-published. Do not judge the conclusion yet - just count.</li>
+      <li>Find the depreciation or useful-life assumption in that same case. Re-run the headline number at three years and at six. If the recommendation flips, you have found the real decision.</li>
+      <li>Check which rental rate the model used. If it is on-demand, ask for the committed three-year comparison before the next review.</li>
+      <li>For any internal build currently funded, write one sentence naming which of the four reasons makes it different from the base rate. If you cannot write it, that is the finding.</li>
+      <li>Practise saying the NANDA number with its sample size attached until it sounds natural. You will need it more often than you expect.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Official sources covered</h2>
+    </div>
+    <p class="lede">This session is deliberately built on primary disclosures and first-party billing feeds rather than analyst commentary, and every source is labelled with its interest where it has one. All prices on this page were fetched on 2026-08-06/07 and go stale faster than anything else on this shelf. This page covers:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">SemiAnalysis GPU cluster capex analysis (~$35,375-39,750 per GPU all-in)</span><span class="note">Independent-ish anchor · sells research to the industry it covers</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Public depreciation disclosures: CoreWeave, Nebius, Amazon, Meta (2025)</span><span class="note">The contested assumption · Amazon 6→5yr, a $700M operating-income cut</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">MIT Project NANDA, August 2025 - 52 executive interviews, 153 leader surveys, 300 public deployments</span><span class="note">95% no measurable P&amp;L return · ~67% vendor-buy success vs ~1/3 of that for builds</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">AWS Savings Plan rates, first-party feed (fetched 2026-08-07)</span><span class="note">p5.48xlarge 3yr all-upfront $2.587/GPU-hr vs $6.88 on-demand · full cost model in a4</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · Nine public GPU TCO analyses all conclude "rent." What is the finding a leader should take away?</p>
+      <button class="qopt" type="button">A · Renting is settled - nine independent analyses agreeing is strong evidence</button>
+      <button class="qopt" type="button">B · Seven of the nine are vendor-published and no peer-reviewed or neutral-consultancy model exists, so this is a captured literature and the conclusion is a starting hypothesis, not evidence</button>
+      <button class="qopt" type="button">C · The analyses are dishonest and should be ignored entirely</button>
+      <p class="qwhy">The agreement is not independent confirmation, because the sources are not independent. That does not make them wrong - vendors have the best telemetry available - but it means the widely quoted 50-70% sustained-utilization break-even is directional, not measurement. The critique that matters is that those thresholds are quoted against on-demand rates rather than committed ones.</p>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · Why does the depreciation schedule decide the build-versus-rent answer more than the hardware price does?</p>
+      <button class="qopt" type="button">A · Because depreciation is a regulated figure that auditors set for every company identically</button>
+      <button class="qopt" type="button">B · Because hardware prices are stable while depreciation changes constantly</button>
+      <button class="qopt" type="button">C · Because useful life is management judgement, not a physical constant - Amazon shortened a subset from 6 to 5 years effective 2025-01-01 at a $700M cut to operating income while Meta extended its estimate in the same year under identical technology</button>
+      <p class="qwhy">Doubling assumed useful life halves annual ownership cost without changing a single price. The published range runs from Burry at 2-3 years to CoreWeave at 6, with operators clustering between 4 and 6. Run your model at both ends of that range - if the recommendation flips inside it, an accounting assumption is making your decision.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · What did MIT's NANDA study find about buying from specialist vendors versus building internally?</p>
+      <button class="qopt" type="button">A · Vendor purchases succeeded around 67% of the time and internal builds at roughly one third of that rate - on a thin sample of 52 executive interviews, 153 leader surveys and 300 public deployments</button>
+      <button class="qopt" type="button">B · Internal builds outperformed vendor purchases once teams were properly staffed</button>
+      <button class="qopt" type="button">C · The study found no measurable difference between the two approaches</button>
+      <p class="qwhy">This is the least-quoted finding of the most-quoted study, and it is the one that applies to a leader planning to build a platform. Always state the sample size with it - the same discipline that keeps the headline 95%-no-P&amp;L-return figure from becoming a permanent laundered statistic. The honest read is not "never build," it is know the base rate you are betting against and be specific about why you differ.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Leader session 3 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>The literature finding</b><span>7 of 9 top-ranking GPU TCO analyses are vendor-published. All 9 conclude rent. No peer-reviewed or neutral-consultancy model exists.</span></div>
+      <div class="cheat-item"><b>The break-even number</b><span>50-70% sustained utilization. All vendor-sourced, so directional, not measurement.</span></div>
+      <div class="cheat-item"><b>The critique that matters</b><span>Thresholds are quoted against on-demand. Re-run at AWS 3yr reserved $2.587/GPU-hr vs $6.88 on-demand and ownership degrades sharply.</span></div>
+      <div class="cheat-item"><b>The omission is the tell</b><span>Almost no vendor analysis runs the committed-rate comparison. Ask which rental rate is in the model.</span></div>
+      <div class="cheat-item"><b>Depreciation range</b><span>Burry 2-3 · Nebius 4 · Amazon 5 · CoreWeave 6 · Nvidia 4-6. Interested parties bracket, operators cluster in the middle.</span></div>
+      <div class="cheat-item"><b>The proof it is judgement</b><span>Amazon shortened 6→5 in 2025 ($700M operating-income cut); Meta extended. Same year, same technology, opposite directions.</span></div>
+      <div class="cheat-item"><b>The NANDA base rate</b><span>Vendor buys ~67% success; internal builds ~1/3 of that. Sample: 52 interviews, 153 surveys, 300 deployments. Say the sample size.</span></div>
+      <div class="cheat-item"><b>The honest read</b><span>Not "never build." Know the base rate you are betting against, and name the specific reason you differ.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Leader session 3 of 6 · learn-ai-infra-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="a2-layer-map.html">← a2 · The layer map</a> &nbsp;·&nbsp; <a href="../index.html">All sessions</a> &nbsp;·&nbsp; <a href="a4-cost-model.html">Next: The cost model →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=2"></script>
+</body>
+</html>

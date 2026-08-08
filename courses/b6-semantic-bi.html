@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practitioner session 6 · Semantic layer, dashboards, reporting - learn ai infra with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-infra-with-phoebe</a> / Practitioner session 6 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Infra with Phoebe · Practitioner track · Session 6 of 10</div>
+    <h1>One metric, <span class="accent">defined once</span></h1>
+    <p class="sub">This is the layer where your organization decides what "revenue" means. Right now it probably decides four times: once in the BI tool, once in somebody's notebook, once in a spreadsheet that finance actually trusts, and once inside a feature pipeline nobody has opened in a year. Tonight you learn what a semantic layer really sells, why the hard part is the join graph rather than the YAML, and what it does to your bill - because it is a compiler, not a storage layer, and it does not make the warehouse cheaper.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Practitioner track</span>
+      <span class="chip audience">Platform · DE · architects</span>
+      <span class="chip audience">Vendor-neutral · real rate cards</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Metric truth as a chokepoint</span>
+      <span class="a3" style="flex:5">18-42 · Build-along: the analyst's surface</span>
+      <span class="a4" style="flex:1">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ PART 1: THE JOB ============ -->
+  <section class="section" id="metric-truth">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the dbt Semantic Layer and MetricFlow documentation</span>
+      <h2>Metric truth as a chokepoint <span class="tag concept">7 min live</span></h2>
+    </div>
+    <p class="lede">The job of this layer is embarrassingly narrow and enormously consequential: hold the definition of every business metric in one place, and serve it to everything that asks. Without it, definitions get re-implemented inside every BI tool, every notebook, every spreadsheet and every feature pipeline that needs them. The visible symptom is two dashboards disagreeing on revenue. The real problem is that nobody can adjudicate, because there is no artifact to point at.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 296" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Left panel: one revenue metric defined once in YAML, fanning out to BI, notebook, spreadsheet and AI agent, all returning the same number. Right panel: the same metric re-implemented four times in four tools, each returning a different number.">
+        <style>
+          .m6-h { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .m6-t { font: 700 12px Inter, sans-serif; fill: #FFFFFF; }
+          .m6-s { font: 400 11px Inter, sans-serif; fill: #FFFFFF; opacity: .9; }
+          .m6-l { font: 600 12px Inter, sans-serif; fill: #1E293B; }
+          .m6-g { font: 700 12px Inter, sans-serif; fill: #3F6212; }
+          .m6-w { font: 600 12px Inter, sans-serif; fill: #FFFFFF; }
+          .m6-r { font: 700 12px Inter, sans-serif; fill: #991B1B; }
+          .m6-n { font: 400 12px Inter, sans-serif; fill: #64748B; }
+        </style>
+        <defs>
+          <marker id="m6-arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" fill="#64748B"/>
+          </marker>
+        </defs>
+        <rect x="14" y="8" width="420" height="250" rx="8" fill="#F8FAFC"/>
+        <rect x="446" y="8" width="420" height="250" rx="8" fill="#FEF2F2"/>
+        <text class="m6-h" x="30" y="32">Defined once, served everywhere</text>
+        <text class="m6-h" x="462" y="32">Re-implemented in every tool</text>
+
+        <rect x="30" y="100" width="130" height="60" rx="7" fill="#1E293B"/>
+        <text class="m6-t" x="44" y="126">revenue</text>
+        <text class="m6-s" x="44" y="144">one YAML metric</text>
+
+        <path d="M160 130 L250 70" stroke="#64748B" stroke-width="1.5" fill="none" marker-end="url(#m6-arw)"/>
+        <path d="M160 130 L250 114" stroke="#64748B" stroke-width="1.5" fill="none" marker-end="url(#m6-arw)"/>
+        <path d="M160 130 L250 158" stroke="#64748B" stroke-width="1.5" fill="none" marker-end="url(#m6-arw)"/>
+        <path d="M160 130 L250 202" stroke="#64748B" stroke-width="1.5" fill="none" marker-end="url(#m6-arw)"/>
+
+        <rect x="250" y="52" width="170" height="36" rx="6" fill="#D9F99D"/>
+        <text class="m6-l" x="264" y="75">BI dashboard</text>
+        <text class="m6-g" x="360" y="75">$4.21M</text>
+        <rect x="250" y="96" width="170" height="36" rx="6" fill="#D9F99D"/>
+        <text class="m6-l" x="264" y="119">Notebook</text>
+        <text class="m6-g" x="360" y="119">$4.21M</text>
+        <rect x="250" y="140" width="170" height="36" rx="6" fill="#D9F99D"/>
+        <text class="m6-l" x="264" y="163">Spreadsheet</text>
+        <text class="m6-g" x="360" y="163">$4.21M</text>
+        <rect x="250" y="184" width="170" height="36" rx="6" fill="#D9F99D"/>
+        <text class="m6-l" x="264" y="207">AI agent</text>
+        <text class="m6-g" x="360" y="207">$4.21M</text>
+
+        <rect x="462" y="52" width="180" height="36" rx="6" fill="#334155"/>
+        <text class="m6-w" x="476" y="75">SQL in the BI tool</text>
+        <rect x="462" y="96" width="180" height="36" rx="6" fill="#334155"/>
+        <text class="m6-w" x="476" y="119">Notebook pandas code</text>
+        <rect x="462" y="140" width="180" height="36" rx="6" fill="#334155"/>
+        <text class="m6-w" x="476" y="163">Spreadsheet formula</text>
+        <rect x="462" y="184" width="180" height="36" rx="6" fill="#334155"/>
+        <text class="m6-w" x="476" y="207">Feature pipeline SQL</text>
+
+        <path d="M642 70 L676 70" stroke="#64748B" stroke-width="1.5" fill="none" marker-end="url(#m6-arw)"/>
+        <path d="M642 114 L676 114" stroke="#64748B" stroke-width="1.5" fill="none" marker-end="url(#m6-arw)"/>
+        <path d="M642 158 L676 158" stroke="#64748B" stroke-width="1.5" fill="none" marker-end="url(#m6-arw)"/>
+        <path d="M642 202 L676 202" stroke="#64748B" stroke-width="1.5" fill="none" marker-end="url(#m6-arw)"/>
+
+        <rect x="676" y="52" width="170" height="36" rx="6" fill="#FFFFFF" stroke="#FCA5A5"/>
+        <text class="m6-r" x="692" y="75">$4.21M</text>
+        <text class="m6-n" x="754" y="75">own logic</text>
+        <rect x="676" y="96" width="170" height="36" rx="6" fill="#FFFFFF" stroke="#FCA5A5"/>
+        <text class="m6-r" x="692" y="119">$3.98M</text>
+        <text class="m6-n" x="754" y="119">own logic</text>
+        <rect x="676" y="140" width="170" height="36" rx="6" fill="#FFFFFF" stroke="#FCA5A5"/>
+        <text class="m6-r" x="692" y="163">$4.40M</text>
+        <text class="m6-n" x="754" y="163">own logic</text>
+        <rect x="676" y="184" width="170" height="36" rx="6" fill="#FFFFFF" stroke="#FCA5A5"/>
+        <text class="m6-r" x="692" y="207">$3.86M</text>
+        <text class="m6-n" x="754" y="207">own logic</text>
+
+        <text class="m6-n" x="30" y="282">One artifact to point at when people disagree.</text>
+        <text class="m6-n" x="462" y="282">Four answers, and nothing to adjudicate between them.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the same metric, defined once versus defined four times</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The proposition, stated plainly<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Define the metric once in version-controlled code, and serve it everywhere through an API. That is the entire pitch, and it is a good one - it moves metric truth out of tool configuration, where it is invisible and unreviewable, into a repository where it gets a diff, a reviewer and a history.</p>
+        <p>The dbt Semantic Layer, built on MetricFlow, serves that definition over <strong>JDBC, GraphQL, a Python SDK, and a dbt MCP server</strong>. Note the last one: the same definitions that feed a dashboard also feed an agent. Hold that thought - it is the whole argument of Part 4.</p>
+        <p>The vocabulary is worth learning exactly, because every competing product uses some variant of it:</p>
+        <ul>
+          <li><strong>Semantic models</strong> - the mapping from your physical tables into the layer.</li>
+          <li><strong>Entities</strong> - "the join keys of your semantic model."</li>
+          <li><strong>Dimensions</strong> - "the ways you want to group or slice/dice your metrics."</li>
+          <li><strong>Measures</strong> - the raw aggregatable columns.</li>
+          <li><strong>Metrics</strong> - what the business actually asks for, built from measures.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Most "our numbers disagree" fights are not definition fights<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>This is the most useful sentence in dbt's own FAQ, and it will save you months of pointless meetings:</p>
+        <div class="callout tip">
+          <strong>From dbt's Semantic Layer FAQ</strong>
+          "If the underlying metric aggregation is different, then these would be different metrics. However, if teams have different definitions because they're using specific filters or dimensions, it's still the same metric."
+        </div>
+        <p>Read the diagnostic out of it. When two teams report different revenue, there are only two possibilities, and they need completely different responses:</p>
+        <ul>
+          <li><strong>Different aggregation</strong> - one team sums gross, the other sums net of refunds. These are genuinely two metrics and should be named as two metrics. This is rare.</li>
+          <li><strong>Same aggregation, different filter or grain</strong> - one team excludes internal test accounts, one reports on order date and the other on ship date, one is in the reporting currency and one is not. This is the same metric, sliced differently. This is almost always what is happening.</li>
+        </ul>
+        <p>The practical consequence: <strong>most "our numbers disagree" fights are filter and grain disputes, not definition disputes.</strong> A semantic layer helps enormously with the second kind, because filters and grain become explicit parameters on a shared definition rather than invisible choices buried in someone's WHERE clause. But it only helps if you diagnose correctly first. Teams that treat every disagreement as a definition problem end up with forty near-identical metrics and are worse off than when they started.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What the layer looks like in code<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Shape only - the point is which blocks exist, not the exact syntax of any one version:</p>
+        <div class="prompt-box"><pre style="margin:0"><code>semantic_model:
+  name: orders
+  entities:
+    - name: order_id      # primary -> the grain of this model
+    - name: customer_id   # foreign -> how it joins to customers
+  dimensions:
+    - name: ordered_at    # the ways you slice the metric
+    - name: sales_region
+  measures:
+    - name: order_total   # the raw aggregatable column
+
+metric:
+  name: revenue           # defined once, served everywhere
+  type: simple
+  measure: order_total</code></pre></div>
+        <p>Nothing here is difficult. That is exactly why the layer gets underestimated - the YAML is the easy half, and Part 2 is about the half that is not.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: THE JOIN GRAPH ============ -->
+  <section class="section" id="join-graph">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers MetricFlow's join resolution and dbt's published trade-offs</span>
+      <h2>The real product is the join graph <span class="tag concept">8 min live</span></h2>
+    </div>
+    <p class="lede">If you take one thing from this session, take this. A semantic layer is not a place to store metric definitions. It is a query compiler that knows the shape of your data model, and its hardest job is deciding how to join tables without silently corrupting the number it returns. MetricFlow, in its own documentation, "captures the types of each identifier and then helps users navigate to appropriate joins. This allows us to avoid the construction of fan out and chasm joins as well as generate legible SQL."</p>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What a fan-out join does to your revenue number<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Take an orders table with one row per order, carrying an order total. Take a line-items table with one row per product in that order. Join them so an analyst can slice revenue by product category, then sum the order total.</p>
+        <p>An order with three line items now contributes its total <strong>three times</strong>. The SQL is valid. The query runs. The dashboard renders. The number is wrong by however many line items the average order carries, and it is wrong in a way that scales with your business, which means it looks like growth.</p>
+        <p>That is a fan-out join. A chasm join is its cousin: two independent one-to-many relationships hanging off one table, multiplied against each other. Both produce plausible, confident, wrong numbers - the same failure signature you will meet again in b9.</p>
+        <div class="callout win">
+          <strong>★ The line to remember</strong>
+          A naive metrics layer silently double-counts on one-to-many joins. Students who learn only "define metrics in YAML" have missed the difficult part. When you evaluate any product in this category, do not ask how metrics are defined - ask how the join path is resolved, and what happens when two measures live at different grains.
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>It is a compiler, not a storage layer<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The second thing that surprises buyers. MetricFlow generates SQL at query time. Nothing is precomputed by default - dbt says so directly: <strong>"you're not materializing any data by default."</strong></p>
+        <p>So the semantic layer <strong>does not save warehouse spend</strong>. Every query still hits the engine, and now it hits the engine with generated SQL rather than hand-written SQL. What the layer actually does to your cost structure is move it: <em>from human duplication to machine compute plus a licence fee.</em> That is very often a good trade, because the human duplication was costing you reconciliation meetings, wrong decisions and analyst attrition. But it is a trade, and a finance stakeholder who was told "this will reduce our warehouse bill" will remember that sentence.</p>
+        <p>Present the trade honestly and it survives the budget review. Present it as a saving and it does not.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>dbt's own admitted trade-offs<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Credit where due: these come from dbt's documentation, not from a competitor's comparison page. Any vendor whose docs list constraints this plainly is easier to plan around than one whose docs do not.</p>
+        <table class="clean">
+          <thead>
+            <tr><th>Trade-off</th><th>What it means for your plan</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Requires a paid plan</td><td>dbt Core users get the local CLI only - no APIs, no integrations. The thing that makes the layer valuable is the serving surface, and the serving surface is the commercial product.</td></tr>
+            <tr><td>Metered by "Queried Metrics"</td><td>Your bill scales with how successfully you drive adoption. Model this before you evangelize internally, not after.</td></tr>
+            <tr><td>"You're not materializing any data by default"</td><td>The warehouse pays compute on every query. Budget engine spend and licence spend together.</td></tr>
+            <tr><td>No custom aggregations on measures</td><td>Anything exotic stays in a dbt model upstream. Check your five weirdest metrics against this before signing.</td></tr>
+          </tbody>
+        </table>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p><strong>The modelling tension, in dbt's own words:</strong> "A star schema data model offers more flexibility for dimensions... but will require more joins. A fully denormalized data model is simpler... but won't be able to join to other tables."</p>
+          <p>There is no free option here. Denormalize and you get fast, simple, cheap queries that cannot answer the cross-domain question your CFO will ask in month three. Keep the star schema and you get flexibility that the join graph has to earn every single query. This decision is made at the modelling layer, in b5 territory, and it constrains everything you can do in b6. That is the strongest argument in the course for not treating these as separate projects.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: THE ANALYST'S SURFACE ============ -->
+  <section class="section" id="analyst-surface">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers Cube and Open Semantic Interchange</span>
+      <h2>The analyst's surface, and the alternative shape <span class="tag demo">★ 12 min · everyone follows along</span></h2>
+    </div>
+    <p class="lede">Everything above this layer is what the analyst actually ships: dashboards people open on Monday, scheduled reports that arrive in an inbox, and PDF exports that get pasted into a board pack and live forever. Those artifacts are the reason metric truth matters. A wrong number in an ad-hoc query gets corrected in the next message. A wrong number in a recurring PDF gets quoted back to you for two years.</p>
+
+    <div class="steps">
+      <div class="step"><p>List every recurring artifact your team produces - dashboard, scheduled email, PDF pack, spreadsheet refresh. For each, write down where its numbers are defined. Most teams find at least three distinct definition homes on the first pass.</p></div>
+      <div class="step"><p>For each artifact, ask the chokepoint test from b1: <strong>what stops someone bypassing the definition?</strong> If an analyst can write raw SQL in the BI tool, your semantic layer governs exactly the people who were already following the rules.</p></div>
+      <div class="step"><p>Now look at the alternative shape. <strong>Cube</strong> describes itself in four pillars: <strong>"data modeling, access control, caching, and APIs."</strong> Note the two that dbt's layer does not lead with - access control and caching. If your pain is "the same dashboard query runs 400 times a morning," that is a caching problem, and it points at a different product.</p></div>
+      <div class="step"><p>Check the protocol list, because it decides who can actually use the layer. Cube serves SQL, REST, GraphQL and MDX/DAX. That last pair is the one nobody mentions in a demo and everybody needs: <strong>it is what lets Excel connect</strong>. Your finance team is not migrating off Excel because you bought a semantic layer.</p></div>
+      <div class="step"><p>Read the marketing shift out loud. Cube repositioned from <strong>"universal semantic layer"</strong> to <strong>"agentic analytics platform"</strong> - with the same core product underneath. That is a category claim following a funding cycle, not a technology change. Learning to spot this is a durable skill: the four pillars are the falsifiable part, the positioning is not.</p></div>
+    </div>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Open Semantic Interchange, and why a standard would matter here<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Open Semantic Interchange (OSI)</strong> is a Snowflake-led effort announced <strong>2025-09-23</strong>: a standardized YAML format for exchanging semantic models between tools. Partners include Alation, Atlan, Cube, dbt Labs, Hex, Sigma and ThoughtSpot.</p>
+        <p>The reason to care is portability. Right now, the definitions you write are the deepest lock-in in the stack - deeper than the table format, because a metric definition encodes business agreement that took nine months of meetings to reach. If those definitions become an exchangeable artifact, the switching cost of a semantic layer drops sharply, which is exactly why an announcement with this partner list is interesting.</p>
+        <p>Two honesty notes. First, a partner list is an announcement, not an implementation - the useful question is which of those seven have shipped import and export against it. Second, we could not verify a v1.0 date or repository at the time of writing, so treat OSI as a direction of travel, not as something you can build a migration plan on today.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Critical reading: the vendor stat that does not match the repo<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A small, concrete exercise you can repeat on any vendor in any category.</p>
+        <table class="clean">
+          <thead>
+            <tr><th>Source</th><th>Claim</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Cube homepage</td><td>18,000 GitHub stars</td></tr>
+            <tr><td>cube-js/cube repository, fetched 2026-08-07</td><td><strong>20,564 stars</strong> (2,104 forks)</td></tr>
+          </tbody>
+        </table>
+        <p>Notice which direction the error runs. The vendor is <em>understating</em> its own number, which tells you exactly what happened: someone hardcoded the figure into the page during a redesign and nobody has touched it since. That is the general lesson - <strong>vendor stat blocks are frozen marketing artifacts, not telemetry.</strong> They are a snapshot of a number on the day a designer wrote the HTML.</p>
+        <p>Two follow-ons. Stars themselves are a weak proxy for anything: they are cumulative, never decay, and reward age over activity. And if a vendor's own homepage number is two years stale, ask the same question of every other number on that page - especially the ones you cannot check against an API.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 4: SELF-STUDY ============ -->
+  <section class="section" id="one-case">
+    <div class="section-kicker">
+      <span class="klabel">Part 4 · self-study · sets up b9</span>
+      <h2>The self-serve case and the AI case are the same case <span class="tag exercise">◐ 6 min read</span></h2>
+    </div>
+    <p class="lede">Here is the argument that makes this the pivot session of the practitioner track, and the reason a layer that looks like a BI concern is on the critical path for everything you are about to build in b7, b8 and b9.</p>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why an agent fails for exactly the reason a second BI developer fails<span class="mini">6 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Consider two scenarios that look completely different and are structurally identical.</p>
+        <p><strong>Scenario one.</strong> A second BI developer joins, is pointed at the warehouse, and builds a revenue dashboard. They do not know that internal test accounts are excluded, that revenue is reported on ship date, or that one region's currency conversion happens upstream. They write reasonable SQL. Their number differs from the existing dashboard by four percent. It takes three weeks and two meetings to find out why.</p>
+        <p><strong>Scenario two.</strong> An agent is given warehouse credentials and asked for revenue by region. It writes reasonable SQL. It does not know any of those three things either, because none of them are written down anywhere the agent can read. Its number differs by four percent. Nobody investigates, because nobody knows to.</p>
+        <p>Same failure, same cause: the business logic lives in people's heads and in tool configuration rather than in an addressable artifact. The only differences are <strong>speed and volume</strong>. The second BI developer produces one wrong dashboard a fortnight and is eventually corrected by a colleague. The agent produces forty wrong answers before lunch, each one delivered with the same confident formatting as a correct one, to people with no way to tell the difference.</p>
+        <p>This is why "we will add the semantic layer later, after we ship the AI assistant" is the sequencing error the whole course exists to prevent. The assistant does not create the problem. It removes every human checkpoint that was quietly containing it.</p>
+        <p>The corollary is more encouraging than it sounds: the work you do on this layer is not BI work that also happens to help AI. It is the same work, and it is the best-returning investment available at this point in the stack, because it pays out twice. <strong>b9 is the evidence session that measures exactly how much it pays.</strong></p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 30-40 min total</span></h2>
+    </div>
+    <ul>
+      <li>Take your single most argued-about metric. Write down every place it is currently defined. Then classify each disagreement you can remember about it: was it a genuine aggregation difference, or a filter and grain difference? Count the two piles.</li>
+      <li>Find one fan-out risk in your own model. Look for any dashboard that joins a header table to a detail table and then sums a header-level column. If you find one, you have found a number your organization currently believes.</li>
+      <li>Price the trade honestly. Estimate the licence cost of a semantic layer against your current warehouse spend, and write the sentence you would say to your CFO. It must contain the words "this does not reduce warehouse compute."</li>
+      <li>Apply the chokepoint test to your BI tool. Can an analyst write raw SQL against the warehouse from inside it? Write down whether your answer is architecture or policy.</li>
+      <li>Pick any vendor in this category and check one homepage statistic against a first-party source. Note the direction and size of the gap.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Official sources covered</h2>
+    </div>
+    <p class="lede">Vendor documentation and first-party repositories, with marketing claims labelled as marketing claims and unverified items labelled as unverified. This page covers:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">dbt Semantic Layer documentation and FAQ</span><span class="note">Parts 1-2 · the filter-versus-definition diagnostic, the four admitted trade-offs</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">MetricFlow documentation - semantic models, entities, dimensions, measures, metrics</span><span class="note">Parts 1-2 · the join graph, fan out and chasm joins, compiler not storage</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Cube documentation and homepage · cube-js/cube repository (fetched 2026-08-07)</span><span class="note">Part 3 · the four pillars, MDX/DAX for Excel, the 18,000 versus 20,564 gap</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Open Semantic Interchange announcement (2025-09-23), Snowflake-led</span><span class="note">Part 3 · partner list verified · v1.0 date and repository unverified, flagged in session</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">1 · Two teams report different revenue figures. Before you touch any tooling, what is the most likely diagnosis?</p>
+      <button class="qopt" type="button">A · They are computing genuinely different metrics and both need renaming</button>
+      <button class="qopt" type="button">B · One of the two SQL queries contains a bug that testing will find</button>
+      <button class="qopt" type="button">C · Same aggregation, different filters or grain - which per dbt's FAQ is still the same metric, just sliced differently</button>
+      <p class="qwhy">dbt's FAQ draws the line precisely: a different underlying aggregation makes it a different metric, but different filters or dimensions leave it the same metric. Most disagreements are the second kind. Teams that treat every one as a definition problem end up with forty near-identical metrics.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">2 · A vendor demos metric definitions in clean YAML. What is the question that actually separates products in this category?</p>
+      <button class="qopt" type="button">A · How the join path is resolved - because a naive layer silently double-counts on one-to-many joins, producing valid SQL with a wrong number</button>
+      <button class="qopt" type="button">B · How many metrics the layer can hold before performance degrades</button>
+      <button class="qopt" type="button">C · Whether the YAML schema is documented and version-controlled</button>
+      <p class="qwhy">MetricFlow's documented job is capturing identifier types and navigating to appropriate joins "to avoid the construction of fan out and chasm joins." The YAML is the easy half. An order with three line items contributing its total three times is the hard half, and it looks like growth.</p>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">3 · Your CFO asks whether the semantic layer will reduce the warehouse bill. What is the honest answer?</p>
+      <button class="qopt" type="button">A · Yes - shared definitions mean fewer redundant queries against the engine</button>
+      <button class="qopt" type="button">B · No - it is a compiler that generates SQL at query time and materializes nothing by default, so it moves cost from human duplication to machine compute plus a licence fee</button>
+      <button class="qopt" type="button">C · Yes, once caching is enabled the engine spend drops to near zero</button>
+      <p class="qwhy">dbt states it directly: "you're not materializing any data by default." The warehouse pays compute on every query, and the layer is metered by Queried Metrics on top. The trade is usually worth it, but it is a trade, and a finance stakeholder promised a saving will remember the promise.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Practitioner session 6 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>The job</b><span>Define each metric once in version-controlled code, serve it everywhere through an API - JDBC, GraphQL, Python SDK, dbt MCP server.</span></div>
+      <div class="cheat-item"><b>The vocabulary</b><span>Semantic models · entities (join keys) · dimensions (the slices) · measures (aggregatable columns) · metrics (what the business asks for).</span></div>
+      <div class="cheat-item"><b>The diagnostic</b><span>Different aggregation = different metric. Different filters or grain = same metric. Most fights are the second kind.</span></div>
+      <div class="cheat-item"><b>The hard part</b><span>The join graph. Fan-out and chasm joins produce valid SQL with silently double-counted numbers that look like growth.</span></div>
+      <div class="cheat-item"><b>Compiler, not storage</b><span>SQL generated at query time, nothing materialized by default. Cost moves from human duplication to compute plus licence.</span></div>
+      <div class="cheat-item"><b>dbt's admitted limits</b><span>Paid plan for APIs · metered by Queried Metrics · no custom aggregations on measures · star schema flexibility versus denormalized simplicity.</span></div>
+      <div class="cheat-item"><b>Cube's four pillars</b><span>Data modeling, access control, caching, APIs. SQL/REST/GraphQL/MDX-DAX, so Excel connects. Positioning shifted, product did not.</span></div>
+      <div class="cheat-item"><b>Read vendor stats critically</b><span>Cube's homepage says 18,000 stars; the repo has 20,564 (2026-08-07). Stat blocks are frozen marketing artifacts, not telemetry.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Practitioner session 6 of 10 · learn-ai-infra-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="b5-lakehouse-engine.html">← b5 · The lakehouse engine</a> &nbsp;·&nbsp; <a href="../index.html">All sessions</a> &nbsp;·&nbsp; <a href="b7-compute-mlops.html">Next: Compute + MLOps →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=2"></script>
+</body>
+</html>

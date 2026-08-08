@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leader session 2 · The layer map and what each buys you - learn ai infra with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-infra-with-phoebe</a> / Leader session 2 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Infra with Phoebe · Leader track · Session 2 of 6</div>
+    <h1>The layer map, and <span class="accent">what each one buys you</span></h1>
+    <p class="sub">Last session named the eight jobs. This one connects them to people and to money. You will see exactly how many layers stand between an analyst and a trustworthy number, meet the idea that makes the whole stack legible - every layer has a chokepoint where truth is decided and lock-in lives - and then watch a platform build itself out one layer at a time while the bill and the headcount of unblocked people move together on screen. The number at the top of that climb is the one worth taking back to your board.</p>
+    <div class="chip-row">
+      <span class="chip level">🟢 Leader track</span>
+      <span class="chip audience">CDAIOs · heads of data · platform sponsors</span>
+      <span class="chip audience">No code, decisions only</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:5">3-18 · Which persona each layer unblocks</span>
+      <span class="a3" style="flex:8">18-42 · Live: watch the platform build out</span>
+      <span class="a4" style="flex:1">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ PART 0 ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we are</h2>
+    </div>
+    <p class="lede">In a1 you got the frame: eight jobs, five people, and the observation that the two foundation layers unblock nobody directly. Today that frame becomes usable. First the dependency map, which is the single most persuasive artifact you can put in front of a budget holder, because it turns "we need a catalog" into "the analyst you keep asking for numbers from is standing on five layers and we funded two of them." Then the chokepoint frame, which is this course's big idea and the reason you can evaluate an unfamiliar product in about ten minutes. Then the live model, where the money appears.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - read after class</span>
+      <span class="pill peach">▶ Live platform sim - real rate-card arithmetic</span>
+      <span class="pill inkpill">Official sources covered</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      The persona-to-layer map for all five of your people, the chokepoint test in one sentence you can use in any vendor meeting, and the honest annual cost of the platform your organisation keeps describing as "just a dashboard tool."
+    </div>
+  </section>
+
+  <!-- ============ PART 1: THE DEPENDENCY MAP ============ -->
+  <section class="section" id="dependency-map">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · the artifact to take to your budget holder</span>
+      <h2>Which persona each layer unblocks <span class="tag concept">15 min live</span></h2>
+    </div>
+    <p class="lede">Each of your five people needs a specific set of layers before they can do their job at all. Not "would benefit from" - <em>needs</em>. Below is the whole dependency map in one picture. Look for the two rows at the bottom where every single line lands.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A dependency map with five persona nodes across the top and eight platform layers as rows beneath, each persona connected by a line running down to the layers it requires, with layers one and two receiving a connection from all five personas.">
+        <style>
+          .m2-h { font: 700 11px Inter, sans-serif; fill: #3F6212; letter-spacing: .5px; }
+          .m2-p { font: 700 12px Inter, sans-serif; fill: #1E293B; }
+          .m2-l { font: 600 12px Inter, sans-serif; fill: #FFFFFF; }
+          .m2-k { font: 400 11.5px Inter, sans-serif; fill: #64748B; }
+          .m2-n { font: 400 12px Inter, sans-serif; fill: #64748B; }
+        </style>
+
+        <text class="m2-h" x="16" y="20">THE EIGHT LAYERS</text>
+        <text class="m2-h" x="251" y="20">THE FIVE PERSONAS AND WHAT EACH ONE REQUIRES</text>
+
+        <!-- persona nodes -->
+        <rect x="251" y="32" width="118" height="48" rx="8" fill="#D9F99D"/>
+        <text class="m2-p" x="310" y="53" text-anchor="middle">Data</text>
+        <text class="m2-p" x="310" y="69" text-anchor="middle">engineer</text>
+        <rect x="376" y="32" width="118" height="48" rx="8" fill="#D9F99D"/>
+        <text class="m2-p" x="435" y="61" text-anchor="middle">Analyst</text>
+        <rect x="501" y="32" width="118" height="48" rx="8" fill="#D9F99D"/>
+        <text class="m2-p" x="560" y="53" text-anchor="middle">Data</text>
+        <text class="m2-p" x="560" y="69" text-anchor="middle">scientist</text>
+        <rect x="626" y="32" width="118" height="48" rx="8" fill="#D9F99D"/>
+        <text class="m2-p" x="685" y="53" text-anchor="middle">AI</text>
+        <text class="m2-p" x="685" y="69" text-anchor="middle">engineer</text>
+        <rect x="751" y="32" width="118" height="48" rx="8" fill="#D9F99D"/>
+        <text class="m2-p" x="810" y="53" text-anchor="middle">Business</text>
+        <text class="m2-p" x="810" y="69" text-anchor="middle">client</text>
+
+        <!-- legend -->
+        <circle cx="560" cy="100" r="8" fill="#84CC16"/>
+        <text class="m2-k" x="574" y="104">requires this layer</text>
+        <circle cx="712" cy="100" r="5" fill="#FFFFFF" stroke="#64748B"/>
+        <text class="m2-k" x="724" y="104">does not</text>
+
+        <!-- row bands -->
+        <rect x="240" y="120" width="630" height="34" rx="5" fill="#F8FAFC"/>
+        <rect x="240" y="208" width="630" height="34" rx="5" fill="#F8FAFC"/>
+        <rect x="240" y="296" width="630" height="34" rx="5" fill="#F8FAFC"/>
+        <rect x="240" y="384" width="630" height="34" rx="5" fill="#D9F99D"/>
+        <rect x="240" y="428" width="630" height="34" rx="5" fill="#D9F99D"/>
+
+        <!-- vertical dependency lines, all five reach layer 1 -->
+        <line x1="310" y1="80" x2="310" y2="445" stroke="#64748B" stroke-width="2"/>
+        <line x1="435" y1="80" x2="435" y2="445" stroke="#64748B" stroke-width="2"/>
+        <line x1="560" y1="80" x2="560" y2="445" stroke="#64748B" stroke-width="2"/>
+        <line x1="685" y1="80" x2="685" y2="445" stroke="#64748B" stroke-width="2"/>
+        <line x1="810" y1="80" x2="810" y2="445" stroke="#64748B" stroke-width="2"/>
+
+        <!-- layer labels -->
+        <rect x="16" y="120" width="215" height="34" rx="6" fill="#334155"/>
+        <text class="m2-l" x="32" y="142">8 · Self-serve</text>
+        <rect x="16" y="164" width="215" height="34" rx="6" fill="#334155"/>
+        <text class="m2-l" x="32" y="186">7 · LLM gateway</text>
+        <rect x="16" y="208" width="215" height="34" rx="6" fill="#334155"/>
+        <text class="m2-l" x="32" y="230">6 · Compute + MLOps</text>
+        <rect x="16" y="252" width="215" height="34" rx="6" fill="#334155"/>
+        <text class="m2-l" x="32" y="274">5 · Semantic + BI</text>
+        <rect x="16" y="296" width="215" height="34" rx="6" fill="#334155"/>
+        <text class="m2-l" x="32" y="318">4 · Engine + transform</text>
+        <rect x="16" y="340" width="215" height="34" rx="6" fill="#334155"/>
+        <text class="m2-l" x="32" y="362">3 · Orchestration</text>
+        <rect x="16" y="384" width="215" height="34" rx="6" fill="#1E293B"/>
+        <text class="m2-l" x="32" y="406">2 · Format + catalog</text>
+        <rect x="16" y="428" width="215" height="34" rx="6" fill="#1E293B"/>
+        <text class="m2-l" x="32" y="450">1 · Storage</text>
+
+        <!-- required = filled lime dot · not required = small open circle -->
+        <g fill="#FFFFFF" stroke="#64748B">
+          <circle cx="310" cy="137" r="5"/><circle cx="435" cy="137" r="5"/><circle cx="560" cy="137" r="5"/><circle cx="685" cy="137" r="5"/>
+          <circle cx="310" cy="181" r="5"/><circle cx="435" cy="181" r="5"/><circle cx="560" cy="181" r="5"/><circle cx="810" cy="181" r="5"/>
+          <circle cx="310" cy="225" r="5"/><circle cx="435" cy="225" r="5"/><circle cx="685" cy="225" r="5"/><circle cx="810" cy="225" r="5"/>
+          <circle cx="310" cy="269" r="5"/><circle cx="560" cy="269" r="5"/><circle cx="685" cy="269" r="5"/>
+          <circle cx="310" cy="313" r="5"/>
+          <circle cx="685" cy="357" r="5"/>
+        </g>
+        <g fill="#84CC16">
+          <circle cx="810" cy="137" r="8"/>
+          <circle cx="685" cy="181" r="8"/>
+          <circle cx="560" cy="225" r="8"/>
+          <circle cx="435" cy="269" r="8"/><circle cx="810" cy="269" r="8"/>
+          <circle cx="435" cy="313" r="8"/><circle cx="560" cy="313" r="8"/><circle cx="685" cy="313" r="8"/><circle cx="810" cy="313" r="8"/>
+          <circle cx="310" cy="357" r="8"/><circle cx="435" cy="357" r="8"/><circle cx="560" cy="357" r="8"/><circle cx="810" cy="357" r="8"/>
+          <circle cx="310" cy="401" r="8"/><circle cx="435" cy="401" r="8"/><circle cx="560" cy="401" r="8"/><circle cx="685" cy="401" r="8"/><circle cx="810" cy="401" r="8"/>
+          <circle cx="310" cy="445" r="8"/><circle cx="435" cy="445" r="8"/><circle cx="560" cy="445" r="8"/><circle cx="685" cy="445" r="8"/><circle cx="810" cy="445" r="8"/>
+        </g>
+
+        <text class="m2-n" x="16" y="486">Layers 1-2 carry every line. They unblock nobody on their own, yet everything above depends on them.</text>
+        <text class="m2-n" x="16" y="504">The analyst needs five layers, not a BI licence. That gap is where most funding arguments go wrong.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - five people, and the layers each one is standing on</figcaption>
+    </figure>
+
+    <table class="clean">
+      <thead>
+        <tr><th>Persona</th><th>Layers needed</th><th>What they cannot do without them</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Data engineer</strong></td><td>1-3</td><td>Without storage, a catalog and orchestration there is no reliable arrival of data at all. Everything downstream is a manual extract that someone re-runs by hand and nobody trusts twice.</td></tr>
+        <tr><td><strong>Analyst</strong></td><td>1-5</td><td>Can build a dashboard on layer 4 alone, but cannot produce a number that survives being challenged. Without the semantic layer, two dashboards give two revenue figures and the meeting becomes about the data instead of the decision.</td></tr>
+        <tr><td><strong>Data scientist</strong></td><td>1-4 + 6</td><td>Can train a model in a notebook without layer 6, and cannot say what is in production, where it came from, who approved it, or how to roll it back. That is not a model in production; it is a model that happens to be running.</td></tr>
+        <tr><td><strong>AI engineer</strong></td><td>1-2, 4, 7</td><td>Can ship an LLM application without a gateway, and gets no cost control, no routing or failover, no shared audit trail and no way to stop one team consuming the whole quota. Spend appears on a credit card before it appears on a plan.</td></tr>
+        <tr><td><strong>Business client</strong></td><td>1-5 + 8</td><td>Layer 8 alone gets them answers. Without layer 5 those answers are computed from ungoverned metrics, and nothing marks the wrong ones. They are not blocked. They are misled, confidently, at speed.</td></tr>
+      </tbody>
+    </table>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The insight to carry out of this table<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Read the analyst row again. <strong>Five layers.</strong> Not a BI licence - five layers, of which the BI tool is roughly the top half of one.</p>
+        <p>This is the sentence that changes budget conversations, because it explains a pattern every data leader has lived through: the organisation buys the analyst a very good BI tool, adoption is fine for a quarter, and then trust quietly collapses because the numbers disagree. Nothing was wrong with the tool. Three of the five layers underneath it were missing, and a BI tool cannot manufacture agreement about what revenue means.</p>
+        <p>Two more readings worth saying out loud in the room:</p>
+        <ul>
+          <li><strong>The AI engineer is the odd one out.</strong> They skip orchestration in this model, because they read curated tables rather than building pipelines. That is exactly why AI application work can start before the platform is ready - and exactly why it so often does, on infrastructure nobody approved.</li>
+          <li><strong>The business client depends on more layers than anyone.</strong> Six of eight. The person who wants the simplest thing - an answer in plain language - is the person requiring the most complete platform. Every "just let the business ask questions" project runs into this arithmetic eventually.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>How to use this map in a funding paper<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The map converts a technical request into a people request, and people requests get funded. The pattern is three lines:</p>
+        <ul>
+          <li><strong>Name the person and the blocked outcome.</strong> "Our analysts cannot produce a revenue figure that two teams agree on." Not "we lack a semantic layer."</li>
+          <li><strong>Show the layers they are standing on and mark which are missing.</strong> The picture does the arguing. A missing layer with a persona sitting on top of it is a diagnosis, and diagnoses are much harder to defer than wish lists.</li>
+          <li><strong>State the cost of the whole chain, not the missing piece.</strong> If you cost only the gap, the next budget round will cut the layer beneath it again. The next section gives you real arithmetic for this.</li>
+        </ul>
+        <p>One caution. The map is a teaching model, not a description of your organisation. Your team sizes, data volumes and existing contracts will move every line on it. What transfers is the shape: the order in which people become unblocked, and the fact that the two layers with no beneficiary carry everyone.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: THE CHOKEPOINT FRAME ============ -->
+  <section class="section" id="chokepoints">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · the idea that makes the stack legible</span>
+      <h2>Every layer has a chokepoint <span class="tag concept">9 min live</span></h2>
+    </div>
+    <p class="lede">Here is the frame that turns eight disconnected topics into one course, and the one thing from this track most worth remembering five years from now. In every layer there is a narrow waist - a single place where plural, messy inputs become a singular, consequential output. That waist is where truth gets decided, where governance is even possible, and where lock-in actually lives. Learn to find it and you can evaluate an unfamiliar product in about ten minutes, in a language your architects and your CFO both understand.</p>
+
+    <table class="clean">
+      <thead>
+        <tr><th>Layer</th><th>The chokepoint</th><th>What it decides</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Storage</td><td>egress economics and retention terms</td><td>what it costs to read your own data, and whether you can leave</td></tr>
+        <tr><td>Table format + catalog</td><td><strong>the catalog</strong></td><td>access control, credential vending, commit sequencing</td></tr>
+        <tr><td>Orchestration</td><td>the asset graph</td><td>what "this ran successfully" actually means</td></tr>
+        <tr><td>Engine</td><td>the compute contract</td><td>who pays for a badly written query</td></tr>
+        <tr><td>Semantic layer</td><td><strong>metric definitions</strong></td><td>what "revenue" means, everywhere</td></tr>
+        <tr><td>MLOps</td><td><strong>the model registry</strong></td><td>what is in production and how to roll it back</td></tr>
+        <tr><td>LLM gateway</td><td><strong>the AI gateway</strong></td><td>which models run, at what cost, with what audit trail</td></tr>
+        <tr><td>Self-serve</td><td>the semantic layer, again</td><td>whether an answer can be trusted</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout tip">
+      <strong>The chokepoint test - the one question to take into every vendor meeting</strong>
+      "What stops someone going around this?" If the answer is architecture, you have a control. If the answer is policy, you have a suggestion. <strong>Architecture is a control; policy is a suggestion.</strong>
+    </div>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Three ways a control turns out to be a suggestion<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A chokepoint only governs if it cannot be bypassed. Every one of these has been demonstrated to a board as a governance capability, and every one of them fails the test in a way that is invisible until an audit:</p>
+        <ul>
+          <li><strong>The model registry, bypassed by object storage.</strong> A registry with approval workflows and beautiful lineage governs nothing if an engineer can deploy an artifact straight from the object store. Your governed models are governed. The others are invisible, and you will not know which is which until something goes wrong.</li>
+          <li><strong>The semantic layer, bypassed by raw SQL in the BI tool.</strong> Metric definitions defined centrally and then optional in practice define metrics for exactly the people who were already following the rules. The dashboards that disagree with each other will be the ones written by the fastest analysts, under deadline, going around the layer.</li>
+          <li><strong>The AI gateway, bypassed by calling the provider directly.</strong> A gateway gives you spend dashboards, rate limits and audit trails covering the compliant portion of your traffic. Teams that put a provider key in an environment variable are absent from every chart you are shown, which is a worse position than having no chart, because the chart looks complete.</li>
+        </ul>
+        <p>So when a vendor demonstrates a governance feature, ask the same question every single time, in the same words: <em>what stops someone from going around this?</em> Watch whether the answer is a mechanism or a process. A good vendor will answer honestly and tell you which enforcement mode you have to configure. A vague answer is itself the answer.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why the chokepoint is also where lock-in lives<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The uncomfortable half of this frame: the place where you get the most governance is the place you are most tied to. These are the same property viewed from two sides, and pretending otherwise makes for bad negotiations.</p>
+        <p>The clearest example is the catalog. It resolves metadata, controls access, vends credentials and sequences commits, and it is the single boundary between every engine and every byte you own. That is why it is the strongest governance point in the stack. It is also why the real lock-in surface is not the file format at all - the files were always portable - but <strong>governance portability</strong>: the row-level security rules, the access grants, the audit configuration. Those do not transfer between catalog implementations, and no migration tool promises they will.</p>
+        <p>The practical move for a leader is not to avoid chokepoints. A platform without them is ungovernable. It is to be deliberate: know which four or five you have chosen, know what it would cost to move each one, and never let a chokepoint get chosen by accident in a proof of concept that quietly became production.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO ============ -->
+  <section class="section" id="demo">
+    <div class="section-kicker">
+      <span class="klabel">Live demo</span>
+      <h2>Watch the platform build out <span class="tag demo">★ 15 min · run it with me</span></h2>
+    </div>
+    <p class="lede">Below is your platform, empty. We switch on one layer at a time, bottom to top, and two numbers move together: how many of your five people can actually do their job, and what the bill says. Every dollar is computed live from published rate cards fetched on 6-7 August 2026 - AWS S3 storage and egress tiers, AWS three-year reserved GPU pricing, NVIDIA AI Enterprise per-installed-GPU list price. Defaults are 50 TB stored, 20 TB egressed per month, 400 query-hours, 200 GPU-hours, 8 installed GPUs and 40 million tokens.</p>
+
+    <div class="steps">
+      <div class="step"><p><strong>Nothing on: $0, and all five people are blocked.</strong> Obvious, but read the cards - each one names the specific job that person cannot do. Those five sentences are your roadmap.</p></div>
+      <div class="step"><p><strong>Storage, then catalog: $1,578 a month, and still zero personas unblocked.</strong> Sit with that. Two layers of real spend and not one person's job has improved. This is the underfunding trap, rendered as a number: it is the exact stretch that gets cut in budget reviews, and cutting it is why the layers above it fail later.</p></div>
+      <div class="step"><p><strong>Add orchestration: $2,178, and the data engineer starts working.</strong> First person unblocked, three layers in. Ask the room whether their organisation would have survived the previous step politically.</p></div>
+      <div class="step"><p><strong>Add the engine and the semantic layer: $5,878, analyst unblocked.</strong> Five layers for one analyst. This is the picture from Part 1 with a price on it - and the answer to anybody who thinks the analyst needed a BI licence.</p></div>
+      <div class="step"><p><strong>All eight on: $11,295 a month, $135,540 a year, all five people working.</strong> That is the honest annual price of the platform your organisation keeps calling "just a dashboard tool." Not a quote for your environment - your volumes and contracts will move it - but the right order of magnitude, from real rate cards.</p></div>
+      <div class="step"><p><strong>Now break it.</strong> With everything on, turn the <strong>semantic layer off</strong> while <strong>self-serve stays on</strong>. Read the business-client card. It goes red, and it stays unblocked. That combination is the point.</p></div>
+    </div>
+
+    <div class="infrabox" data-mode="ladder" data-layers=""></div>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Reading the red client card<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The card reads: <em>"Answering confidently from ungoverned metrics - plausible SQL, wrong business logic."</em> The client is not blocked. The self-serve tool still answers. The answers are simply not trustworthy, and nothing in the workflow says so.</p>
+        <p>That is not a quirk of the simulator. It is the most common failure in enterprise data, and it is worse than an outage for one reason: <strong>a blocked user knows they are blocked.</strong> A misled user does not, and neither does the person reading their slide. The count of unblocked personas drops on screen, but the client card stays lit, because a talk-to-your-data tool will cheerfully answer without a semantic layer underneath it. That is the entire lesson of this course in one toggle.</p>
+        <p>Microsoft's engineering team measured this failure directly, and their evaluation is worth knowing about because the methodology is published and reproducible, unlike any vendor accuracy claim. Session a5 and the practitioner track's evidence session go through the numbers properly. For today, the shape is enough: the same product, on the same benchmark, was transformed by metadata work rather than by a better model.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p><strong>Airbnb's Minerva exists because of exactly this problem.</strong> Not because they lacked dashboards - they had plenty - but because teams kept reporting conflicting numbers for the same question. Their answer, published on their own engineering blog in 2021, was a metrics platform carrying 12,000+ metrics, 4,000+ dimensions and 200+ data producers. Layer 5, built deliberately, four years after their first data portal. The order matters more than the tooling.</p>
+        </div>
+      </div>
+    </details>
+
+    <div class="callout tip">
+      <strong>What this model is and is not</strong>
+      The cost arithmetic is real and recomputes live from published rate cards fetched on 6-7 August 2026. The persona outcomes are a teaching model, not a simulation of your organisation - your team sizes, volumes and existing contracts will move every number. What transfers is the shape: the order of unblocking, and how much you spend before anyone notices a difference.
+    </div>
+  </section>
+
+  <!-- ============ PART 3: SEQUENCING ============ -->
+  <section class="section" id="sequencing">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · self-study</span>
+      <h2>Fund top-down, build bottom-up <span class="tag exercise">◐ 5 min read</span></h2>
+    </div>
+    <p class="lede">The ladder you just climbed contains the sequencing rule this whole track exists to teach, and it is not "build the foundations first." That advice is correct and useless, because no foundation ever won a funding round on its own merits. The rule is subtler and it separates two decisions that most organisations collapse into one.</p>
+
+    <div class="steps">
+      <div class="step"><p><strong>Fund top-down.</strong> Money follows outcomes, and outcomes live at the top of the stack. Your business case is the analyst's trustworthy number or the client's answer - never the catalog. Write the case in the language of layer 5 or layer 8, because that is the language the budget is denominated in.</p></div>
+      <div class="step"><p><strong>Build bottom-up.</strong> Dependencies do not negotiate. The catalog goes in before the semantic layer whatever the business case says, because retrofitting it underneath live workloads costs several times what installing it first would have, and the bill arrives exactly when the platform is finally being used.</p></div>
+      <div class="step"><p><strong>Fund the chain, not the gap.</strong> If your paper costs only the missing piece, next year's review cuts the layer beneath it again and you repeat this conversation with less credibility. Cost the whole dependency chain for the persona you are unblocking, and show the $1,578-with-zero-personas step honestly rather than hiding it.</p></div>
+      <div class="step"><p><strong>Set the expectation before the quiet quarter, not during it.</strong> There is a stretch of every platform programme where real money is spent and nobody's job has visibly improved. If the board hears about that stretch for the first time while they are living through it, the programme is in trouble. Tell them in advance, with the number.</p></div>
+    </div>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why "just buy the outcome" fails<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Collapsing funding and building into one decision produces the most expensive pattern in enterprise data: funding top-down <em>and</em> building top-down at the same time. Buying the outcome without the dependencies.</p>
+        <p>It is genuinely seductive. The layer-8 product demos beautifully, it is the only layer a non-specialist can evaluate by watching, and it is the one that maps directly to the business case you already wrote. Nothing about the purchase looks wrong on the day.</p>
+        <p>And it does not fail loudly. That is what makes it dangerous. There is no outage, no error message, no incident review. There are answers - fluent, fast, confidently wrong on the questions that matter most, arriving in decks that nobody has reason to challenge. By the time somebody traces a bad decision back to a metric definition that never existed, the tool has a year of usage behind it and a sponsor with their name on it.</p>
+        <p>The counter-move is a single sentence in every evaluation, and it comes straight from a1's question 2: <strong>which layers does this product assume we already have?</strong> Ask it before the demo, in writing, and make the answer part of the business case rather than a discovery you make in month nine.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Before session a3</span>
+      <h2>Three things to do this week <span class="tag exercise">◐ 30 min total</span></h2>
+    </div>
+    <ul>
+      <li>Fill in the dependency map for your own organisation: five personas down the top, eight layers down the side, and a mark where the layer genuinely exists rather than where a product is licensed. The empty cells under a persona are your roadmap in priority order.</li>
+      <li>Pick any governance capability your organisation already owns and apply the chokepoint test in writing: what stops someone going around it? Record whether the honest answer is architecture or policy. Bring the uncomfortable one to a3.</li>
+      <li>Run the ladder above with your real numbers - storage volume and egress in the demo inputs - and note where your spend actually concentrates. It is rarely where people assume, and session a4 is entirely about why.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Official sources covered</h2>
+    </div>
+    <p class="lede">Vendors' own documentation and billing feeds, published engineering blogs from the companies that built these platforms, and peer-reviewed work where it exists - with marketing claims labelled as such. Every price carries its fetch date. This page covers:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">AWS S3, GPU and NVIDIA AI Enterprise published rate cards (fetched 2026-08-06/07)</span><span class="note">The arithmetic behind the ladder · full cost model in a4</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The chokepoint frame across all eight layers - catalog, metric definitions, model registry, AI gateway</span><span class="note">The course's organising idea · applied per layer through the practitioner track</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Microsoft ISE evaluation of Databricks Genie on LiveSQLBench (published 2026-05-07)</span><span class="note">Previewed in the red client card · the full evidence session is a5</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Airbnb engineering blog - Dataportal (2017), Minerva (2021), Metis (2023)</span><span class="note">Minerva as the layer-5 case · the whole six-year arc in a5</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · Your analysts cannot produce a revenue number two teams agree on. How many layers does an analyst actually need?</p>
+      <button class="qopt" type="button">A · One - a good BI tool, correctly configured</button>
+      <button class="qopt" type="button">B · Five - storage, catalog, orchestration, engine and the semantic layer, of which the BI tool is roughly the top half of one</button>
+      <button class="qopt" type="button">C · Two - the engine and the BI tool, since everything else is a data engineering concern</button>
+      <p class="qwhy">The ladder puts a price on it: $5,878 a month before the analyst is unblocked, against $2,178 for the data engineer. A BI tool cannot manufacture agreement about what revenue means. That agreement is layer 5, and it is the layer most often missing when trust in dashboards quietly collapses.</p>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · A vendor demonstrates a model registry with approval workflows and full lineage. What is the chokepoint test?</p>
+      <button class="qopt" type="button">A · Ask how many model versions it can store and how far back the audit log goes</button>
+      <button class="qopt" type="button">B · Ask whether it integrates with the BI tool you already own</button>
+      <button class="qopt" type="button">C · Ask what stops an engineer deploying an artifact straight from object storage and bypassing it entirely - architecture is a control, policy is a suggestion</button>
+      <p class="qwhy">A chokepoint governs only if it is the only door. The same test dismantles a semantic layer that analysts can skip with raw SQL, and an AI gateway that teams can skip by calling the provider directly. In each case the dashboards look complete, which is worse than having no dashboard at all.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · You turn the semantic layer off while self-serve stays on. The client card turns red but the client stays unblocked. What does that mean?</p>
+      <button class="qopt" type="button">A · They are getting confident, plausible answers computed from ungoverned metrics, with nothing to flag the wrong ones - and a misled user, unlike a blocked one, does not know</button>
+      <button class="qopt" type="button">B · The self-serve tool has crashed and is serving cached results</button>
+      <button class="qopt" type="button">C · The model is inconsistent - a persona should never be red and unblocked at the same time</button>
+      <p class="qwhy">The client deliberately does not require the semantic layer in this model, because a talk-to-your-data tool will happily answer without one. That is the entire lesson. The failure mode is not broken SQL; it is syntactically valid SQL carrying wrong business logic, arriving fast, in a deck nobody has reason to challenge.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Leader session 2 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>The dependency map</b><span>DE needs layers 1-3 · analyst needs 1-5 · data scientist needs 1-4 + 6 · AI engineer needs 1-2, 4, 7 · business client needs 1-5 + 8.</span></div>
+      <div class="cheat-item"><b>The line to remember</b><span>The analyst needed five layers, not a BI licence. The client, who wants the simplest thing, depends on six of the eight.</span></div>
+      <div class="cheat-item"><b>The ladder</b><span>$0 → $1,578 with zero personas unblocked → $2,178 data engineer → $5,878 analyst → $11,295 a month with all five working. $135,540 a year.</span></div>
+      <div class="cheat-item"><b>The underfunding trap</b><span>$1,578 a month buying nobody's improved job. That stretch gets cut in every budget review, and cutting it is why the layers above fail later.</span></div>
+      <div class="cheat-item"><b>The chokepoint frame</b><span>Every layer has a narrow waist where truth is decided and lock-in lives: the catalog, the metric definitions, the model registry, the AI gateway.</span></div>
+      <div class="cheat-item"><b>The chokepoint test</b><span>"What stops someone going around this?" Architecture is a control; policy is a suggestion. Ask it in those words, every time.</span></div>
+      <div class="cheat-item"><b>The red client card</b><span>Unblocked and wrong. Answering confidently from ungoverned metrics - plausible SQL, wrong business logic. A blocked user knows; a misled one does not.</span></div>
+      <div class="cheat-item"><b>The sequencing rule</b><span>Fund top-down, build bottom-up. Cost the whole chain, not the gap. Ask which layers a product assumes you already have, before the demo.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span><a href="a1-what-ai-infra-is.html">← a1 · What AI infra actually is</a> &nbsp;·&nbsp; <a href="../index.html">All sessions</a></span>
+    <span><a href="a3-build-buy-rent.html">Next: Build vs buy vs rent →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/infra-live.js?v=1"></script>
+<script src="../assets/app.js?v=2"></script>
+</body>
+</html>

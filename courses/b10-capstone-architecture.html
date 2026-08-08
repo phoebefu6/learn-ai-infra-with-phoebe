@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practitioner session 10 · Capstone: your reference architecture - learn ai infra with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-infra-with-phoebe</a> / Practitioner session 10 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Infra with Phoebe · Practitioner track · Session 10 of 10</div>
+    <h1>Assemble it, cost it, <span class="accent">then defend it</span></h1>
+    <p class="sub">Nine sessions of layers, chokepoints and rate cards converge into one page. Tonight you write the reference architecture document: eight rows, six columns, one of which nobody ever fills in and which is the only column that survives contact with a finance director. Then you cost it live, sequence it by which persona it unblocks, and hold it up to the six hostile questions a sponsor will actually ask. An architecture whose every row survives that round is a plan. One that does not is a diagram.</p>
+    <div class="chip-row">
+      <span class="chip level">🔴 Practitioner track</span>
+      <span class="chip audience">Platform · DE · architects</span>
+      <span class="chip audience">Vendor-neutral · real rate cards</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · The architecture document</span>
+      <span class="a3" style="flex:5">18-42 · Build-along: cost it and sequence it</span>
+      <span class="a4" style="flex:1">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ PART 1: THE DOCUMENT ============ -->
+  <section class="section" id="the-document">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · the deliverable this whole track was building</span>
+      <h2>Eight rows, six columns <span class="tag concept">12 min live</span></h2>
+    </div>
+    <p class="lede">A reference architecture is not a diagram of boxes with logos in them. It is a table where every row commits to a decision and shows its working. Eight rows, one per layer. Six columns: <strong>the job it does · the option chosen · why, meaning the constraint that decided it · the cost band · the chokepoint and who owns it · the exit cost if you change your mind.</strong> The first five get written in every organization. The sixth almost never does, and it is the one that matters.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A one-page reference architecture document mockup: eight layer rows down the left and six labelled columns across, with the exit-cost column highlighted.">
+        <style>
+          .a10H { font: 700 11px Inter, sans-serif; fill: #FFFFFF; }
+          .a10Hd { font: 700 11px Inter, sans-serif; fill: #1E293B; }
+          .a10L { font: 700 11px Inter, sans-serif; fill: #FFFFFF; }
+          .a10C { font: 400 11px Inter, sans-serif; fill: #1E293B; }
+          .a10T { font: 700 14px Inter, sans-serif; fill: #1E293B; }
+          .a10N { font: 600 13px Inter, sans-serif; fill: #3F6212; }
+        </style>
+        <text class="a10T" x="20" y="28">Reference architecture · eight layers, six columns, one page</text>
+
+        <rect x="20" y="44" width="138" height="38" rx="6" fill="#334155"/>
+        <text class="a10H" x="32" y="62">the layer</text>
+        <text class="a10H" x="32" y="76">and its number</text>
+        <rect x="160" y="44" width="114" height="38" rx="6" fill="#334155"/>
+        <text class="a10H" x="170" y="62">the job</text>
+        <text class="a10H" x="170" y="76">it does</text>
+        <rect x="276" y="44" width="114" height="38" rx="6" fill="#334155"/>
+        <text class="a10H" x="286" y="62">the option</text>
+        <text class="a10H" x="286" y="76">chosen</text>
+        <rect x="392" y="44" width="114" height="38" rx="6" fill="#334155"/>
+        <text class="a10H" x="402" y="62">why</text>
+        <text class="a10H" x="402" y="76">the constraint</text>
+        <rect x="508" y="44" width="114" height="38" rx="6" fill="#334155"/>
+        <text class="a10H" x="518" y="62">the cost</text>
+        <text class="a10H" x="518" y="76">band</text>
+        <rect x="624" y="44" width="114" height="38" rx="6" fill="#334155"/>
+        <text class="a10H" x="634" y="62">chokepoint</text>
+        <text class="a10H" x="634" y="76">and its owner</text>
+        <rect x="740" y="44" width="114" height="38" rx="6" fill="#84CC16"/>
+        <text class="a10Hd" x="750" y="62">the exit cost</text>
+        <text class="a10Hd" x="750" y="76">if you change</text>
+
+        <rect x="20" y="86" width="138" height="32" rx="5" fill="#1E293B"/>
+        <text class="a10L" x="32" y="106">1 · Storage</text>
+        <rect x="160" y="86" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="170" y="106">cheap bytes</text>
+        <rect x="276" y="86" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="286" y="106">S3 / R2 / Wasabi</text>
+        <rect x="392" y="86" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="402" y="106">egress terms</text>
+        <rect x="508" y="86" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="518" y="106">$1,178/mo</text>
+        <rect x="624" y="86" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="634" y="106">egress · DE</text>
+        <rect x="740" y="86" width="114" height="32" rx="5" fill="#D9F99D"/>
+        <text class="a10C" x="750" y="106">$8,563 / 100TB</text>
+
+        <rect x="20" y="120" width="138" height="32" rx="5" fill="#1E293B"/>
+        <text class="a10L" x="32" y="140">2 · Catalog</text>
+        <rect x="160" y="120" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="170" y="140">one source truth</text>
+        <rect x="276" y="120" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="286" y="140">Polaris / Unity</text>
+        <rect x="392" y="120" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="402" y="140">portability</text>
+        <rect x="508" y="120" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="518" y="140">$400/mo</text>
+        <rect x="624" y="120" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="634" y="140">catalog · DE</text>
+        <rect x="740" y="120" width="114" height="32" rx="5" fill="#D9F99D"/>
+        <text class="a10C" x="750" y="140">rewrite policies</text>
+
+        <rect x="20" y="154" width="138" height="32" rx="5" fill="#1E293B"/>
+        <text class="a10L" x="32" y="174">3 · Orchestration</text>
+        <rect x="160" y="154" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="170" y="174">data arrives</text>
+        <rect x="276" y="154" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="286" y="174">Airflow 3</text>
+        <rect x="392" y="154" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="402" y="174">failure model</text>
+        <rect x="508" y="154" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="518" y="174">$600/mo</text>
+        <rect x="624" y="154" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="634" y="174">asset graph · DE</text>
+        <rect x="740" y="154" width="114" height="32" rx="5" fill="#D9F99D"/>
+        <text class="a10C" x="750" y="174">re-author DAGs</text>
+
+        <rect x="20" y="188" width="138" height="32" rx="5" fill="#1E293B"/>
+        <text class="a10L" x="32" y="208">4 · Engine</text>
+        <rect x="160" y="188" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="170" y="208">SQL at scale</text>
+        <rect x="276" y="188" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="286" y="208">warehouse</text>
+        <rect x="392" y="188" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="402" y="208">query cost</text>
+        <rect x="508" y="188" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="518" y="208">$1,600/mo</text>
+        <rect x="624" y="188" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="634" y="208">compute · DE</text>
+        <rect x="740" y="188" width="114" height="32" rx="5" fill="#D9F99D"/>
+        <text class="a10C" x="750" y="208">re-tune all SQL</text>
+
+        <rect x="20" y="222" width="138" height="32" rx="5" fill="#1E293B"/>
+        <text class="a10L" x="32" y="242">5 · Semantic + BI</text>
+        <rect x="160" y="222" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="170" y="242">agreed metrics</text>
+        <rect x="276" y="222" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="286" y="242">MetricFlow</text>
+        <rect x="392" y="222" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="402" y="242">metric truth</text>
+        <rect x="508" y="222" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="518" y="242">$2,100/mo</text>
+        <rect x="624" y="222" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="634" y="242">metrics · DA</text>
+        <rect x="740" y="222" width="114" height="32" rx="5" fill="#D9F99D"/>
+        <text class="a10C" x="750" y="242">redefine all</text>
+
+        <rect x="20" y="256" width="138" height="32" rx="5" fill="#1E293B"/>
+        <text class="a10L" x="32" y="276">6 · MLOps</text>
+        <rect x="160" y="256" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="170" y="276">train + deploy</text>
+        <rect x="276" y="256" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="286" y="276">MLflow</text>
+        <rect x="392" y="256" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="402" y="276">GPU + licence</text>
+        <rect x="508" y="256" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="518" y="276">$3,517/mo</text>
+        <rect x="624" y="256" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="634" y="276">registry · DS</text>
+        <rect x="740" y="256" width="114" height="32" rx="5" fill="#D9F99D"/>
+        <text class="a10C" x="750" y="276">re-register all</text>
+
+        <rect x="20" y="290" width="138" height="32" rx="5" fill="#1E293B"/>
+        <text class="a10L" x="32" y="310">7 · LLM gateway</text>
+        <rect x="160" y="290" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="170" y="310">one door</text>
+        <rect x="276" y="290" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="286" y="310">LiteLLM proxy</text>
+        <rect x="392" y="290" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="402" y="310">attribution</text>
+        <rect x="508" y="290" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="518" y="310">$400/mo</text>
+        <rect x="624" y="290" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="634" y="310">gateway · AIE</text>
+        <rect x="740" y="290" width="114" height="32" rx="5" fill="#D9F99D"/>
+        <text class="a10C" x="750" y="310">re-point apps</text>
+
+        <rect x="20" y="324" width="138" height="32" rx="5" fill="#1E293B"/>
+        <text class="a10L" x="32" y="344">8 · Self-serve</text>
+        <rect x="160" y="324" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="170" y="344">answers</text>
+        <rect x="276" y="324" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="286" y="344">Genie / Cortex</text>
+        <rect x="392" y="324" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="402" y="344">metadata debt</text>
+        <rect x="508" y="324" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="518" y="344">$1,500/mo</text>
+        <rect x="624" y="324" width="114" height="32" rx="5" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="a10C" x="634" y="344">semantics · DA</text>
+        <rect x="740" y="324" width="114" height="32" rx="5" fill="#D9F99D"/>
+        <text class="a10C" x="750" y="344">redo metadata</text>
+
+        <rect x="20" y="378" width="14" height="14" rx="3" fill="#84CC16"/>
+        <text class="a10N" x="44" y="390">The exit-cost column is the one nobody writes and the only one a sponsor cannot argue with.</text>
+        <rect x="20" y="408" width="14" height="14" rx="3" fill="#84CC16"/>
+        <text class="a10N" x="44" y="420">Eight rows sum to $11,295/month, $135,540/year. Rate cards fetched 2026-08-06/07.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the one-page document, with the column everyone skips highlighted</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Write the eight rows, one at a time<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Fill these in for your own organization as we go. The options below are illustrative choices, not recommendations. What transfers is the <em>shape</em> of a defensible row: a constraint in the "why" column rather than a preference, a named owner in the chokepoint column, and a number in the exit column.</p>
+        <div class="steps">
+          <div class="step"><p><strong>1 · Storage.</strong> Job: cheap durable bytes in open formats. Option: object storage. Why: <strong>egress terms, not storage price</strong>. Cost band: $1,178/month at 50 TB. Chokepoint: egress economics and retention terms, owned by the platform lead. <strong>Exit cost: egressing 100 TB costs $0 on Cloudflare R2 and roughly $8,563 on AWS</strong> (rate cards fetched 2026-08-06/07). Storage prices differ about 3x across vendors; the egress gap is effectively infinite. This is b2's whole argument compressed into one row.</p></div>
+          <div class="step"><p><strong>2 · Table format and catalog.</strong> Job: ACID and one source of truth over object storage. Why: the battleground moved from format to catalog. Cost band: $400/month. Chokepoint: <strong>the catalog</strong> - access control, credential vending, commit sequencing - owned by the data engineering lead. Exit cost: <strong>row-level security written in Unity Catalog does not transfer to Polaris.</strong> Governance portability is the real lock-in surface, and it does not appear on any price list.</p></div>
+          <div class="step"><p><strong>3 · Ingestion and orchestration.</strong> Job: data arrives reliably, on schedule, observably. Why: choose by failure semantics, not features - in a task graph green means "exited zero," in an asset graph a materialization means "this table exists at this version from these inputs." Cost band: $600/month. Chokepoint: the asset graph. Exit cost: re-authoring every pipeline in another tool's model.</p></div>
+          <div class="step"><p><strong>4 · Lakehouse engine and transform.</strong> Job: SQL at scale and modelled marts. Why: the compute contract, meaning who pays for a badly written query. Cost band: $1,600/month at 400 query-hours. Chokepoint: the compute contract, owned by whoever holds the budget. Exit cost: re-tuning every query against different execution behaviour.</p></div>
+          <div class="step"><p><strong>5 · Semantic layer and BI.</strong> Job: agreed metrics. Why: metric truth, and because b9 proved this layer is also what makes layer eight safe. Cost band: $2,100/month. Chokepoint: <strong>metric definitions</strong>, owned by the analytics lead. Exit cost: redefining every metric, which in a real organization is between three months and a year of work. Note the honest framing from b6: <strong>the semantic layer is a compiler, not a storage layer</strong> - it does not save warehouse spend, it moves cost from human duplication to machine compute plus a licence.</p></div>
+          <div class="step"><p><strong>6 · Compute and MLOps.</strong> Job: train, register, deploy, monitor. Why: GPU economics plus per-installed-GPU licensing. Cost band: $3,517/month, the single largest line. Chokepoint: <strong>the model registry</strong>, owned by the ML platform lead. Exit cost: re-registering every model and rebuilding promotion gates. Carry b7's warning into the row: <strong>NVIDIA AI Enterprise is licensed per installed GPU at $4,500 per GPU-year on the one-year term</strong> (docs page updated 2026-06-08), so an 8-GPU node carries $36,000 a year before hardware.</p></div>
+          <div class="step"><p><strong>7 · LLM gateway and app runtime.</strong> Job: one governed door for models you rent. Why: a shared cross-team view of budgets and attribution is structurally impossible in an SDK. Cost band: $400/month at 40M tokens. Chokepoint: <strong>the gateway</strong>, owned by the AI engineering lead. Exit cost: repointing every application, plus losing the collected traffic that was becoming your eval set.</p></div>
+          <div class="step"><p><strong>8 · Self-serve and governance.</strong> Job: answers for people who do not write SQL. Why: this is the outcome that funds everything below it. Cost band: $1,500/month. Chokepoint: the semantic layer, again. Exit cost: <strong>redoing the metadata work</strong>, which b9 measured as the difference between 9.50% and 69.23% accuracy. The licence is portable; the metadata investment mostly is not.</p></div>
+        </div>
+      </div>
+    </details>
+
+    <div class="callout win">
+      <strong>★ Why the exit-cost column is the one that matters</strong>
+      Every other column describes the world if the decision was right. The exit column describes the world if it was wrong, which is the only scenario a sponsor is actually worried about. It also makes lock-in arithmetic instead of rhetoric: <strong>b2's egress economics</strong> put a dollar figure on leaving a storage vendor, and <strong>b3's governance portability</strong> puts a work estimate on leaving a catalog. Fill this column in and you stop arguing about lock-in as a feeling.
+    </div>
+  </section>
+
+  <!-- ============ PART 2: COST IT AND SEQUENCE IT ============ -->
+  <section class="section" id="cost-and-sequence">
+    <div class="section-kicker">
+      <span class="klabel">Build-along · the ladder, one last time</span>
+      <h2>Cost it, then sequence it <span class="tag demo">★ 14 min · everyone runs it</span></h2>
+    </div>
+    <p class="lede">Reproduce the ladder from b1 with everything you now know behind each toggle. Then do the thing the ladder cannot do for you: decide what gets funded in Q1, and say out loud which person that unblocks and which person stays blocked and for how long.</p>
+
+    <div class="steps">
+      <div class="step"><p>Start at <strong>$0</strong>, all layers off, five personas blocked. Climb to <strong>$11,295/month, $135,540/year</strong> with all five working. Every dollar recomputes live from published rate cards fetched on 6-7 August 2026.</p></div>
+      <div class="step"><p>Now change the volume inputs to <em>your</em> numbers - storage volume, egress, query-hours, GPU-hours, tokens. <strong>Where your spend concentrates will differ from the teaching defaults</strong>, and it is rarely where the room assumes. At 50 TB the storage line is small and MLOps dominates; at 5 PB the arithmetic inverts.</p></div>
+      <div class="step"><p>Flip the <strong>semantic layer</strong> off one final time, with self-serve on. Watch the client card go red on ungoverned metrics while staying unblocked, and the count drop to 3 of 5. Now turn it back on and <strong>leave it on forever.</strong> That is b9's evidence session rendered as a toggle.</p></div>
+      <div class="step"><p>Flip the <strong>direct-read</strong> lever, watch <strong>+$1,784/month, $21,402/year</strong> appear for exactly the same work on AWS's published egress tiers, and <strong>leave it off.</strong> That single lever is worth more than most cost-optimization programmes.</p></div>
+      <div class="step"><p>Then sequence it. Write one line per quarter: <strong>which layer do you fund, and which persona does that unblock?</strong> The ladder already told you the shape - the data engineer needs three layers before anyone notices, the analyst needs five, and nobody is unblocked at all until layer three.</p></div>
+    </div>
+
+    <div class="infrabox" data-mode="ladder"></div>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Sequencing rules that survive a budget review<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Fund bottom-up, sell top-down.</strong> The funding conversation is about layer eight because that is the outcome an executive wants. The build order is layers one to three because nothing above them works. Most failures happen when an organization sells top-down and then also <em>builds</em> top-down.</li>
+          <li><strong>Name the persona, not the tool.</strong> "Fund orchestration in Q1" loses to "in Q1 the data engineer stops hand-running loads, and here is what they do instead." The five sentences describing what each persona cannot currently do are a more persuasive roadmap than any tool list.</li>
+          <li><strong>Budget the metadata work as a line item, not an assumption.</strong> The licence is the small number. Between 9.50% and 69.23% sits somebody writing down what the columns mean, and it is the task nobody scopes.</li>
+          <li><strong>Publish the exit costs with the plan.</strong> A sponsor who sees the exit column believes the rest of the document more, because you have shown them the downside without being asked.</li>
+        </ul>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p><strong>GetYourGuide is the migration case worth copying because it published effort next to benefit.</strong> Moving 750 tables from Snowflake to Databricks (own engineering blog, 2025-01-29): a proof of concept of 1.5 months at 1 FTE, then a migration of 4.5 months at roughly 2 FTE, for a <strong>20% operational cost reduction</strong>, with 98%+ of queries working after migration and 72% completing under 10 seconds. Six months of two engineers is the honest shape of a single-layer change. Set that against any vendor migration timeline you are shown.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: DEFEND IT ============ -->
+  <section class="section" id="defend-it">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · the red-team round</span>
+      <h2>Defend it, row by row <span class="tag demo">★ 10 min · pair up and attack</span></h2>
+    </div>
+    <p class="lede">Swap documents with the person next to you and attack theirs. These are not clever hypotheticals; they are the six questions a sponsor, a finance director or a security reviewer will actually ask, in roughly this order. <strong>An architecture whose every row survives is a plan. One that does not is a diagram.</strong></p>
+
+    <table class="clean">
+      <thead>
+        <tr><th>Aimed at</th><th>The hostile question</th><th>What a surviving answer contains</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Storage</td><td><strong>"What is the egress cost of leaving this vendor?"</strong></td><td>a number with a fetch date, not a reassurance. $0 on R2, roughly $8,563 per 100 TB on AWS</td></tr>
+        <tr><td>MLOps</td><td><strong>"Is that licensing per used or per installed unit?"</strong></td><td>NVIDIA AI Enterprise is per <em>installed</em> GPU, one licence per physical GPU, $4,500/GPU-year on the 1-year term</td></tr>
+        <tr><td>Any governed layer</td><td><strong>"What stops a team going around this control?"</strong></td><td>architecture, not policy. Network rules and key custody, or you have a suggestion</td></tr>
+        <tr><td>The sequence</td><td><strong>"Which persona is still blocked after Q1, and for how long?"</strong></td><td>a name, a quarter, and the reason - the ladder gives you all three</td></tr>
+        <tr><td>Self-serve</td><td><strong>"What is the accuracy number, and on which benchmark?"</strong></td><td>9.50% empty, 69.23% with column descriptions, on LiveSQLBench, published methodology, bias flagged</td></tr>
+        <tr><td>Every row</td><td><strong>"Who owns this layer when the person who chose it leaves?"</strong></td><td>a role that still exists without that person, and a written decision record</td></tr>
+      </tbody>
+    </table>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>How to answer the accuracy question honestly and still win<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The self-serve question is the one people get wrong in both directions - either quoting a vendor's 90% or refusing to give a number at all. Neither survives. The defensible answer has four parts, and you already have all of them from b9:</p>
+        <ul>
+          <li><strong>State the honest position first:</strong> nobody currently has a trustworthy public measurement of enterprise text-to-SQL accuracy. Any single number is a claim about a specific setup, not a property of the technology.</li>
+          <li><strong>Give the measured ladder anyway:</strong> Microsoft's evaluation of Databricks Genie on LiveSQLBench moved 9.50% to 69.23% to 88.50% across three configurations, with published methodology, and flag that it is Microsoft evaluating a Databricks product.</li>
+          <li><strong>Convert it into a plan:</strong> which means our accuracy is a function of the metadata work in the budget, not of the model we pick.</li>
+          <li><strong>Promise what the evidence supports:</strong> certified metrics, over a scoped set of tables, answerable in natural language, with the SQL visible and a feedback path. Not "ask anything of your data."</li>
+        </ul>
+        <p>That answer is more credible than a percentage, because it is the only one in the room that shows its working. This is what "defensible" means everywhere else in the document too.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The ship gate<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>One rule for taking this out of the classroom. <strong>Every row must survive its hostile question before the document goes to a sponsor.</strong> Not most rows. Every row, because the one you skipped is the one that gets asked first.</p>
+        <p>A row survives when three things are true: the "why" column names a constraint rather than a preference, the chokepoint column names a role that will still exist next year, and the exit column has a number or a work estimate in it. If a row cannot meet that bar, the honest move is to mark it <em>undecided</em> with the question you still need answered, which is a far stronger position than a confident row that collapses under one question.</p>
+        <div class="callout tip">
+          <strong>The counterweight to keep in the room</strong>
+          MIT's Project NANDA report (August 2025) found <strong>95% of enterprise generative-AI pilots deliver no measurable P&amp;L return</strong>. State the sample every time, because it is thin: 52 executive interviews, 153 leader surveys and 300 public deployments. Its least-quoted finding is the one for this session: <strong>buying from specialist vendors succeeded around 67% of the time, while internal builds succeeded at roughly one third of that rate.</strong> That is the honest counterweight to building anything on this page yourself, and a defensible document should acknowledge it rather than hope nobody read it.
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 4: WHERE NEXT ============ -->
+  <section class="section" id="where-next">
+    <div class="section-kicker">
+      <span class="klabel">Part 4 · after this track</span>
+      <h2>Where next, and what this course did not cover <span class="tag exercise">◐ self-study</span></h2>
+    </div>
+    <p class="lede">Ten sessions gave you a platform-level frame and a defensible document. It deliberately did not make you an expert in any single layer, and it left three areas out entirely. Both of those are worth saying plainly.</p>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The four courses that continue from here<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>The leader track of this same course</strong>, for whoever funds the document you just wrote. Six sessions, same evidence, framed for the person approving $135,540 a year rather than the person operating it.</li>
+          <li><strong>learn-data-governance</strong> for the policy layer. This track treated governance as an architectural property - where the chokepoints are and whether they can be bypassed. That is only half of it; the other half is policy, regulation and who is accountable.</li>
+          <li><strong>learn-ai-evals</strong> for measuring the AI layers. b8 gave you the collection point and b9 gave you the evidence that public benchmarks will not answer your question. Evals is where the traffic your gateway collected turns into a measurement you can trust.</li>
+          <li><strong>learn-mcp</strong> for the agent-to-tool protocol. Layer seven governs which model runs; MCP governs what that model is allowed to reach. As agent workloads grow, that boundary becomes a second chokepoint sitting beside the gateway.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The honest not-covered list<span class="mini">2 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Three frontiers this course named and did not teach. If your architecture depends on them, the document has a gap and you should mark it as one rather than let it read as covered.</p>
+        <ul>
+          <li><strong>Kubernetes operations and cluster administration.</strong> Referenced throughout - Kubeflow, self-hosted proxies, GPU scheduling - and taught nowhere. The rule of thumb from b7 stands: you need a platform team already running Kubernetes before Kubernetes-based tooling is a net win.</li>
+          <li><strong>Network and security engineering.</strong> The chokepoint test keeps arriving at network egress rules and key custody, which is a different discipline with its own specialists. Bring one into the red-team round.</li>
+          <li><strong>Hardware procurement.</strong> b7 gave you the arithmetic and the honest limit: NVIDIA publishes software prices to the dollar and no list price for any DGX system, so you budget by quote. The useful planning constraint is physical rather than financial - a DGX B300 draws around 14 kW in 10U, and the facility constrains you before the budget does.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Final deliverable</span>
+      <h2>Finish the document - this week <span class="tag exercise">◐ 2-3 hours total</span></h2>
+    </div>
+    <ul>
+      <li>Complete all eight rows and all six columns for your own organization. Any cell you cannot fill is a question to take to a vendor or a colleague, and writing it as a question is more useful than guessing.</li>
+      <li>Run the exit column properly: for each layer, one number or one work estimate. This is the part that takes the longest and the part that makes the document yours rather than a template.</li>
+      <li>Have someone hostile read it and ask the six red-team questions. A colleague in finance or security is better for this than a peer in data.</li>
+      <li>Write the sequencing on one line per quarter, naming the persona unblocked each time. Then write the sentence for the persona who stays blocked longest, because that sentence is the one your sponsor will remember.</li>
+      <li>Re-verify every price before you present it. Everything on these pages was fetched on 6-7 August 2026, and this is the fastest-moving subject on the shelf.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Official sources covered</h2>
+    </div>
+    <p class="lede">This session is a synthesis rather than new material, so the sources are the ones the whole track was built on. Everything below appeared earlier with its full treatment; here it is load-bearing for a decision. This page covers:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Published rate cards - AWS, Cloudflare R2, Wasabi, NVIDIA AI Enterprise (fetched 2026-08-06/07)</span><span class="note">Parts 1-3 · every cost band, every exit number, every red-team answer</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The chokepoint frame across all eight layers</span><span class="note">Part 1 · the fifth column · Part 3 · the "what stops someone going around this" question</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Microsoft ISE evaluation of Databricks Genie on LiveSQLBench (2026-05-07)</span><span class="note">Part 2 · the semantic-layer toggle · Part 3 · how to answer the accuracy question</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Airbnb engineering blog · GetYourGuide migration retrospective (2025-01-29)</span><span class="note">Part 2 · sequencing, and effort published next to benefit</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">MIT Project NANDA report (August 2025)</span><span class="note">Part 3 · the build-versus-buy counterweight · sample size stated every time</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · What is the exit-cost column for?</p>
+      <button class="qopt" type="button">A · Estimating the depreciation schedule for owned hardware</button>
+      <button class="qopt" type="button">B · It prices being wrong - it turns lock-in from a feeling into arithmetic, using egress numbers for storage and governance-portability work for the catalog</button>
+      <button class="qopt" type="button">C · Recording the vendor's contractual termination notice period</button>
+      <p class="qwhy">Every other column describes the world if the decision was right. The exit column is the only one describing the world if it was wrong, which is the scenario a sponsor is actually worried about. $0 versus roughly $8,563 to egress 100 TB, or rewriting row-level security that does not transfer between catalogs.</p>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · What is the ship gate for taking this document to a sponsor?</p>
+      <button class="qopt" type="button">A · Every layer has a named vendor and a signed quote</button>
+      <button class="qopt" type="button">B · The total annual cost is below the approved budget</button>
+      <button class="qopt" type="button">C · Every row survives its hostile question - a constraint in the why column, a role in the chokepoint column, a number or work estimate in the exit column - or it is marked undecided with the open question stated</button>
+      <p class="qwhy">Not most rows. Every row, because the one you skipped gets asked first. An architecture whose every row survives is a plan; one that does not is a diagram. Marking a row undecided is a stronger position than a confident row that collapses under one question.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · Your sponsor wants the self-serve outcome and asks what to fund first. What do you say?</p>
+      <button class="qopt" type="button">A · Fund bottom-up and sell top-down - the outcome is layer eight, but nobody is unblocked at all until layer three, and self-serve without the semantic layer produces confident wrong answers</button>
+      <button class="qopt" type="button">B · Fund self-serve first so the business sees value early, then backfill the layers beneath it</button>
+      <button class="qopt" type="button">C · Fund every layer at 20% so all five personas make partial progress</button>
+      <p class="qwhy">The ladder shows the shape: two layers of spend before anyone is unblocked, three before the data engineer works, five before the analyst does. Buying layer eight first does not fail loudly - it fails quietly, at 9.50% accuracy with nothing to flag the wrong answers.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Practitioner session 10 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>The document</b><span>Eight rows, six columns: the job · the option chosen · why (the constraint) · the cost band · the chokepoint and its owner · the exit cost.</span></div>
+      <div class="cheat-item"><b>The column nobody writes</b><span>Exit cost. It prices being wrong. $0 vs roughly $8,563 per 100 TB egress; catalog policies that do not transfer.</span></div>
+      <div class="cheat-item"><b>The full bill</b><span>$0 → $11,295/month → $135,540/year for five working personas. Rate cards fetched 2026-08-06/07.</span></div>
+      <div class="cheat-item"><b>Two levers, set once</b><span>Semantic layer on forever. Direct-read off forever - it adds $1,784/month, $21,402/year for identical work.</span></div>
+      <div class="cheat-item"><b>The sequencing rule</b><span>Fund bottom-up, sell top-down. Nobody is unblocked until layer three; the analyst needs five layers, not one BI licence.</span></div>
+      <div class="cheat-item"><b>The six hostile questions</b><span>Egress on exit · per used or per installed · what stops a bypass · who is still blocked after Q1 · what accuracy on which benchmark · who owns this when the chooser leaves.</span></div>
+      <div class="cheat-item"><b>The ship gate</b><span>Every row survives, or it is marked undecided with the open question. A plan, not a diagram.</span></div>
+      <div class="cheat-item"><b>The counterweight</b><span>MIT NANDA (Aug 2025, thin sample): 95% of GenAI pilots show no P&amp;L return; specialist vendors succeeded ~67%, internal builds about a third of that.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Practitioner session 10 of 10 · learn-ai-infra-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="b9-self-serve.html">← b9 · Self-serve, and why it comes last</a> &nbsp;·&nbsp; <a href="../index.html">Back to all sessions →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/infra-live.js?v=1"></script>
+<script src="../assets/app.js?v=2"></script>
+</body>
+</html>

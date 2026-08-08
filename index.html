@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>learn ai infra with phoebe - a two-track course on the platform behind your data team</title>
+<link rel="stylesheet" href="assets/style.css?v=1">
+<style>
+  .stats-row { display: flex; gap: 2.4rem; margin-top: 1.5rem; flex-wrap: wrap; }
+  .stat b { display: block; font-size: 2.1rem; font-weight: 800; line-height: 1.05; font-variant-numeric: tabular-nums; }
+  .stat span { font-size: .72rem; opacity: .85; text-transform: uppercase; letter-spacing: .09em; font-weight: 600; }
+
+  .course-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+  .course-card {
+    border: 1px solid var(--hairline);
+    border-top: 4px solid var(--diff, var(--indigo));
+    border-radius: var(--radius);
+    padding: 1.2rem 1.3rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    text-decoration: none;
+    color: var(--ink);
+    background: #fff;
+    transition: box-shadow .15s ease, border-color .15s ease, transform .15s ease;
+    position: relative;
+  }
+  .course-card:hover { border-color: var(--indigo-soft); border-top-color: var(--diff, var(--indigo)); box-shadow: 0 8px 28px rgba(51,65,85,.16); transform: translateY(-3px); }
+  .course-card .cicon { font-size: 1.7rem; line-height: 1; }
+  .course-card .cnum { font-size: .72rem; font-weight: 700; color: var(--indigo); text-transform: uppercase; letter-spacing: .1em; }
+  .course-card h3 { font-size: 1.05rem; font-weight: 800; line-height: 1.3; }
+  .course-card p { font-size: .85rem; color: var(--muted); flex: 1; }
+  .course-card .meta { display: flex; gap: .4rem; flex-wrap: wrap; }
+
+  .diff-legend { display: flex; gap: 1rem; margin-top: 1.6rem; font-size: .74rem; color: var(--muted); font-weight: 600; flex-wrap: wrap; }
+  .diff-legend i { display: inline-block; width: .85rem; height: .35rem; border-radius: 999px; margin-right: .35rem; vertical-align: middle; }
+
+  .paths { margin-top: 2.6rem; }
+  .paths h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: .3rem; }
+  .paths .plede { color: var(--muted); font-size: .92rem; margin-bottom: .8rem; }
+  .path { display: flex; gap: .55rem; align-items: center; padding: .75rem 0; border-bottom: .5px solid var(--hairline); flex-wrap: wrap; }
+  .path:last-child { border-bottom: none; }
+  .path b { min-width: 15.5rem; font-size: .9rem; }
+  .path .pstep { background: var(--indigo-50); color: var(--indigo); border-radius: 999px; padding: .16rem .68rem; font-weight: 700; font-size: .8rem; text-decoration: none; transition: all .12s ease; }
+  .path .pstep:hover { background: var(--indigo); color: #fff; }
+  .path .parr { color: var(--faint); font-weight: 700; }
+
+  .mm-section { margin-top: 1.6rem; }
+  .mm-section h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: .2rem; }
+  .mm-section .mm-lede { color: var(--muted); font-size: .92rem; margin-bottom: .4rem; }
+  .mm-wrap { border: 1px solid var(--hairline); border-radius: var(--radius); background: linear-gradient(180deg,#fff,#F1F5F9); padding: .6rem; overflow-x: auto; }
+  .mm-svg { width: 100%; height: auto; display: block; max-width: 60rem; margin: 0 auto; min-width: 34rem; }
+  .mm-link { cursor: pointer; text-decoration: none; }
+  .mm-node rect { transition: opacity .15s ease, filter .15s ease; }
+  .mm-node text { pointer-events: none; }
+  .mm-link:hover .mm-node rect { filter: brightness(1.06); }
+  .mm-edge { transition: opacity .15s ease; }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Infra with Phoebe</div>
+    <h1>The platform behind your whole data team</h1>
+    <p class="sub">A data platform is eight layers, five personas and a lot of money. This course builds the reference architecture that lets a data engineer ingest and clean, an analyst build dashboards and reports, a data scientist train and deploy, an AI engineer ship LLM applications, and a business client ask a question and trust the answer - all on one stack. Vendor-neutral, with real options and honest cost bands at every layer, every price fetched from the vendor's own billing feed with the date attached. A live simulator computes the bill as you build: watch it climb from $0 to $11,295 a month as your five people come unblocked, then flip one lever and watch analytics egress add $21,402 a year for exactly the same work. And the sequencing rule the whole course exists to teach: self-serve is layer eight, and buying it first is the most expensive mistake in enterprise data.</p>
+    <div class="stats-row">
+      <div class="stat"><b data-count="8">8</b><span>platform layers</span></div>
+      <div class="stat"><b data-count="5">5</b><span>data personas</span></div>
+      <div class="stat"><b data-count="16">16</b><span>sessions</span></div>
+      <div class="stat"><b data-count="45">45</b><span>min per session</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section">
+    <div class="paths" style="margin-top:0">
+      <h2>The leader track 🤝 <span style="font-size:.85rem;font-weight:600;color:var(--muted)">· for CDAIOs, heads of data &amp; platform sponsors · 6 x 45 min · no code</span></h2>
+      <p class="plede">The investment case: what each layer buys, where the money actually goes, why the build-vs-rent literature cannot be trusted, what really happened in the platform builds that published numbers - and the sequencing that avoids shelfware.</p>
+    </div>
+    <div class="course-grid">
+      <a class="course-card" href="courses/a1-what-ai-infra-is.html" style="--diff:#34D399">
+        <span class="cicon">🗺️</span>
+        <span class="cnum">Leader 1 · easy</span>
+        <h3>What AI infra actually is now</h3>
+        <p>The eight layers in plain language, the five people they serve, and what genuinely changed in 2025-2026 - including why every major launch is now about grounding context for agents.</p>
+        <span class="meta"><span class="pill amber">▶ Leaders start here</span></span>
+      </a>
+      <a class="course-card" href="courses/a2-layer-map.html" style="--diff:#34D399">
+        <span class="cicon">🧱</span>
+        <span class="cnum">Leader 2 · easy</span>
+        <h3>The layer map and what each buys you</h3>
+        <p>Which persona each layer unblocks, why two layers unblock nobody at all, and the chokepoint idea that makes any vendor pitch evaluable in ten minutes.</p>
+        <span class="meta"><span class="pill light">▶ The build-out sim</span></span>
+      </a>
+      <a class="course-card" href="courses/a3-build-buy-rent.html" style="--diff:#FBBF24">
+        <span class="cicon">⚖️</span>
+        <span class="cnum">Leader 3 · medium</span>
+        <h3>Build vs buy vs rent</h3>
+        <p>Why every published GPU TCO analysis concludes "rent" and who wrote them, why depreciation is the assumption that decides the answer, and the finding that internal builds succeed at a third the rate of specialist vendors.</p>
+        <span class="meta"><span class="pill light">The captured literature</span></span>
+      </a>
+      <a class="course-card" href="courses/a4-cost-model.html" style="--diff:#FBBF24">
+        <span class="cicon">💰</span>
+        <span class="cnum">Leader 4 · medium</span>
+        <h3>The cost model</h3>
+        <p>Storage versus egress asymmetry, GPU list prices versus what the market pays, per-installed-GPU licensing, and token spend - the four places platform budgets go wrong.</p>
+        <span class="meta"><span class="pill light">▶ Storage economics</span></span>
+      </a>
+      <a class="course-card" href="courses/a5-launches-and-failures.html" style="--diff:#FB923C">
+        <span class="cicon">📊</span>
+        <span class="cnum">Leader 5 · deciding</span>
+        <h3>Real launches and honest failures</h3>
+        <p>Airbnb's six-year arc, GetYourGuide's 20% saving with the effort published beside it, Birmingham's £216.5M, Lidl's €500M data-model conflict - and why data platform failures never make the news.</p>
+        <span class="meta"><span class="pill light">The evidence session</span></span>
+      </a>
+      <a class="course-card" href="courses/a6-your-roadmap.html" style="--diff:#FB923C">
+        <span class="cicon">🧭</span>
+        <span class="cnum">Leader 6 · deciding</span>
+        <h3>Your platform roadmap</h3>
+        <p>Sequencing that avoids shelfware, what to fund first and why, the questions that separate a real vendor from a demo, and how to stage a platform nobody has time to stop using.</p>
+        <span class="meta"><span class="pill light">Strategy session</span></span>
+      </a>
+    </div>
+
+    <div class="paths">
+      <h2>The practitioner track 🛠️ <span style="font-size:.85rem;font-weight:600;color:var(--muted)">· for platform engineers, DE &amp; architects · 10 x 45 min · vendor-neutral</span></h2>
+      <p class="plede">Build the architecture layer by layer, bottom to top. Each session states the job, names the real options with honest trade-offs, finds the chokepoint, and prices it. b10 assembles your organization's reference architecture, costed and sequenced, and defends it.</p>
+    </div>
+    <div class="course-grid">
+      <a class="course-card" href="courses/b1-layers-and-personas.html" style="--diff:#34D399">
+        <span class="cicon">🏗️</span>
+        <span class="cnum">Practitioner 1 · easy</span>
+        <h3>The eight layers and five personas</h3>
+        <p>The whole stack in one session: who each layer unblocks, where the chokepoints are, and the live build-out from $0 to $11,295 a month.</p>
+        <span class="meta"><span class="pill amber">▶ Practitioners start here</span></span>
+      </a>
+      <a class="course-card" href="courses/b2-storage-formats.html" style="--diff:#34D399">
+        <span class="cicon">🗄️</span>
+        <span class="cnum">Practitioner 2 · easy</span>
+        <h3>Storage + open table formats</h3>
+        <p>Egress economics that decide architecture, retention fine print, and the format war - where Iceberg won, and why XTable translates metadata rather than data.</p>
+        <span class="meta"><span class="pill light">▶ The egress trap</span></span>
+      </a>
+      <a class="course-card" href="courses/b3-catalog-governance.html" style="--diff:#FBBF24">
+        <span class="cicon">📇</span>
+        <span class="cnum">Practitioner 3 · medium</span>
+        <h3>Catalog, lineage, governance</h3>
+        <p>The REST catalog spec, credential vending and scan planning - and why governance portability, not file format, is the real lock-in surface in 2026.</p>
+        <span class="meta"><span class="pill light">The chokepoint layer</span></span>
+      </a>
+      <a class="course-card" href="courses/b4-ingestion-orchestration.html" style="--diff:#FBBF24">
+        <span class="cicon">🔄</span>
+        <span class="cnum">Practitioner 4 · medium</span>
+        <h3>Ingestion + orchestration</h3>
+        <p>Airflow 3's security break, Dagster's asset model and what "success" means in each, Prefect's runtime graphs - choosing by failure semantics rather than by stars.</p>
+        <span class="meta"><span class="pill light">DE unblocked</span></span>
+      </a>
+      <a class="course-card" href="courses/b5-lakehouse-engine.html" style="--diff:#FBBF24">
+        <span class="cicon">⚙️</span>
+        <span class="cnum">Practitioner 5 · medium</span>
+        <h3>The lakehouse engine</h3>
+        <p>Medallion honestly, the three unification axes vendors actually compete on, and the SQL and Python surface your analysts and scientists both work against.</p>
+        <span class="meta"><span class="pill light">The compute contract</span></span>
+      </a>
+      <a class="course-card" href="courses/b6-semantic-bi.html" style="--diff:#FB923C">
+        <span class="cicon">📐</span>
+        <span class="cnum">Practitioner 6 · hands-on</span>
+        <h3>Semantic layer, dashboards, reporting</h3>
+        <p>MetricFlow's join graph as the real product, why the semantic layer is a compiler not a store, and the dashboard-and-PDF surface your analysts ship from.</p>
+        <span class="meta"><span class="pill light">DA unblocked</span></span>
+      </a>
+      <a class="course-card" href="courses/b7-compute-mlops.html" style="--diff:#FB923C">
+        <span class="cicon">🖥️</span>
+        <span class="cnum">Practitioner 7 · hands-on</span>
+        <h3>Compute + MLOps</h3>
+        <p>GPU economics without the marketing, per-installed-GPU licensing, and the model registry as the narrow waist - aliases over stages, skew versus drift.</p>
+        <span class="meta"><span class="pill light">DS unblocked</span></span>
+      </a>
+      <a class="course-card" href="courses/b8-llm-gateway.html" style="--diff:#FB923C">
+        <span class="cicon">🚪</span>
+        <span class="cnum">Practitioner 8 · hands-on</span>
+        <h3>The LLM gateway + app runtime</h3>
+        <p>SDK versus proxy - one app with many providers, or many apps with one governed door. Routing, budgets, caching, and the gateway as your eval-set collector.</p>
+        <span class="meta"><span class="pill light">AI engineer unblocked</span></span>
+      </a>
+      <a class="course-card" href="courses/b9-self-serve.html" style="--diff:#F87171">
+        <span class="cicon">💬</span>
+        <span class="cnum">Practitioner 9 · hardest</span>
+        <h3>Self-serve, and why it comes last</h3>
+        <p>The evidence session: 86.6% to 10.1% between demo and enterprise conditions, 9.50% to 69.23% from column descriptions alone, and why the benchmarks themselves are two-thirds mis-annotated.</p>
+        <span class="meta"><span class="pill light">▶ The confidently-wrong trap</span></span>
+      </a>
+      <a class="course-card" href="courses/b10-capstone-architecture.html" style="--diff:#F87171">
+        <span class="cicon">🏆</span>
+        <span class="cnum">Practitioner 10 · hardest</span>
+        <h3>Capstone: your reference architecture</h3>
+        <p>All eight layers chosen, costed and sequenced for your five personas - then defended line by line against the questions a sponsor will actually ask.</p>
+        <span class="meta"><span class="pill light">Ship the architecture</span></span>
+      </a>
+    </div>
+    <div class="diff-legend">
+      <span><i style="background:#34D399"></i>easy - everyone</span>
+      <span><i style="background:#FBBF24"></i>medium</span>
+      <span><i style="background:#FB923C"></i>hands-on / deciding</span>
+      <span><i style="background:#F87171"></i>hardest</span>
+    </div>
+
+    <div class="paths">
+      <h2>Choose your path 🗺️</h2>
+      <p class="plede">Two doors into one architecture. Leaders decide what to fund and in what order; practitioners choose the components and defend the design.</p>
+      <div class="path"><b>🤝 Leader (fund and sequence)</b>
+        <a class="pstep" href="courses/a1-what-ai-infra-is.html">a1</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a2-layer-map.html">a2</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a3-build-buy-rent.html">a3</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a4-cost-model.html">a4</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a5-launches-and-failures.html">a5</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a6-your-roadmap.html">a6</a>
+      </div>
+      <div class="path"><b>🛠️ Practitioner (build the stack)</b>
+        <a class="pstep" href="courses/b1-layers-and-personas.html">b1</a><span class="parr">→</span>
+        <a class="pstep" href="courses/b2-storage-formats.html">b2</a><span class="parr">→</span>
+        <a class="pstep" href="courses/b3-catalog-governance.html">b3</a><span class="parr">→</span>
+        <a class="pstep" href="courses/b4-ingestion-orchestration.html">b4</a><span class="parr">→</span>
+        <a class="pstep" href="courses/b5-lakehouse-engine.html">b5</a><span class="parr">→</span>
+        <a class="pstep" href="courses/b6-semantic-bi.html">b6</a><span class="parr">→</span>
+        <a class="pstep" href="courses/b7-compute-mlops.html">b7</a><span class="parr">→</span>
+        <a class="pstep" href="courses/b8-llm-gateway.html">b8</a><span class="parr">→</span>
+        <a class="pstep" href="courses/b9-self-serve.html">b9</a><span class="parr">→</span>
+        <a class="pstep" href="courses/b10-capstone-architecture.html">b10</a>
+      </div>
+      <div class="path"><b>💸 Cost-first fast lane</b>
+        <a class="pstep" href="courses/b1-layers-and-personas.html">b1</a><span class="parr">→</span>
+        <a class="pstep" href="courses/b2-storage-formats.html">b2</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a4-cost-model.html">a4</a><span class="parr">→</span>
+        <a class="pstep" href="courses/b7-compute-mlops.html">b7</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a3-build-buy-rent.html">a3</a>
+      </div>
+      <div class="path"><b>🚀 Full journey (fund AND build)</b>
+        <a class="pstep" href="courses/a1-what-ai-infra-is.html">a1-a6</a><span class="parr">→</span>
+        <a class="pstep" href="courses/b1-layers-and-personas.html">b1-b10</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section mm-section">
+    <h2>The knowledge map 🧠</h2>
+    <p class="mm-lede">Both tracks at a glance - hover a session to spotlight its concepts, click any node to jump in.</p>
+    <div class="mm-wrap"><div id="mindmap"></div></div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>learn-ai-infra-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a> · built from vendors' own billing feeds and documentation (AWS, Azure, Cloudflare, Wasabi, NVIDIA, Databricks, Snowflake, Microsoft Fabric), published engineering blogs (Airbnb, Uber, LinkedIn, GetYourGuide, Michelin), the Apache Iceberg / Delta / Hudi / Polaris / Airflow projects, and peer-reviewed work including Spider 2.0, BIRD and the CIDR 2026 benchmark audit. Every price carries its fetch date - re-verify before planning against it.</span>
+  </footer>
+</main>
+
+<script>
+window.MINDMAP_DATA = {
+  title: "AI\nInfrastructure",
+  centerColor: "#1E293B",
+  sessions: [
+    { label: "What AI\ninfra is", href: "courses/a1-what-ai-infra-is.html", color: "#34D399",
+      concepts: [
+        { label: "Eight layers", href: "courses/a1-what-ai-infra-is.html" },
+        { label: "The agent shift", href: "courses/a1-what-ai-infra-is.html" } ] },
+    { label: "The layer\nmap", href: "courses/a2-layer-map.html", color: "#34D399",
+      concepts: [
+        { label: "Who each unblocks", href: "courses/a2-layer-map.html" },
+        { label: "Chokepoints", href: "courses/a2-layer-map.html" } ] },
+    { label: "Build vs\nbuy vs rent", href: "courses/a3-build-buy-rent.html", color: "#FBBF24",
+      concepts: [
+        { label: "Captured literature", href: "courses/a3-build-buy-rent.html" },
+        { label: "Depreciation", href: "courses/a3-build-buy-rent.html" } ] },
+    { label: "The cost\nmodel", href: "courses/a4-cost-model.html", color: "#FBBF24",
+      concepts: [
+        { label: "Egress asymmetry", href: "courses/a4-cost-model.html" },
+        { label: "List vs market", href: "courses/a4-cost-model.html" } ] },
+    { label: "Launches &\nfailures", href: "courses/a5-launches-and-failures.html", color: "#FB923C",
+      concepts: [
+        { label: "Airbnb's six years", href: "courses/a5-launches-and-failures.html" },
+        { label: "Birmingham · Lidl", href: "courses/a5-launches-and-failures.html" } ] },
+    { label: "Your\nroadmap", href: "courses/a6-your-roadmap.html", color: "#FB923C",
+      concepts: [
+        { label: "Sequencing", href: "courses/a6-your-roadmap.html" },
+        { label: "Vendor questions", href: "courses/a6-your-roadmap.html" } ] },
+    { label: "Layers &\npersonas", href: "courses/b1-layers-and-personas.html", color: "#34D399",
+      concepts: [
+        { label: "The eight jobs", href: "courses/b1-layers-and-personas.html" },
+        { label: "Five personas", href: "courses/b1-layers-and-personas.html" },
+        { label: "The build-out", href: "courses/b1-layers-and-personas.html" } ] },
+    { label: "Storage &\nformats", href: "courses/b2-storage-formats.html", color: "#34D399",
+      concepts: [
+        { label: "Egress economics", href: "courses/b2-storage-formats.html" },
+        { label: "The format war", href: "courses/b2-storage-formats.html" } ] },
+    { label: "Catalog &\ngovernance", href: "courses/b3-catalog-governance.html", color: "#FBBF24",
+      concepts: [
+        { label: "REST catalog", href: "courses/b3-catalog-governance.html" },
+        { label: "Governance portability", href: "courses/b3-catalog-governance.html" } ] },
+    { label: "Ingestion &\norchestration", href: "courses/b4-ingestion-orchestration.html", color: "#FBBF24",
+      concepts: [
+        { label: "Asset vs task", href: "courses/b4-ingestion-orchestration.html" },
+        { label: "Airflow 3", href: "courses/b4-ingestion-orchestration.html" } ] },
+    { label: "Lakehouse\nengine", href: "courses/b5-lakehouse-engine.html", color: "#FBBF24",
+      concepts: [
+        { label: "Medallion honestly", href: "courses/b5-lakehouse-engine.html" },
+        { label: "Three unification axes", href: "courses/b5-lakehouse-engine.html" } ] },
+    { label: "Semantic\nlayer & BI", href: "courses/b6-semantic-bi.html", color: "#FB923C",
+      concepts: [
+        { label: "The join graph", href: "courses/b6-semantic-bi.html" },
+        { label: "Metric truth", href: "courses/b6-semantic-bi.html" } ] },
+    { label: "Compute &\nMLOps", href: "courses/b7-compute-mlops.html", color: "#FB923C",
+      concepts: [
+        { label: "GPU economics", href: "courses/b7-compute-mlops.html" },
+        { label: "The registry", href: "courses/b7-compute-mlops.html" } ] },
+    { label: "LLM\ngateway", href: "courses/b8-llm-gateway.html", color: "#FB923C",
+      concepts: [
+        { label: "SDK vs proxy", href: "courses/b8-llm-gateway.html" },
+        { label: "Eval-set collector", href: "courses/b8-llm-gateway.html" } ] },
+    { label: "Self-serve\n(comes last)", href: "courses/b9-self-serve.html", color: "#F87171",
+      concepts: [
+        { label: "86.6% to 10.1%", href: "courses/b9-self-serve.html" },
+        { label: "Broken benchmarks", href: "courses/b9-self-serve.html" } ] },
+    { label: "Capstone\narchitecture", href: "courses/b10-capstone-architecture.html", color: "#F87171",
+      concepts: [
+        { label: "Costed + sequenced", href: "courses/b10-capstone-architecture.html" },
+        { label: "Defend it", href: "courses/b10-capstone-architecture.html" } ] }
+  ]
+};
+</script>
+<script src="assets/mindmap.js?v=1"></script>
+<script src="assets/app.js?v=2"></script>
+</body>
+</html>

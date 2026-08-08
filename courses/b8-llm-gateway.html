@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practitioner session 8 · The LLM gateway + app runtime - learn ai infra with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-infra-with-phoebe</a> / Practitioner session 8 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Infra with Phoebe · Practitioner track · Session 8 of 10</div>
+    <h1>One governed door for <span class="accent">every model you rent</span></h1>
+    <p class="sub">Layer seven is the smallest box on the architecture diagram and the one that decides whether anyone can answer "what are we spending on AI, and on what." Tonight: the strongest primary definition of an AI gateway, the one rule that tells you when an SDK is enough and when it structurally cannot be, two products the market calls gateways that are not, the most valuable thing a gateway quietly gives you, and five trade-offs that are usually left off the slide.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Practitioner track</span>
+      <span class="chip audience">Platform · DE · architects</span>
+      <span class="chip audience">Vendor-neutral · real rate cards</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · What a gateway is and is not</span>
+      <span class="a3" style="flex:5">18-42 · Build-along: SDK vs proxy</span>
+      <span class="a4" style="flex:1">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ PART 1: THE DEFINITION ============ -->
+  <section class="section" id="definition">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers Azure API Management AI gateway docs, updated 2026-06-25</span>
+      <h2>What a gateway actually is <span class="tag concept">8 min live</span></h2>
+    </div>
+    <p class="lede">The clearest primary definition in the category comes from Microsoft, not from a startup landing page. Azure API Management describes its AI gateway as <strong>"a set of capabilities that help you manage your AI backends effectively. Use these capabilities to secure, scale, monitor, and govern AI models, agents, and tools."</strong> The sentence right after it is the one worth reading twice: it <strong>"extends API Management's existing API gateway; it's not a separate offering."</strong> This is not a new category of infrastructure. It is the API gateway your organization has run for fifteen years, taught to count tokens.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Many applications on the left connect through a single gateway box holding four jobs, out to many model providers on the right, with a dashed bypass arrow going around the gateway.">
+        <style>
+          .y8T { font: 700 13px Inter, sans-serif; fill: #FFFFFF; }
+          .y8S { font: 400 11.5px Inter, sans-serif; fill: #FFFFFF; opacity: .92; }
+          .y8I { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .y8B { font: 600 12px Inter, sans-serif; fill: #1E293B; }
+          .y8X { font: 400 12px Inter, sans-serif; fill: #64748B; }
+          .y8N { font: 600 13px Inter, sans-serif; fill: #3F6212; }
+          .y8R { font: 700 12px Inter, sans-serif; fill: #991B1B; }
+        </style>
+        <defs>
+          <marker id="y8arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 z" fill="#64748B"/>
+          </marker>
+          <marker id="y8red" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 z" fill="#991B1B"/>
+          </marker>
+        </defs>
+        <text class="y8I" x="30" y="26">Many applications</text>
+        <text class="y8I" x="290" y="26">One governed door</text>
+        <text class="y8I" x="700" y="26">Many providers</text>
+
+        <rect x="30" y="42" width="150" height="30" rx="6" fill="#F8FAFC" stroke="#334155" stroke-width="2"/>
+        <text class="y8B" x="44" y="62">Support bot</text>
+        <rect x="30" y="80" width="150" height="30" rx="6" fill="#F8FAFC" stroke="#334155" stroke-width="2"/>
+        <text class="y8B" x="44" y="100">Doc search agent</text>
+        <rect x="30" y="118" width="150" height="30" rx="6" fill="#F8FAFC" stroke="#334155" stroke-width="2"/>
+        <text class="y8B" x="44" y="138">Sales copilot</text>
+        <rect x="30" y="156" width="150" height="30" rx="6" fill="#F8FAFC" stroke="#334155" stroke-width="2"/>
+        <text class="y8B" x="44" y="176">Batch summariser</text>
+        <rect x="30" y="194" width="150" height="30" rx="6" fill="#F8FAFC" stroke="#334155" stroke-width="2"/>
+        <text class="y8B" x="44" y="214">+ 20 more apps</text>
+
+        <line x1="182" y1="57" x2="248" y2="90" stroke="#64748B" stroke-width="2" marker-end="url(#y8arr)"/>
+        <line x1="182" y1="95" x2="248" y2="110" stroke="#64748B" stroke-width="2" marker-end="url(#y8arr)"/>
+        <line x1="182" y1="133" x2="248" y2="133" stroke="#64748B" stroke-width="2" marker-end="url(#y8arr)"/>
+        <line x1="182" y1="171" x2="248" y2="156" stroke="#64748B" stroke-width="2" marker-end="url(#y8arr)"/>
+        <line x1="182" y1="209" x2="248" y2="176" stroke="#64748B" stroke-width="2" marker-end="url(#y8arr)"/>
+
+        <rect x="250" y="42" width="340" height="200" rx="10" fill="#1E293B"/>
+        <text class="y8T" x="268" y="68">The AI gateway</text>
+        <text class="y8S" x="268" y="88">one unified OpenAI-compatible API in front</text>
+        <rect x="268" y="100" width="10" height="10" rx="2" fill="#84CC16"/>
+        <text class="y8S" x="288" y="109">routing and failover across providers</text>
+        <rect x="268" y="128" width="10" height="10" rx="2" fill="#84CC16"/>
+        <text class="y8S" x="288" y="137">cost tracking, budgets, token rate limits</text>
+        <rect x="268" y="156" width="10" height="10" rx="2" fill="#84CC16"/>
+        <text class="y8S" x="288" y="165">semantic and exact-match caching</text>
+        <rect x="268" y="184" width="10" height="10" rx="2" fill="#84CC16"/>
+        <text class="y8S" x="288" y="193">key management, guardrails, observability</text>
+        <text class="y8S" x="268" y="222">every prompt and completion passes through here</text>
+
+        <line x1="592" y1="90" x2="676" y2="57" stroke="#64748B" stroke-width="2" marker-end="url(#y8arr)"/>
+        <line x1="592" y1="110" x2="676" y2="95" stroke="#64748B" stroke-width="2" marker-end="url(#y8arr)"/>
+        <line x1="592" y1="133" x2="676" y2="133" stroke="#64748B" stroke-width="2" marker-end="url(#y8arr)"/>
+        <line x1="592" y1="156" x2="676" y2="171" stroke="#64748B" stroke-width="2" marker-end="url(#y8arr)"/>
+        <line x1="592" y1="176" x2="676" y2="209" stroke="#64748B" stroke-width="2" marker-end="url(#y8arr)"/>
+
+        <rect x="678" y="42" width="172" height="30" rx="6" fill="#334155"/>
+        <text class="y8T" x="692" y="62">OpenAI</text>
+        <rect x="678" y="80" width="172" height="30" rx="6" fill="#334155"/>
+        <text class="y8T" x="692" y="100">Anthropic</text>
+        <rect x="678" y="118" width="172" height="30" rx="6" fill="#334155"/>
+        <text class="y8T" x="692" y="138">Google Vertex</text>
+        <rect x="678" y="156" width="172" height="30" rx="6" fill="#334155"/>
+        <text class="y8T" x="692" y="176">Azure OpenAI</text>
+        <rect x="678" y="194" width="172" height="30" rx="6" fill="#334155"/>
+        <text class="y8S" x="692" y="214">Bedrock (a backend)</text>
+
+        <path d="M105 226 L105 296 L764 296 L764 226" fill="none" stroke="#991B1B" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#y8red)"/>
+        <rect x="300" y="304" width="12" height="12" rx="3" fill="#FCA5A5"/>
+        <text class="y8R" x="322" y="315">the thing that breaks your cost dashboard</text>
+
+        <rect x="30" y="344" width="14" height="14" rx="3" fill="#84CC16"/>
+        <text class="y8N" x="54" y="356">A chokepoint governs only if it is the only door. Ask what stops a team calling the provider direct.</text>
+        <rect x="30" y="374" width="14" height="14" rx="3" fill="#84CC16"/>
+        <text class="y8N" x="54" y="386">Azure: it "extends API Management's existing API gateway; it's not a separate offering."</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - many apps, one door, many providers, and the bypass that ruins the numbers</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The seven capabilities, verified across five products<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>These are not one vendor's feature list. Each row below appears in the product documentation of Azure API Management, Kong, LiteLLM, Cloudflare and MLflow. When a category converges this tightly on its feature set, the feature set is the definition.</p>
+        <table class="clean">
+          <thead>
+            <tr><th>Capability</th><th>What it does</th><th>Why it cannot live in the app</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Unified OpenAI-compatible API</strong></td><td>one request shape for every provider</td><td>it can, and this is the one that does</td></tr>
+            <tr><td>Routing and failover</td><td>send traffic elsewhere when a provider degrades</td><td>needs a live view of provider health across all callers</td></tr>
+            <tr><td><strong>Cost tracking and budgets</strong></td><td>spend per team, per app, per key, with hard caps</td><td>needs every team's traffic in one ledger</td></tr>
+            <tr><td><strong>Token rate limiting</strong></td><td>caps tokens per minute per consumer</td><td>a quota is only meaningful if it is enforced centrally</td></tr>
+            <tr><td>Semantic and exact caching</td><td>returns a stored answer instead of paying again</td><td>a cache hit only pays off if it is shared</td></tr>
+            <tr><td>Observability</td><td>logs prompts, completions, latency, errors</td><td>the eval set is the whole estate, not one app</td></tr>
+            <tr><td><strong>Key management and guardrails</strong></td><td>rotation, scoping, content policy at the edge</td><td>keys distributed to apps cannot be rotated centrally</td></tr>
+          </tbody>
+        </table>
+        <p>Read the third column downward. Five of the seven capabilities are <em>structurally</em> impossible inside a single application, no matter how good its libraries are. That column is the whole argument for layer seven, and Part 2 turns it into a rule.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Microsoft's "why," which is the most concrete one any vendor gives<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Most gateway pitches open with "unified API." Microsoft's opens with an operations problem, and it is far more persuasive because it names a failure you can picture.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>With <strong>one</strong> application you simply cap tokens-per-minute on the deployment and you are done. With <strong>twenty</strong> applications, in Microsoft's own words, <em>"you need to make sure that one app doesn't use the whole TPM quota and block other apps."</em></p>
+          <p>That is a <strong>noisy-neighbour problem over prepaid throughput</strong>. You bought a fixed quantity of tokens per minute, and every consumer is drawing from the same tap. The first application to write a retry loop takes the capacity that the customer-facing product needed. Nobody is malicious; the architecture just has no arbiter.</p>
+        </div>
+        <p>This reframes the purchase honestly. You are not buying a nicer SDK. You are buying an arbiter for a shared, prepaid, finite resource, plus the ledger that says who consumed it. Every other capability follows from having somewhere to stand.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Read the vendor stat block as a frozen marketing artifact<span class="mini">2 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A small critical-reading habit worth carrying into every evaluation in this layer. <strong>LiteLLM says "100+ LLMs" on its documentation and "140+" on its marketing pages.</strong> Neither number is dishonest; they were simply written at different times and never resynchronised.</p>
+        <p>The same pattern shows up across this shelf: Cube's homepage claimed 18,000 GitHub stars against an actual 20,564, and Prefect advertises "50.7k+" against a repository count of 23,565 (both fetched 2026-08-07). Vendor stat blocks are snapshots someone pasted in once, not telemetry. If a number matters to your decision, fetch it yourself from the primary feed and write down the date, which is exactly what every price on these pages does.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: SDK VS PROXY ============ -->
+  <section class="section" id="sdk-vs-proxy">
+    <div class="section-kicker">
+      <span class="klabel">Build-along · covers LiteLLM SDK and Proxy, Kong, Portkey, Bedrock, OpenRouter</span>
+      <h2>The rule: SDK or proxy <span class="tag demo">★ 12 min · everyone classifies their own stack</span></h2>
+    </div>
+    <p class="lede">If you remember one sentence from layer seven, make it this one. <strong>The SDK gives one application many providers. The proxy gives many applications one governed door.</strong> They look similar in a demo because both let you swap a model name in a string. They are not similar at all, and the difference is not a matter of degree.</p>
+
+    <div class="callout win">
+      <strong>★ The rule, stated so it settles arguments</strong>
+      Anything that needs a <strong>shared view across teams</strong> - budgets, cost attribution, key rotation, audit trail - is <strong>structurally impossible in the SDK</strong>. Not harder. Not a roadmap item. Impossible, because the SDK runs inside one process and there is no place in that process where another team's traffic exists.
+    </div>
+
+    <div class="steps">
+      <div class="step"><p>List every AI application in your organization. If the answer is <strong>one</strong>, and it will stay one for a year, the SDK is the correct choice and a proxy is a component you will operate for no benefit.</p></div>
+      <div class="step"><p>Now ask who is going to be asked, at some point, "what did we spend on AI last quarter and which team spent it?" If that question has an owner, you need the proxy, and you needed it before the second application shipped.</p></div>
+      <div class="step"><p>Apply the chokepoint test from b1: <strong>what stops a team calling the provider API directly?</strong> If the answer is a policy document rather than network egress rules and key custody, your gateway covers the compliant half of your spend and your dashboards are confidently wrong.</p></div>
+      <div class="step"><p>Classify each product below yourself before reading the table. Two of them will surprise the room.</p></div>
+    </div>
+
+    <table class="clean">
+      <thead>
+        <tr><th>Product</th><th>Gateway?</th><th>What the documentation actually supports</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>LiteLLM Proxy</td><td><strong>Yes</strong></td><td>many apps, one door, per-key budgets and attribution</td></tr>
+        <tr><td>Portkey</td><td><strong>Yes</strong></td><td>full capability set, now inside Palo Alto Networks</td></tr>
+        <tr><td>Cloudflare AI Gateway</td><td><strong>Yes</strong></td><td>caching, rate limiting and analytics at the edge</td></tr>
+        <tr><td>Kong AI Gateway</td><td><strong>Yes</strong></td><td>AI plugins on an existing API gateway data plane</td></tr>
+        <tr><td>Azure API Management</td><td><strong>Yes</strong></td><td>explicitly an extension of the existing API gateway</td></tr>
+        <tr><td>MLflow AI Gateway</td><td><strong>Yes</strong></td><td>plus traffic collection into evaluation datasets</td></tr>
+        <tr><td><strong>Amazon Bedrock</strong></td><td><strong>No</strong></td><td>the Converse API unifies the surface for models AWS hosts</td></tr>
+        <tr><td><strong>OpenRouter</strong></td><td><strong>Partly</strong></td><td>a gateway that also intermediates the commercial relationship</td></tr>
+      </tbody>
+    </table>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why Bedrock is not a gateway, precisely<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>This is not a criticism of Bedrock, which is a good product doing a different job. It is a category correction, and getting it wrong produces an architecture with a hole where the ledger should be.</p>
+        <ul>
+          <li>Bedrock's <strong>Converse API unifies the request surface for models AWS hosts</strong>. That is genuinely useful and it is one of the seven capabilities. It is not the other six.</li>
+          <li>It <strong>does not proxy first-party OpenAI or Anthropic APIs</strong>. Traffic your teams send directly to those providers is invisible to it, which means it cannot be the only door.</li>
+          <li>It therefore <strong>cannot do cross-provider cost attribution</strong>, which is the capability most organizations actually bought a gateway for.</li>
+          <li>The tell is in a competitor's documentation: <strong>Azure's own docs treat Bedrock as a backend that the gateway manages.</strong> A thing that sits behind the gateway is not the gateway.</li>
+        </ul>
+        <p>The practical consequence: if your architecture row for layer seven says "Bedrock," you have chosen a model-hosting layer and left the governance chokepoint empty. That is a defensible choice on an AWS-only estate. It is not a defensible answer to "what are we spending across providers."</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why OpenRouter is only partly one<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>OpenRouter does most of what the capability table lists, so calling it "not a gateway" would be wrong. The reason it sits in its own row is that it changes something the other gateways leave alone: <strong>it runs its own credit billing rather than routing through your provider accounts.</strong></p>
+        <p>That single design decision moves it from an infrastructure component to a counterparty, with two consequences worth stating in a procurement meeting:</p>
+        <ul>
+          <li><strong>Every prompt transits a third party</strong> that is not your model provider. For a self-hosted proxy the prompts stay inside your perimeter; here there is an extra organization holding your traffic.</li>
+          <li><strong>You lose direct rate-limit negotiation.</strong> When you need a quota increase for a launch, you are no longer the provider's customer of record, so the conversation you would have had is not available to you.</li>
+        </ul>
+        <p>For prototyping and for reaching long-tail models quickly, that trade is often worth it. For the production path of a regulated workload, it usually is not. The point of the classification exercise is to make that a decision rather than an accident.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: TRAFFIC BECOMES AN EVAL SET ============ -->
+  <section class="section" id="eval-set">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers Azure Monitor logging and MLflow AI Gateway</span>
+      <h2>Production traffic becomes an eval set <span class="tag concept">6 min live</span></h2>
+    </div>
+    <p class="lede">Here is the capability that never makes the comparison grid and is worth more than any of the seven that do. <strong>A gateway sees every prompt and every completion your organization produces.</strong> That is not a logging side effect. It is the only place where the question "how well is our AI actually working" can be answered with your own traffic instead of somebody's benchmark.</p>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Two vendors say this out loud<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Azure API Management logs prompts and completions to Azure Monitor.</strong> Once that stream exists, your real questions, in your real vocabulary, against your real data, are sitting in a queryable store.</li>
+          <li><strong>MLflow's AI Gateway states the purpose explicitly</strong>, enabling "dataset collection from real-world traffic for building evaluation benchmarks." That is a vendor telling you the gateway is an eval-set collector, in the documentation, without a marketing frame.</li>
+        </ul>
+        <p>Why this matters more than it sounds: in b9 you will see that the gap between a public benchmark score and your warehouse is enormous, and that the only measurement worth trusting is one taken on your own conditions. The gateway is where those conditions are recorded. Skip it and every accuracy conversation you have for the next two years is about somebody else's data.</p>
+        <p><em>Cross-reference:</em> the full treatment of building and running evaluations on collected traffic is in <strong>learn-ai-evals</strong>. This session's job is only to make sure the collection point exists in your architecture, because a gateway added later cannot log traffic that already happened.</p>
+      </div>
+    </details>
+
+    <div class="callout win">
+      <strong>★ The structural insight - b7 and b8 are one pattern</strong>
+      <strong>MLflow, the canonical MLOps tool, now ships an AI gateway.</strong> That is the strongest available evidence that layers six and seven are not two subjects. The <strong>model registry is the chokepoint for models you train; the AI gateway is the chokepoint for models you rent.</strong> Both answer exactly the same four questions: what is running, where did it come from, who approved it, and how do I roll it back. Same governance instinct, same team, two eras of model.
+    </div>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The four questions, asked of a rented model<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Run b7's registry questions against layer seven and the parallel stops being an analogy and becomes an operational checklist:</p>
+        <table class="clean">
+          <thead>
+            <tr><th>Question</th><th>Registry answer (models you train)</th><th>Gateway answer (models you rent)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>What is running?</td><td>the artifact behind the alias</td><td>the model and version each route resolves to</td></tr>
+            <tr><td>Where did it come from?</td><td>lineage to run and training data</td><td>which provider, which deployment, which region</td></tr>
+            <tr><td>Who approved it?</td><td>the promotion gate</td><td>the route config change and who merged it</td></tr>
+            <tr><td>How do I roll it back?</td><td>reassign the alias pointer</td><td>repoint the route, no application deploy</td></tr>
+          </tbody>
+        </table>
+        <p>That last row is the underrated one. In the SDK world, changing model providers is a code change, a review, a release and a deploy per application. Behind a proxy it is a configuration change in one place, which is also precisely why the proxy is a governance surface and the SDK is not.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 4: TRADE-OFFS ============ -->
+  <section class="section" id="trade-offs">
+    <div class="section-kicker">
+      <span class="klabel">Part 4 · the five costs, taught as prominently as the benefits</span>
+      <h2>What the gateway costs you <span class="tag concept">7 min live</span></h2>
+    </div>
+    <p class="lede">Every argument so far has been for the gateway, and the argument is sound. Now the other side, at the same volume, because an architecture row you cannot defend is not a decision. Five of these, and the fifth one has a date on it.</p>
+
+    <div class="steps">
+      <div class="step"><p><strong>1 · You inserted a single point of failure into 100% of AI traffic, in the name of reliability.</strong> Sit with the shape of that. You added the component to survive one provider degrading, and in doing so you created a component whose outage makes every healthy provider unreachable. This is worth paying for, but it must be run like the tier-one dependency it now is, not like a proxy someone stood up in a sprint.</p></div>
+      <div class="step"><p><strong>2 · Added latency on every single call.</strong> <strong>LiteLLM rewrote its core in Rust and publishes p99 overhead figures precisely because buyers interrogate this.</strong> Take the numbers as directional only: they are self-reported, unaudited, and their own published figures are internally inconsistent across pages. Measure it yourself against your own payload sizes, which takes an afternoon and settles the argument.</p></div>
+      <div class="step"><p><strong>3 · Unified APIs are lowest-common-denominator by construction.</strong> The proof is in the products themselves: <strong>passthrough endpoints exist as escape hatches</strong>, letting you send a provider-native request straight through. That feature is an admission that the abstraction leaks. Expect your most valuable use case to be the one that needs the escape hatch.</p></div>
+      <div class="step"><p><strong>4 · The gateway concentrates every provider key and every prompt in one system.</strong> You built a single store containing your credentials, your customers' questions and your proprietary context. <strong>Palo Alto Networks completing its acquisition of Portkey on 2026-05-29 is the market pricing exactly this</strong> - a security company buying the place where the secrets pool.</p></div>
+      <div class="step"><p><strong>5 · Vendor risk, now on the critical path.</strong> <strong>Cloudflare deprecated its Universal Endpoint.</strong> The category is three years old and already deprecating primitives. Check for retirement notices before you design around any managed feature, and keep the routing configuration in a form you could re-express somewhere else.</p></div>
+    </div>
+
+    <div class="callout tip">
+      <strong>How to hold both sides at once</strong>
+      The trade-offs do not argue against a gateway. They argue for treating it as a tier-one production dependency with an owner, a runbook, a latency budget you have measured, a key-custody story, and a written answer to "what do we do if this vendor retires the feature we depend on." A gateway run that way is one of the highest-return components in the stack. A gateway run as a side project is a new outage surface wrapped around your revenue.
+    </div>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The vendor-risk habit, applied beyond this layer<span class="mini">2 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Cloudflare's Universal Endpoint deprecation is not an isolated event, and the habit it should build is general. Two other live examples from this course, both verbatim from vendor documentation:</p>
+        <ul>
+          <li><strong>"Amazon SageMaker Model Monitor is no longer open to new customers"</strong> - a governance-critical component of a flagship service, quietly closed to new adoption.</li>
+          <li>Vertex AI is now presented as the <strong>"Gemini Enterprise Agent Platform"</strong>, which is a repositioning rather than a retirement, but it changes what you are buying and what the documentation covers.</li>
+        </ul>
+        <p>So add one line to every vendor evaluation: <em>search the docs for retirement, deprecation and "no longer open to new customers" before the demo, not after the contract.</em> It takes five minutes and it is the cheapest risk work available to you.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 30-40 min total</span></h2>
+    </div>
+    <ul>
+      <li>Count the AI applications in your organization, then try to answer "what did each one spend last month." How you get to that answer, or fail to, tells you whether you have layer seven or only think you do.</li>
+      <li>Apply the chokepoint test in writing: list every route by which a team could reach a model provider without passing your gateway. If the list is not empty, your cost dashboard covers a fraction you should be able to name.</li>
+      <li>Classify whatever you run today against the eight-row table in Part 2. If the row says Bedrock or OpenRouter, write the one sentence explaining what you gave up and why it was the right trade.</li>
+      <li>Measure the added latency yourself on a representative payload rather than quoting a vendor's p99. Bring the number to b10, because the sponsor will ask.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Official sources covered</h2>
+    </div>
+    <p class="lede">Every definition and capability on this page comes from product documentation rather than analyst commentary, because this category is young enough that the documentation is still the most honest thing written about it. This page covers:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Azure API Management AI gateway documentation (doc updated 2026-06-25)</span><span class="note">Part 1 · the definition, the "not a separate offering" line, the TPM motivation</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">LiteLLM SDK and Proxy documentation</span><span class="note">Part 2 · the SDK-vs-proxy rule · Part 4 · the Rust rewrite and p99 claims</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Cloudflare AI Gateway documentation</span><span class="note">Part 1 · capability set · Part 4 · the Universal Endpoint deprecation</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">MLflow AI Gateway documentation</span><span class="note">Part 3 · traffic as eval set, and the registry-equals-gateway insight</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Kong AI Gateway documentation</span><span class="note">Part 1 · one of the five products the capability list was verified across</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Amazon Bedrock Converse API · OpenRouter product documentation</span><span class="note">Part 2 · the two boundary cases · full compute economics stayed in b7</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">1 · Your team already uses an SDK that supports every major provider. Finance now wants AI spend broken down by team. What do you tell them?</p>
+      <button class="qopt" type="button">A · The SDK can do it once we upgrade to the latest version</button>
+      <button class="qopt" type="button">B · We can add per-team tracking to each application's logging</button>
+      <button class="qopt" type="button">C · The SDK gives one application many providers; a proxy gives many applications one governed door. A shared view across teams is structurally impossible in the SDK, so this needs layer seven</button>
+      <p class="qwhy">Budgets, attribution, key rotation and audit all require a place where every team's traffic exists. Inside one application process there is no such place - which is why this is a structural limit, not a feature gap.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">2 · A colleague says "we already have a gateway, it's Bedrock." What is the correction?</p>
+      <button class="qopt" type="button">A · The Converse API unifies the surface for models AWS hosts, but it does not proxy first-party OpenAI or Anthropic APIs and cannot do cross-provider attribution - Azure's own docs treat it as a backend the gateway manages</button>
+      <button class="qopt" type="button">B · Bedrock is a gateway but only for text models, not for embeddings</button>
+      <button class="qopt" type="button">C · Bedrock is a gateway; the objection is only about pricing</button>
+      <p class="qwhy">Bedrock does one of the seven capabilities well and is a sound model-hosting choice. Calling it layer seven leaves the governance chokepoint empty, so nobody can answer "what are we spending across providers."</p>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">3 · What is the uncomfortable shape of the reliability argument for a gateway?</p>
+      <button class="qopt" type="button">A · Failover only works if all providers use the same request format</button>
+      <button class="qopt" type="button">B · You inserted a single point of failure into 100% of AI traffic in the name of reliability - if the gateway is down, healthy providers are effectively down too</button>
+      <button class="qopt" type="button">C · Caching makes failover unnecessary in most architectures</button>
+      <p class="qwhy">The component added to survive one provider degrading becomes the component whose outage makes every provider unreachable. That is worth paying for, but only if it is operated as a tier-one dependency with an owner and a runbook.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Practitioner session 8 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>The definition</b><span>Azure: capabilities to "secure, scale, monitor, and govern AI models, agents, and tools." And it "extends API Management's existing API gateway; it's not a separate offering."</span></div>
+      <div class="cheat-item"><b>The seven capabilities</b><span>Unified API · routing and failover · cost tracking and budgets · token rate limiting · semantic and exact caching · observability · keys and guardrails.</span></div>
+      <div class="cheat-item"><b>THE RULE</b><span>The SDK gives one app many providers. The proxy gives many apps one governed door. A shared cross-team view is impossible in the SDK.</span></div>
+      <div class="cheat-item"><b>Microsoft's why</b><span>With twenty apps "you need to make sure that one app doesn't use the whole TPM quota and block other apps." Noisy neighbours over prepaid throughput.</span></div>
+      <div class="cheat-item"><b>The two boundary cases</b><span>Bedrock is NOT a gateway - Converse unifies AWS-hosted models only. OpenRouter is only partly one - its own credit billing makes it a counterparty.</span></div>
+      <div class="cheat-item"><b>The best hidden benefit</b><span>Traffic becomes an eval set. MLflow: "dataset collection from real-world traffic for building evaluation benchmarks." See learn-ai-evals.</span></div>
+      <div class="cheat-item"><b>Registry = gateway</b><span>MLflow now ships both. Registry governs models you train, gateway governs models you rent. Same four questions, two eras.</span></div>
+      <div class="cheat-item"><b>The five trade-offs</b><span>One SPOF over all AI traffic · latency on every call · lowest-common-denominator APIs with passthrough escape hatches · keys and prompts pooled (Palo Alto closed the Portkey deal 2026-05-29) · vendor risk (Cloudflare deprecated Universal Endpoint).</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Practitioner session 8 of 10 · learn-ai-infra-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="b7-compute-mlops.html">← b7 · Compute + MLOps</a> &nbsp;·&nbsp; <a href="../index.html">All sessions</a> &nbsp;·&nbsp; <a href="b9-self-serve.html">Next: Self-serve, and why it comes last →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=2"></script>
+</body>
+</html>

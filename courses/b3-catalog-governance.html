@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practitioner session 3 · Catalog, lineage, governance - learn ai infra with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-infra-with-phoebe</a> / Practitioner session 3 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Infra with Phoebe · Practitioner track · Session 3 of 10</div>
+    <h1>The battleground moved <span class="accent">to the catalog</span></h1>
+    <p class="sub">b2 ended with the format war settled directionally. This is where the fight went next, and it is the more consequential one. The catalog is the single API boundary between every engine and every byte you own: it resolves metadata, controls access, vends credentials and sequences commits. Tonight you learn why that makes it the chokepoint of layer two, work through the real implementations, and find the lock-in surface that nobody puts on a comparison slide.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Practitioner track</span>
+      <span class="chip audience">Platform · DE · architects</span>
+      <span class="chip audience">Vendor-neutral · real rate cards</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:5">3-18 · Why the catalog is the chokepoint</span>
+      <span class="a3" style="flex:8">18-42 · Build-along: evaluating catalogs</span>
+      <span class="a4" style="flex:1">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we are in the stack</h2>
+    </div>
+    <p class="lede">Layer two has two halves. b2 took the first half - the table format, the transactional metadata that turns a directory of Parquet files into something you can trust. Tonight takes the second half, and it is the half that holds the chokepoint. The b1 table put it plainly: the chokepoint of layer two is <strong>the catalog</strong>, and what it decides is <strong>access control, credential vending and commit sequencing</strong>. That is a governance job wearing a metadata job's name, which is exactly why it gets bought as an afterthought and later turns out to be the thing you cannot change.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - read after class</span>
+      <span class="pill inkpill">Official sources covered</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      Why the industry fight moved from format to catalog, the four jobs the catalog does and what the Iceberg REST spec unlocked by standardizing them, a working map of the eight real implementations with what each is actually for, the lock-in surface that nobody markets, and three open problems you should be honest about with any vendor who tells you this layer is solved.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: THE CHOKEPOINT ============ -->
+  <section class="section" id="chokepoint">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · the idea</span>
+      <h2>Why the catalog is the chokepoint <span class="tag concept">9 min live</span></h2>
+    </div>
+    <p class="lede">Recall the chokepoint definition from b1: a narrow waist where plural, messy inputs become a singular, consequential output, and where governance is therefore possible. Above the catalog sits every engine anyone in your organization might run - Spark, Trino, Flink, Dremio, StarRocks, Doris, a notebook, a BI tool, an agent. Below it sits every bucket in every cloud. <strong>All of that traffic goes through one box, and that box does four jobs.</strong></p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram of the catalog as a narrow waist: six query engines across the top, all arrows converging into a single catalog box listing its four jobs, and arrows continuing down to four object storage buckets.">
+        <style>
+          .c3T { font: 700 13px Inter, sans-serif; fill: #FFFFFF; }
+          .c3B { font: 700 12px Inter, sans-serif; fill: #FFFFFF; }
+          .c3J { font: 400 12px Inter, sans-serif; fill: #FFFFFF; }
+          .c3H { font: 600 12px Inter, sans-serif; fill: #64748B; }
+          .c3S { font: 600 11.5px Inter, sans-serif; fill: #3F6212; }
+          .c3N { font: 400 12px Inter, sans-serif; fill: #64748B; }
+        </style>
+        <rect x="0" y="0" width="880" height="400" fill="#F8FAFC"/>
+        <defs>
+          <marker id="c3arrowhead" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 z" fill="#64748B"/>
+          </marker>
+        </defs>
+
+        <text class="c3H" x="40" y="26">Engines above - each one used to need its own connector</text>
+        <rect x="40" y="38" width="120" height="34" rx="6" fill="#334155"/>
+        <text class="c3B" x="78" y="60">Spark</text>
+        <rect x="176" y="38" width="120" height="34" rx="6" fill="#334155"/>
+        <text class="c3B" x="214" y="60">Trino</text>
+        <rect x="312" y="38" width="120" height="34" rx="6" fill="#334155"/>
+        <text class="c3B" x="352" y="60">Flink</text>
+        <rect x="448" y="38" width="120" height="34" rx="6" fill="#334155"/>
+        <text class="c3B" x="482" y="60">Dremio</text>
+        <rect x="584" y="38" width="120" height="34" rx="6" fill="#334155"/>
+        <text class="c3B" x="612" y="60">StarRocks</text>
+        <rect x="720" y="38" width="120" height="34" rx="6" fill="#334155"/>
+        <text class="c3B" x="762" y="60">Doris</text>
+
+        <path d="M100,74 L300,146" stroke="#64748B" stroke-width="1.5" marker-end="url(#c3arrowhead)"/>
+        <path d="M236,74 L360,146" stroke="#64748B" stroke-width="1.5" marker-end="url(#c3arrowhead)"/>
+        <path d="M372,74 L420,146" stroke="#64748B" stroke-width="1.5" marker-end="url(#c3arrowhead)"/>
+        <path d="M508,74 L470,146" stroke="#64748B" stroke-width="1.5" marker-end="url(#c3arrowhead)"/>
+        <path d="M644,74 L530,146" stroke="#64748B" stroke-width="1.5" marker-end="url(#c3arrowhead)"/>
+        <path d="M780,74 L590,146" stroke="#64748B" stroke-width="1.5" marker-end="url(#c3arrowhead)"/>
+
+        <rect x="200" y="150" width="480" height="122" rx="8" fill="#1E293B"/>
+        <text class="c3T" x="220" y="176">The catalog - one HTTP API, four jobs</text>
+        <text class="c3J" x="220" y="200">1 · resolves metadata: which files, which snapshot</text>
+        <text class="c3J" x="220" y="220">2 · controls access: row filters, column masks</text>
+        <text class="c3J" x="220" y="240">3 · vends credentials: temporary storage tokens</text>
+        <text class="c3J" x="220" y="260">4 · sequences commits: server-side conflict resolution</text>
+
+        <text class="c3S" x="700" y="186">every engine</text>
+        <text class="c3S" x="700" y="204">above, every</text>
+        <text class="c3S" x="700" y="222">byte below,</text>
+        <text class="c3S" x="700" y="240">one door in</text>
+        <text class="c3S" x="700" y="258">between</text>
+
+        <path d="M300,272 L155,302" stroke="#64748B" stroke-width="1.5" marker-end="url(#c3arrowhead)"/>
+        <path d="M400,272 L345,302" stroke="#64748B" stroke-width="1.5" marker-end="url(#c3arrowhead)"/>
+        <path d="M480,272 L535,302" stroke="#64748B" stroke-width="1.5" marker-end="url(#c3arrowhead)"/>
+        <path d="M580,272 L725,302" stroke="#64748B" stroke-width="1.5" marker-end="url(#c3arrowhead)"/>
+
+        <rect x="70" y="306" width="170" height="32" rx="6" fill="#334155"/>
+        <text class="c3B" x="118" y="327">S3 bucket</text>
+        <rect x="260" y="306" width="170" height="32" rx="6" fill="#334155"/>
+        <text class="c3B" x="292" y="327">ADLS container</text>
+        <rect x="450" y="306" width="170" height="32" rx="6" fill="#334155"/>
+        <text class="c3B" x="494" y="327">GCS bucket</text>
+        <rect x="640" y="306" width="170" height="32" rx="6" fill="#334155"/>
+        <text class="c3B" x="662" y="327">on-prem objects</text>
+
+        <text class="c3N" x="40" y="366">The Iceberg REST catalog spec replaced per-engine connectors with plain HTTP.</text>
+        <text class="c3N" x="40" y="386">Tier-1 service: if the catalog fails, every lakehouse read and write halts.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the narrow waist of layer two, and the four jobs it holds</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What the Iceberg REST Catalog spec actually unlocked<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Before the REST spec, catalog access was a per-engine integration problem. <strong>Spark talked to Hive Metastore one way. Trino talked to Glue another way.</strong> Every engine needed a bespoke connector for every catalog, which meant the number of things to build and maintain was engines times catalogs, and any new capability had to be implemented independently in each cell of that grid. In practice that meant new capabilities did not arrive.</p>
+        <p><strong>The REST spec replaced all of that with plain HTTP.</strong> The catalog became a service with a documented API rather than a library you linked against. That sounds like plumbing. Look at what it made possible, because each item is a governance capability that could not exist before:</p>
+        <ul>
+          <li><strong>Credential vending.</strong> The catalog hands the engine a scoped, temporary storage credential instead of the engine holding a long-lived key to the whole bucket. Access decisions move from cloud IAM, which knows about prefixes, to the catalog, which knows about tables.</li>
+          <li><strong>Remote signing.</strong> The catalog signs individual storage requests, so the engine never holds a credential at all.</li>
+          <li><strong>Server-side commit conflict resolution.</strong> Two writers racing on the same table get sequenced by the catalog rather than by whichever client's retry logic happens to be better.</li>
+          <li><strong>Scan planning</strong> - and this is the one to underline. <strong>The catalog applies row filters and column masks BEFORE returning a plan.</strong></li>
+        </ul>
+        <p>Sit with that last one, because it is the difference between governance and a suggestion. If filtering happens in the engine, then governance is only as strong as every engine's willingness to apply it, and a new engine is a new hole. If the catalog applies the filter during scan planning, <strong>the restricted rows are never in the plan the engine receives</strong>. The engine cannot read what it was never told exists. That is architecture, not policy - and by the b1 chokepoint test, that is the difference between a control and a suggestion.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why this fight is bigger than the format fight was<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A format is a file layout. If you dislike it, translation is metadata-sized and cheap, as b2 established - XTable and UniForm rewrite nothing. That is precisely why the format war de-escalated: the switching cost turned out to be low, so owning the format stopped being worth fighting for.</p>
+        <p>A catalog is not a file layout. It holds your access policies, your role hierarchy, your table-level and row-level and column-level rules, your audit trail, and the identity mappings that connect all of it to your organization. <strong>None of that is standardized by the REST spec.</strong> The spec standardized how an engine asks for a table. It did not standardize how you write "analysts in the EU may see these rows."</p>
+        <p>So the industry standardized the cheap-to-switch layer and left the expensive-to-switch layer proprietary. That is not a conspiracy, it is the ordinary result of standardizing what everyone agrees on first. But it does mean the interoperability story you are sold at the format layer does not automatically extend one layer up, and Part 3 is about exactly that gap.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: THE IMPLEMENTATIONS ============ -->
+  <section class="section" id="implementations">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · build-along</span>
+      <h2>The implementations, and what each is for <span class="tag demo">★ 12 min · work through it</span></h2>
+    </div>
+    <p class="lede">Eight real options. Read the table with one question in hand rather than a feature checklist: <em>what problem was this built to solve, and is it my problem?</em> Several of these are not competitors at all - they are answers to different questions that happen to share a category name.</p>
+
+    <table class="clean">
+      <thead>
+        <tr><th>Name</th><th>What it is</th><th>Notable</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Apache Polaris</strong></td>
+          <td>Open-source catalog implementing the Iceberg REST API</td>
+          <td>Graduated to ASF <strong>Top-Level Project 2026-02-19</strong>. Published interop across Doris, Flink, Spark, Dremio, StarRocks and Trino - the broadest engine list of any option here</td>
+        </tr>
+        <tr>
+          <td><strong>Snowflake Open Catalog</strong></td>
+          <td>Managed Polaris</td>
+          <td>Two-tier RBAC. Credential vending gives the query engine <em>"a temporary storage credential"</em>. <strong>Free now, with billing expected in H1 2026 on REST API requests</strong> - price the request volume before you depend on it</td>
+        </tr>
+        <tr>
+          <td><strong>Unity Catalog</strong></td>
+          <td>Databricks' catalog and governance layer</td>
+          <td>The managed product is strong and mature; <strong>the open-source variant lags it</strong>. Do not evaluate one and deploy the other</td>
+        </tr>
+        <tr>
+          <td><strong>AWS Glue / S3 Tables</strong></td>
+          <td>AWS-native catalog, plus managed Iceberg tables in S3</td>
+          <td>Deepest integration with AWS IAM and the AWS analytics estate. That integration is the benefit and the boundary</td>
+        </tr>
+        <tr>
+          <td><strong>Lakekeeper</strong></td>
+          <td>Open-source REST catalog written in Rust</td>
+          <td>PostgreSQL for state, <strong>OpenFGA for authorization</strong> - a relationship-based access model rather than a bolted-on role table</td>
+        </tr>
+        <tr>
+          <td><strong>Nessie</strong></td>
+          <td>Catalog with git-like branching and tagging</td>
+          <td>Branch, merge and time-travel across multiple tables at once. <strong>No built-in access control</strong> - this is a workflow answer, not a governance answer</td>
+        </tr>
+        <tr>
+          <td><strong>Apache Gravitino</strong></td>
+          <td>Federated metadata catalog across sources</td>
+          <td>ASF <strong>Top-Level Project June 2025</strong>. Aimed at the "we already have four catalogs" problem rather than the "we need one" problem</td>
+        </tr>
+        <tr>
+          <td><strong>BigLake Metastore</strong></td>
+          <td>Google Cloud's managed metastore</td>
+          <td>The GCP-native equivalent of the Glue position, with the same trade shape</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>How to read that table without a feature matrix<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Group them by the question they answer and eight options become four decisions:</p>
+        <ul>
+          <li><strong>"I want the open standard, self-hosted"</strong> - Polaris or Lakekeeper. Polaris has the widest published engine interop; Lakekeeper's OpenFGA authorization model is the more interesting choice if fine-grained permissions are your actual pain.</li>
+          <li><strong>"I want it managed, and I have already picked a platform"</strong> - Snowflake Open Catalog, Unity Catalog, Glue / S3 Tables or BigLake Metastore. Here the catalog decision is mostly downstream of a decision you already made, which is worth naming out loud rather than pretending it is an open evaluation.</li>
+          <li><strong>"I need multi-table branching and merge workflows"</strong> - Nessie, with clear eyes about the missing access control. Teams adopt Nessie for its development workflow and then discover governance is a separate project.</li>
+          <li><strong>"I already have several catalogs and cannot consolidate"</strong> - Gravitino. Federation is the honest answer to an organizational fact, not a technical preference.</li>
+        </ul>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Note the pricing line on Snowflake Open Catalog, because it is the kind of thing that quietly changes an architecture. It is free today, with <strong>billing expected in H1 2026 on REST API requests</strong>. A catalog is called on every table resolution, every plan, every commit - which means the meter, when it arrives, runs on query patterns rather than on data volume. A chatty BI tool refreshing dashboards every five minutes generates catalog requests in a completely different order of magnitude from a nightly batch job over the same tables. Ask for the request-volume estimate before the price exists, not after.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Five questions to put to any catalog vendor<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Take these into your next evaluation. Each maps to something on this page.</p>
+        <ul>
+          <li><strong>"Show me a row filter being applied during scan planning."</strong> Not in the engine. In the plan the engine receives. If it is applied downstream, every new engine is a new hole.</li>
+          <li><strong>"What exactly does an engine hold - a long-lived key, a vended temporary credential, or nothing because you sign requests?"</strong> Three very different blast radiuses when a client is compromised.</li>
+          <li><strong>"If I write my row-level and column-level policies here, what is the export path?"</strong> Expect discomfort. Part 3 explains why.</li>
+          <li><strong>"What is your availability target, and what happens to reads and writes when you are down?"</strong> Answered honestly, this is a tier-1 conversation.</li>
+          <li><strong>"Which capabilities exist in the managed product but not in the open-source one?"</strong> Ask specifically about governance features, which is where the gap usually sits.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: GOVERNANCE PORTABILITY ============ -->
+  <section class="section" id="portability">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · the part nobody markets</span>
+      <h2>Governance portability is the real lock-in surface <span class="tag concept">9 min live</span></h2>
+    </div>
+    <p class="lede">Here is the sentence this session exists to deliver. <strong>Row-level security written in Unity Catalog does not transfer to Polaris.</strong> Not "transfers with effort" - there is no standard target format to transfer it into. The REST spec standardized how an engine asks for a table; it did not standardize how you express who may see which rows. So every policy you author accumulates in one vendor's dialect, and the pile grows every quarter.</p>
+
+    <div class="callout tip">
+      <strong>Where the switching cost actually sits</strong>
+      Your data files are portable - Parquet, and always were. Your table metadata is portable - translation is metadata-sized and cheap, per b2. Your <em>governance</em> is not portable, and it is the only one of the three that took two years of negotiation with your risk, legal and audit functions to write. Vendors compete loudly on the two portable layers and stay quiet about the third. That asymmetry is the whole lock-in story of layer two, and it is why the fight moved here.
+    </div>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Three unsolved problems - teach them as open questions<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Any vendor who tells you this layer is solved is selling. These three are genuinely open, and the useful posture is to name them and design around them rather than wait for someone to close them.</p>
+        <ul>
+          <li><strong>1 · Governance portability.</strong> No standard exists for expressing row filters, column masks, role hierarchies or tag-based policies across catalogs. Practical mitigation: author your policies as code in your own repository and apply them to the catalog, so that the source of truth is a file you own rather than a state you accumulated by clicking. That does not make migration free, but it turns a rewrite into a re-render.</li>
+          <li><strong>2 · The open-versus-managed parity gap.</strong> The open-source variant of a managed catalog routinely lags the managed one, and it lags most in governance features specifically - which are the expensive ones to reimplement. Evaluating the open-source version and deploying the managed version, or the reverse, produces a surprise in month four rather than in week one.</li>
+          <li><strong>3 · Operational reliability.</strong> <strong>The catalog is a tier-1 service: if it fails, all lakehouse reads and writes halt.</strong> Not degrade - halt. Every engine resolves every table through it. Many teams deploy a catalog with the operational care of a metadata service and then discover they have made it the availability floor of the entire data platform. Ask for the SLO, the failure modes, the backup and restore procedure for catalog state, and whether anyone has ever practised the restore.</li>
+        </ul>
+        <p><strong>Now apply the b1 chokepoint test explicitly:</strong> what stops someone from going around the catalog? On a lakehouse, the honest answer is often "a direct read from the object store with cloud credentials." If any engine, notebook or service can read the Parquet directly with bucket-level IAM permissions, <strong>every row filter and column mask in your catalog governs only the well-behaved path.</strong> The catalog is a genuine chokepoint only when storage-level access has been closed off in favour of catalog-vended credentials. Credential vending is not a convenience feature. It is the mechanism that makes the chokepoint real, and without it you have a suggestion with excellent documentation.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Lineage: what it buys, and why it should not be a project<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Lineage is the record of which inputs produced which outputs, at table and ideally column granularity. Four things it buys, all of them boring until the day you need them:</p>
+        <ul>
+          <li><strong>Impact analysis</strong> - before you change a column, know who breaks.</li>
+          <li><strong>Root-cause analysis</strong> - a dashboard is wrong, and lineage turns "somewhere upstream" into a short list.</li>
+          <li><strong>Regulatory evidence</strong> - showing where a personal-data field came from and where it went, on demand.</li>
+          <li><strong>Deprecation</strong> - the only way to retire a table with confidence rather than by deleting it and waiting for complaints.</li>
+        </ul>
+        <p>The trap is treating lineage as a procurement item: buy a lineage tool, run parsers over your SQL, produce a graph that is 70% accurate and stale by Thursday. It is expensive and it decays, because it is reconstructing after the fact something the system knew at the time and threw away.</p>
+        <p><strong>The alternative is structural.</strong> In an asset-based orchestrator, you declare the assets and their dependencies as the way you author work in the first place, so a successful run means "this table exists at this version, produced from these inputs." Lineage falls out of that as a <strong>by-product rather than a separate project</strong>, and it is accurate by construction because it is the same declaration the scheduler executed. That is a change in what "the pipeline succeeded" even means, and it is the heart of <strong>b4</strong>, where we take orchestration properly and choose between tools by failure semantics rather than by feature list.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 30 min total</span></h2>
+    </div>
+    <ul>
+      <li>Name your catalog, in one sentence, without hedging. A surprising number of teams have two or three and have never said so out loud. If you have more than one, write down which engines use which, and whether a policy written in one is visible from the other.</li>
+      <li>Apply the chokepoint test to your storage: can any engine, notebook, service account or person read the underlying Parquet directly with bucket-level credentials, bypassing the catalog entirely? Count the paths. Every path you find is a row filter that does not apply.</li>
+      <li>Inventory your governance policies - row filters, column masks, roles, tags. Estimate how long they took to negotiate and write. That estimate, not the licence fee, is your true switching cost for this layer.</li>
+      <li>Ask your catalog owner two questions: what is the SLO, and has anyone ever restored catalog state from backup in a drill? If the answer to the second is no, you are running a tier-1 service on an untested recovery path.</li>
+      <li>If you use a managed catalog with a free tier, estimate your monthly REST request volume from your query patterns, not your data volume. Then ask what happens when it is metered.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Official sources covered</h2>
+    </div>
+    <p class="lede">Specifications and project documentation first, vendor documentation second and labelled as such, practitioner commentary last and bias-flagged. This page covers:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Apache Iceberg REST Catalog specification and Iceberg project documentation</span><span class="note">The four jobs, credential vending, remote signing, commit resolution, scan planning with filters</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Apache Polaris project documentation and ASF Top-Level Project graduation (2026-02-19)</span><span class="note">The reference open implementation · published engine interop list</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Snowflake Open Catalog documentation</span><span class="note">Two-tier RBAC, the credential-vending quote, and the H1 2026 billing expectation on REST requests</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Unity Catalog, AWS Glue / S3 Tables, Lakekeeper, Nessie, Gravitino, BigLake docs</span><span class="note">Vendor and project sources · used for positioning, not for comparative claims</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Practitioner commentary on catalog interoperability</span><span class="note"><strong>Bias flag:</strong> developer-advocate source with a vendor affiliation · used only where it matches primary docs</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · The Iceberg REST Catalog spec replaced per-engine connectors with plain HTTP. What did that unlock that matters most for governance?</p>
+      <button class="qopt" type="button">A · Faster metadata reads, because HTTP is lighter than a metastore client library</button>
+      <button class="qopt" type="button">B · Credential vending, remote signing, server-side commit conflict resolution, and scan planning where the catalog applies row filters and column masks before returning a plan</button>
+      <button class="qopt" type="button">C · Support for more file formats beyond Parquet</button>
+      <p class="qwhy">Spark talked to Hive Metastore one way and Trino talked to Glue another; every capability had to be built per engine, so it was not built. The scan-planning item is the sharpest: if the restricted rows are never in the plan, the engine cannot read what it was never told exists.</p>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · Your data is Parquet, your tables are Iceberg, and everything is open. Where is the lock-in?</p>
+      <button class="qopt" type="button">A · There is none - open formats mean you can move at any time</button>
+      <button class="qopt" type="button">B · In the file format, since rewriting Parquet at scale is expensive</button>
+      <button class="qopt" type="button">C · In governance portability - row-level security written in Unity Catalog does not transfer to Polaris, and there is no standard target format to transfer it into</button>
+      <p class="qwhy">Data files are portable and table metadata translates cheaply, per b2. Governance is the one layer with no standard, and it is the layer that took two years of negotiation with risk, legal and audit to write. That asymmetry is the whole lock-in story.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · Why should the catalog be treated as a tier-1 service?</p>
+      <button class="qopt" type="button">A · Every engine resolves every table through it, so if it fails all lakehouse reads and writes halt - not degrade, halt</button>
+      <button class="qopt" type="button">B · Because it stores a copy of the data and losing it means losing the tables</button>
+      <button class="qopt" type="button">C · Because catalog licences are usually the largest line in the platform budget</button>
+      <p class="qwhy">The catalog holds no data - and that is exactly why the failure is total rather than partial. Teams deploy it with the operational care of a metadata service and then discover it is the availability floor of the whole platform. Ask for the SLO and whether anyone has ever practised the restore.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Practitioner session 3 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>The move</b><span>The battleground went from format to catalog. Formats translate cheaply; catalogs hold policy, and policy does not translate at all.</span></div>
+      <div class="cheat-item"><b>The four jobs</b><span>Resolve metadata · control access · vend credentials · sequence commits. One API boundary between every engine and every byte.</span></div>
+      <div class="cheat-item"><b>What REST unlocked</b><span>Credential vending, remote signing, server-side commit conflict resolution, and scan planning with row filters and column masks applied before the plan returns.</span></div>
+      <div class="cheat-item"><b>Open implementations</b><span>Polaris (TLP 2026-02-19, widest engine interop) · Lakekeeper (Rust, PostgreSQL, OpenFGA) · Nessie (git-like branching, no built-in access control) · Gravitino (federated, TLP June 2025).</span></div>
+      <div class="cheat-item"><b>Managed implementations</b><span>Snowflake Open Catalog (managed Polaris, two-tier RBAC, free now, billing expected H1 2026 on REST requests) · Unity Catalog · AWS Glue / S3 Tables · BigLake Metastore.</span></div>
+      <div class="cheat-item"><b>THE LOCK-IN</b><span>Governance portability. Row-level security written in Unity Catalog does not transfer to Polaris. Author policy as code you own.</span></div>
+      <div class="cheat-item"><b>The chokepoint test here</b><span>If anything can read the Parquet directly with bucket credentials, every catalog filter governs only the well-behaved path. Credential vending is what makes it real.</span></div>
+      <div class="cheat-item"><b>Three open problems + lineage</b><span>Portability · open-vs-managed parity · tier-1 reliability (catalog down = all reads and writes halt). Lineage should be an orchestrator by-product, not a project - see b4.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span><a href="b2-storage-formats.html">← b2 · Storage + open table formats</a> &nbsp;·&nbsp; Practitioner session 3 of 10 · learn-ai-infra-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="../index.html">← All sessions</a> &nbsp;·&nbsp; <a href="b4-ingestion-orchestration.html">Next: Ingestion + orchestration →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=2"></script>
+</body>
+</html>

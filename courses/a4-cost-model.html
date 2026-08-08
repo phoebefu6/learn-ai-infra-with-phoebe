@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leader session 4 · The cost model - learn ai infra with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-infra-with-phoebe</a> / Leader session 4 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Infra with Phoebe · Leader track · Session 4 of 6</div>
+    <h1>The cost model, and <span class="accent">where budgets quietly leak</span></h1>
+    <p class="sub">Platform budgets rarely fail on the line everyone argues about. They fail on four lines nobody put in the model: the cost of reading your own data back out, the gap between a list price and what the market actually pays, licensing charged per installed unit rather than per unit used, and token spend. Tonight you see all four, then run the storage arithmetic live and watch a single architectural choice move twenty-six thousand dollars a year. Every rate on this page was fetched from a first-party billing feed on 2026-08-06/07.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Leader track</span>
+      <span class="chip audience">CDAIOs · heads of data · platform sponsors</span>
+      <span class="chip audience">No code, decisions only</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:5">3-18 · Where platform budgets go wrong</span>
+      <span class="a3" style="flex:8">18-42 · Live: storage economics</span>
+      <span class="a4" style="flex:1">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Why this session exists</h2>
+    </div>
+    <p class="lede">Session a3 was about who wrote the numbers. This one is about which numbers to look at. A platform budget presented to a board almost always has the right shape and the wrong emphasis: pages of detail on the visible unit prices, one line for storage, and nothing at all for the things that end up dominating the bill. The four leaks below are not exotic. They are ordinary, published, and available to anyone who reads a rate card carefully - which is why finding them is a leadership skill rather than a technical one.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - read after class</span>
+      <span class="pill peach">▶ Live platform sim - real rate-card arithmetic</span>
+      <span class="pill inkpill">Official sources covered</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      The egress-to-storage ratio that quietly drives architecture, the difference between a list GPU price and a market one, the licensing trap that charges you for hardware you are not using, and a habit that will save you more money than any of them: budget from first-party billing feeds, never from an aggregator or a catalog page.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: THE FOUR LEAKS ============ -->
+  <section class="section" id="four-leaks">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · the four places budgets go wrong</span>
+      <h2>Four leaks into one bill <span class="tag concept">15 min live</span></h2>
+    </div>
+    <p class="lede">Here are the four, in order of how much money they move and in reverse order of how much attention they usually get. Token spend is the one every executive asks about first. It is the narrowest pipe on the diagram.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Four labelled pipes feeding into a monthly bill. The widest pipe is storage-versus-egress asymmetry, followed by list-versus-market GPU price, per-installed-GPU licensing, and the narrowest pipe, token spend.">
+        <style>
+          .c4T { font: 700 14px Inter, sans-serif; fill: #1E293B; }
+          .c4L { font: 700 12.5px Inter, sans-serif; fill: #FFFFFF; }
+          .c4S { font: 400 11px Inter, sans-serif; fill: #FFFFFF; opacity: .92; }
+          .c4B { font: 700 12.5px Inter, sans-serif; fill: #1E293B; }
+          .c4Bs { font: 400 11px Inter, sans-serif; fill: #334155; }
+          .c4X { font: 400 11.5px Inter, sans-serif; fill: #64748B; }
+        </style>
+        <text class="c4T" x="30" y="24">Four leaks into one bill. The widest pipe is the one nobody budgets.</text>
+
+        <rect x="30" y="44" width="610" height="64" rx="7" fill="#1E293B"/>
+        <text class="c4L" x="48" y="70">1 · Storage vs egress asymmetry</text>
+        <text class="c4S" x="48" y="91">S3 $0.023/GB-month stored vs $0.09/GB out: one read costs ~3.9x a month of storage</text>
+
+        <rect x="30" y="118" width="610" height="48" rx="7" fill="#334155"/>
+        <text class="c4L" x="48" y="141">2 · List price vs market price</text>
+        <text class="c4S" x="48" y="159">AWS p5 on-demand $6.88 · 3yr reserved $2.587 · SemiAnalysis index $2.82 per GPU-hr</text>
+
+        <rect x="30" y="176" width="610" height="40" rx="7" fill="#334155"/>
+        <text class="c4L" x="48" y="196">3 · Licensed per INSTALLED GPU, not per GPU used</text>
+        <text class="c4S" x="48" y="211">an 8-GPU DGX B300 carries $36,000/year before any hardware</text>
+
+        <rect x="30" y="226" width="610" height="28" rx="7" fill="#334155"/>
+        <text class="c4L" x="48" y="245">4 · Token spend · the leak every budget remembers</text>
+
+        <path d="M640,69 L658,76 L640,83 z" fill="#84CC16"/>
+        <path d="M640,135 L658,142 L640,149 z" fill="#84CC16"/>
+        <path d="M640,189 L658,196 L640,203 z" fill="#84CC16"/>
+        <path d="M640,233 L658,240 L640,247 z" fill="#84CC16"/>
+
+        <rect x="660" y="44" width="190" height="210" rx="8" fill="#F8FAFC" stroke="#334155"/>
+        <text class="c4B" x="676" y="74">Monthly bill</text>
+        <text class="c4Bs" x="676" y="102">Leaders watch:</text>
+        <text class="c4Bs" x="676" y="120">· token spend</text>
+        <text class="c4Bs" x="676" y="148">The money sits in:</text>
+        <text class="c4Bs" x="676" y="166">· egress</text>
+        <text class="c4Bs" x="676" y="184">· list vs reserved</text>
+        <text class="c4Bs" x="676" y="202">· installed-GPU</text>
+        <text class="c4Bs" x="676" y="218">&#160; licensing</text>
+
+        <text class="c4X" x="30" y="300">All rates fetched 2026-08-06/07 from first-party billing feeds, not marketing pages.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the four leaks, sized by how much money they actually move</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Leak 1: it costs more to read your data than to keep it<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>On AWS S3 (Price List API, publication date 2026-08-06), storage is <strong>$0.023 per GB-month</strong> and egress to the internet is <strong>$0.09 per GB</strong> after the first 100 GB free. Put those side by side and the ratio is the thing to remember: <strong>downloading a byte once costs about 3.9 times what it costs to store that byte for a whole month.</strong></p>
+        <p>Every architectural argument about data movement is downstream of that ratio. It is why copying data between systems is expensive in a way that surprises people, why "just let the analytics tool read straight from the lake" is a budget decision rather than a plumbing decision, and why leaving a cloud provider is a capital event rather than a migration task.</p>
+        <p>The headline comparison, on the same fetch dates: egressing <strong>100 TB in one month</strong> costs <strong>$0 on Cloudflare R2</strong>, <strong>$0 on Wasabi but only if you also store at least 100 TB</strong>, and <strong>around $8,563 on AWS</strong>. Storage prices across vendors differ by roughly three times. The egress gap is effectively infinite.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Leak 2: the list price is not the price<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Three numbers for the same accelerator, all fetched 2026-08-07. AWS p5 on-demand is <strong>$6.88 per GPU-hour</strong>. The same instance on a three-year all-upfront Savings Plan is <strong>$2.587 per GPU-hour</strong>. The SemiAnalysis composite index for H100 capacity sits at <strong>$2.82 per GPU-hour</strong> (April 2026), <strong>down 57% from $6.62 in the second half of 2023</strong>.</p>
+        <p>Two consequences worth stating out loud in a budget review:</p>
+        <ul>
+          <li><strong>Published list prices substantially overstate what the market pays.</strong> A model built on list is not conservative, it is wrong in a direction that happens to favour whoever built it.</li>
+          <li><strong>Azure H100 spot at $2.27 per GPU-hour is below AWS's three-year reserved rate.</strong> For interruptible batch work - backfills, embedding regeneration, offline scoring - spot capacity inside an existing contract is frequently the cheapest compute you can buy without leaving your security perimeter.</li>
+        </ul>
+        <p>And prices move violently, which is a governance point as much as a finance one. <strong>AWS cut P5 by 44% effective 2025-06-01.</strong> Azure's $98.32 per hour for eight H100s is exactly AWS's pre-cut price, never matched. Any budget with a GPU line in it needs a scheduled re-price, not an annual one.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Leak 3: licensed per installed GPU, not per GPU used<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>NVIDIA AI Enterprise is one of the very few published rate cards in this whole subject (docs page updated 2026-06-08). Self-managed is <strong>$4,500 per GPU per year</strong>; the cloud marketplace rate is <strong>$1.00 per GPU-hour</strong> on top of the instance cost. Those cross at about <strong>51% annual utilization</strong>, since $1/GPU-hour works out to $8,760 per GPU-year.</p>
+        <p>The trap is the denominator. The licence is charged <strong>per installed GPU, not per GPU used</strong>, and there is one licence per physical GPU on a multi-GPU card. An eight-GPU DGX B300 therefore carries <strong>$36,000 per year in licensing before any hardware cost at all</strong>, whether those GPUs are saturated or idle. This is the single line item first-pass budgets miss most often, and it does not shrink when utilization does.</p>
+        <p>One more detail from the same rate card, purely because it is free money: the five-year term is <strong>$18,000</strong> and the four-year term is also <strong>$18,000</strong>. Five years for the price of four. There is never a reason to buy the four-year term.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Leak 4: token spend, and why it is the narrow pipe<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Token spend is the leak every executive asks about first, and on most enterprise platforms in 2026 it is the smallest of the four. That is not a reason to ignore it - it is the fastest-growing line and the one most likely to be spent without attribution, which is a governance problem rather than a cost problem.</p>
+        <p>The structural point for a leader: token spend is the only one of the four leaks with a natural chokepoint already available. Layer seven of the stack, the LLM gateway, exists precisely so that routing, budgets, rate limits and per-team attribution happen in one place. If your token spend is untracked, you do not have a pricing problem, you have a missing layer.</p>
+        <p>The chokepoint test from a2 applies here exactly as it did there: a gateway that teams can skip by calling the provider API directly gives you cost dashboards covering the compliant half of your spend.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The fifth line: requests, and why it is a rounding error<span class="mini">2 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Object storage bills have a third component after storage and egress: request charges. On S3 (fetched 2026-08-06) PUT, COPY, POST and LIST requests are <strong>$5.00 per million</strong> and GET requests are <strong>$0.40 per million</strong>. Cloudflare R2 prices operations exactly 10% under those figures, at <strong>$4.50</strong> and <strong>$0.36</strong> per million.</p>
+        <p>Two things worth noticing. First, on a normal analytics workload this line is small enough to be a rounding error next to egress, so it should not drive a vendor decision. Second, and more interesting commercially: R2's 10% discount on operations exists to remove the last counter-argument to its zero-egress pitch. It is a pricing move aimed at a specific objection, and reading it that way tells you more than the discount itself does.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: THE DATA-QUALITY LESSON ============ -->
+  <section class="section" id="data-quality">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · where your numbers come from</span>
+      <h2>Budget from billing feeds, not aggregators <span class="tag concept">8 min live</span></h2>
+    </div>
+    <p class="lede">Every price on this page came from a vendor's own machine-readable billing feed rather than a comparison site or a marketing page, and there is a specific reason for that discipline. The most-linked GPU pricing aggregator on the internet is currently wrong by about a third on one of its headline rows, and the error runs in the direction that makes reserved capacity look cheaper than it is.</p>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The aggregator error.</strong> The most-linked GPU pricing aggregator (Vantage) labels AWS's three-year, no-upfront rate of $23.777 per hour as "1-Year Reserved." AWS's real one-year rates are in the $32-35 per hour range. That is a <strong>32% error in the single most cited GPU pricing reference</strong>, on the exact row a budget owner is most likely to copy into a model. Nobody is being dishonest; a label was mapped wrongly and then linked ten thousand times. <strong>Use first-party billing feeds.</strong></p>
+    </div>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What is published to the dollar, and what is not<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Here is a pattern worth carrying into every hardware conversation you have this year. <strong>NVIDIA publishes its software prices to the dollar and publishes no list price for any DGX system.</strong> Every DGX figure circulating in the market - including the roughly $3M often quoted for a GB200 NVL72 rack - traces back to an HSBC analyst estimate, not to a vendor catalog.</p>
+        <p>So the rule is: <strong>budget by quote, not by catalog.</strong> If a business case contains a hardware price you cannot trace to a quotation with your organization's name on it, that price is an estimate wearing the costume of a fact.</p>
+        <p>What you <em>can</em> plan against, because it is physical and falsifiable:</p>
+        <ul>
+          <li><strong>A DGX B300 draws roughly 14 kW in 10U.</strong> Power and cooling are the binding constraint. The facility runs out before the budget does, and facility work has a longer lead time than procurement.</li>
+          <li><strong>Storage bandwidth scales linearly at about 12.5 Gb/s per GPU.</strong> Sixteen GPUs need roughly 200 Gb/s. That single rule turns a vendor conversation into arithmetic you can do on the back of an agenda.</li>
+        </ul>
+        <p>Note what those two have in common: they are engineering constraints, not commercial claims, which is exactly why they are the numbers that survive contact with a procurement cycle.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The denominator trap: check what a price is per<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>One more reading error, and this one is worth eight times your money. <strong>CoreWeave publishes per-instance prices, not per-GPU prices.</strong> Divide by eight or your model is wrong by a factor of eight, and their HGX shapes are sold as whole eight-GPU nodes anyway, with no single-GPU option.</p>
+        <p>Once you do divide correctly, a piece of received wisdom falls over. CoreWeave's H100 at <strong>$6.155 per GPU-hour</strong> against AWS at <strong>$6.88</strong> is an 11% discount, not the two-to-three times that the specialist-cloud narrative implies (both fetched 2026-08-07). The genuine discounters on list are RunPod at <strong>$2.69</strong> and Lambda at <strong>$3.99</strong>. What CoreWeave actually sells is committed contracts and InfiniBand fabric, which may well be worth buying - just not for the reason the market repeats.</p>
+        <p>So the habit for every price you are shown: <strong>ask what the denominator is</strong>. Per GPU or per instance. Per used unit or per installed unit. Per hour of runtime or per hour of reservation. Three of the four leaks in this session are denominator errors rather than price errors.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>"AI Factory" and other unfalsifiable words<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>"AI Factory" is branding, not a technical standard. There is no independent certifying body, so no proposal can be disqualified for failing to be one. When a term cannot be failed, it cannot be used in an evaluation.</p>
+        <p>Underneath the branding there are falsifiable things, and those are what belong in a requirements document: validated node counts, certified-partner lists, and the storage sizing rule above. One sharp detail on certification, because it costs money to get wrong: the DGX SuperPOD certified-storage list is a <em>subset</em> of the general NVIDIA-Certified Storage list. A vendor being "NVIDIA-certified" does not qualify them for a SuperPOD purchase, and that distinction has been discovered late by more than one buyer.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO ============ -->
+  <section class="section" id="demo">
+    <div class="section-kicker">
+      <span class="klabel">Live demo</span>
+      <h2>Storage economics, run live <span class="tag demo">★ 20 min · everyone runs it</span></h2>
+    </div>
+    <p class="lede">This is the only calculator in the leader track, and it does one thing: prices the same 50 TB of data against three published rate cards fetched 2026-08-06/07. No projections, no assumptions about your organization. Just three vendors' own numbers applied to one volume, so you can see how much of a storage bill is not storage.</p>
+
+    <div class="steps">
+      <div class="step"><p>Read the default first, before touching anything: <strong>50 TB stored, 20 TB egressed per month</strong>. Wasabi <strong>$400/month</strong>, Cloudflare R2 <strong>$768/month</strong>, AWS S3 <strong>$2,961/month</strong> - and <strong>$1,784 of that S3 figure is egress</strong>, not storage.</p></div>
+      <div class="step"><p>Say the gap out loud, because it is the number that lands in a steering committee: <strong>S3 costs $2,193 a month more than R2 - $26,317 a year - and almost all of it is egress.</strong> The bytes are identical. The difference is what it costs to read them back.</p></div>
+      <div class="step"><p>Now note what this does <em>not</em> say. It does not say leave AWS. Egress is one line in a platform bill, and proximity to the rest of your estate has real value. It says: know which line you are actually paying, because most organizations believe they are buying storage.</p></div>
+      <div class="step"><p>Push <strong>egress above stored volume</strong> and watch the Wasabi row flip to a warning. You have left the 1:1 free-egress policy. Read carefully what that warning is: not a metered overage with a published penalty rate, but a terms-of-service risk. Wasabi's own words: <em>"we reserve the right to limit or suspend your service."</em></p></div>
+      <div class="step"><p>That distinction is the leadership point of the whole demo. A billed overage is a number you can forecast and approve. A suspension right is an operational risk with no price attached, and it belongs in a risk register rather than a budget line. Two vendors can both say "free egress" and mean materially different things.</p></div>
+    </div>
+
+    <div class="infrabox" data-mode="egress"></div>
+
+    <div class="callout tip">
+      <strong>What this model is and is not</strong>
+      The arithmetic is real and recomputes live from published rate cards fetched on 2026-08-06/07. It covers storage, egress and requests only - not the compute, licensing or token lines from Part 1. Your own retention terms, minimum durations and negotiated rates will move every figure. What transfers is the shape: the proportion of a storage bill that is not storage.
+    </div>
+  </section>
+
+  <!-- ============ PART 3: CONTRACT QUESTIONS ============ -->
+  <section class="section" id="contract-questions">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · self-study</span>
+      <h2>Before you sign any infrastructure contract <span class="tag exercise">◐ 6 min read</span></h2>
+    </div>
+    <p class="lede">Four questions. They are deliberately dull, they take a supplier about ten minutes to answer, and between them they cover every leak in this session. Ask them before signature, because after signature they become negotiations rather than questions.</p>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>1 · What is the egress cost of leaving?<span class="mini">2 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Not the monthly egress cost of operating - the one-off cost of moving everything out. At S3's published tiers that is a large, calculable number, and it is the honest measure of switching cost for the storage layer.</p>
+        <p>Ask specifically whether any exit waiver applies and read its conditions. AWS's free-exit-egress programme, announced 2024-03-05 and still live, waives transfer-out charges for customers migrating off AWS - but it is <strong>request-based, approval-gated, credited after the fact, and time-boxed to 90 days</strong>. It was driven by regulation, principally the EU Data Act, rather than by a rate-card change. A waiver you must apply for and complete inside a quarter is a real benefit and a poor foundation for a migration plan.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>2 · What is the minimum retention?<span class="mini">2 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Minimum storage durations turn a cheap headline rate into an expensive one for high-churn data. Wasabi's own terms: <em>"if stored objects are deleted before they have been stored with Wasabi for a certain number of days, a Timed Deleted Storage charge equal to the storage charge for the remaining days will be applied."</em> That is 90 days on Pay-Go and 30 on Reserved Capacity, plus a 1 TB minimum billing (10 TB for Cloud NAS).</p>
+        <p>The practical reading: the cheapest per-terabyte rate on the market can be the wrong choice for short-lived, high-churn data, and nothing on the pricing page tells you that. Match the retention term to the actual lifecycle of the data, not to the headline rate.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>3 · Is licensing per used unit or per installed unit?<span class="mini">1 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Straight from Leak 3, and it generalises well beyond GPUs. Per-installed-unit licensing decouples your software bill from your utilization entirely, which means efficiency work delivers nothing on that line. Ask for the denominator in writing, ask what happens to it when a node is idle, and ask what happens when a card carries multiple physical processors.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>4 · What does the reserved rate actually look like?<span class="mini">1 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Ask for the committed rate from the vendor's own feed, with the term, the upfront structure, and the date on it. Do not accept an aggregator screenshot - that is precisely the 32% error described in Part 2. And note the trap running the other way: Lambda's committed clusters are <strong>inverted</strong>, with a 16-GPU H100 cluster at $6.16 per GPU-hour, <strong>54% more</strong> than its eight-GPU on-demand rate of $3.99, because what you are buying is fabric and guaranteed capacity rather than raw hours. Committed does not automatically mean cheaper.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 30 min total</span></h2>
+    </div>
+    <ul>
+      <li>Pull your last three months of object-storage billing and split it into storage, egress and requests. Most people are surprised by the proportions, and the surprise is the point.</li>
+      <li>Find every per-unit licence in your platform estate and write down the denominator for each: per used unit or per installed unit. Anything in the second category is immune to efficiency work.</li>
+      <li>Take one GPU price currently in a business case and trace it to a first-party feed with a date on it. If it came from an aggregator or a slide, replace it.</li>
+      <li>Ask your incumbent storage vendor the four contract questions from Part 3 in writing. Keep the answers - they become the switching-cost baseline for a5 and a6.</li>
+      <li>Put a re-price date in the calendar for every GPU line in your budget. AWS moved P5 by 44% in a single day; an annual refresh is not fast enough.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Official sources covered</h2>
+    </div>
+    <p class="lede">Every price on this page was pulled from a vendor's own machine-readable feed or published rate card and carries its fetch date of 2026-08-06/07. Nothing here comes from a comparison site, and Part 2 explains why that rule exists. This page covers:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">AWS Price List API and Azure Retail Prices API (fetched 2026-08-06/07)</span><span class="note">S3 tiers, p5 on-demand $6.88, 3yr reserved $2.587, Azure spot $2.27</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Wasabi and Cloudflare R2 published rate cards and terms of service</span><span class="note">The egress demo · 1:1 policy quoted verbatim · minimum retention terms</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">NVIDIA AI Enterprise pricing page (updated 2026-06-08)</span><span class="note">$4,500/GPU/yr · $1/GPU-hr cloud · per installed GPU · five years for the price of four</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">SemiAnalysis GPU Price Index (H100 composite $2.82, April 2026)</span><span class="note">Market vs list · down 57% from $6.62 in 2H 2023 · independent-ish, sells to the industry</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">1 · On AWS S3, how does the cost of reading a byte out compare to the cost of storing it?</p>
+      <button class="qopt" type="button">A · Roughly the same - egress and storage are priced to be neutral</button>
+      <button class="qopt" type="button">B · Egress is cheaper, which is why data movement is rarely a budget concern</button>
+      <button class="qopt" type="button">C · Storage is $0.023/GB-month and egress is $0.09/GB, so downloading a byte once costs about 3.9x storing it for a whole month</button>
+      <p class="qwhy">That ratio drives architecture. At 50 TB stored and 20 TB egressed a month, S3 comes to $2,961 against R2's $768 - $2,193 a month, or $26,317 a year, almost all of it egress. Egressing 100 TB in one month is $0 on R2, $0 on Wasabi only if you also store at least 100 TB, and around $8,563 on AWS.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">2 · NVIDIA AI Enterprise is $4,500 per GPU per year self-managed. Why does an idle eight-GPU DGX B300 still cost $36,000 a year?</p>
+      <button class="qopt" type="button">A · Because the licence is charged per INSTALLED GPU, not per GPU used - one licence per physical GPU, whether saturated or idle</button>
+      <button class="qopt" type="button">B · Because idle GPUs are billed at a penalty rate</button>
+      <button class="qopt" type="button">C · Because the annual minimum commitment is $36,000 regardless of fleet size</button>
+      <p class="qwhy">Per-installed-unit licensing decouples your software bill from utilization entirely, so efficiency work returns nothing on that line. It is the item first-pass budgets miss most often. The cloud alternative is $1/GPU-hour, which works out to $8,760/GPU-year and crosses the self-managed price at roughly 51% annual utilization. Separately: the five-year term is $18,000 and so is the four-year term, so never buy the four-year.</p>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">3 · The most-linked GPU pricing aggregator labels AWS's 3yr-no-upfront rate as "1-Year Reserved." What is the lesson?</p>
+      <button class="qopt" type="button">A · Aggregators are dishonest and comparison shopping should be avoided</button>
+      <button class="qopt" type="button">B · It is a 32% error on the row budget owners copy most, so budget from first-party billing feeds - and note NVIDIA publishes software prices to the dollar but no DGX list price at all, so budget by quote, not catalog</button>
+      <button class="qopt" type="button">C · AWS should publish clearer reserved pricing</button>
+      <p class="qwhy">AWS's real one-year rates are $32-35/hr. Nobody was dishonest; a label was mapped wrongly and then linked everywhere. The same discipline applies to hardware: every circulating DGX figure traces to an HSBC analyst estimate. What you can plan against is physical - a DGX B300 is about 14 kW in 10U, and storage sizing runs ~12.5 Gb/s per GPU, so 16 GPUs need roughly 200 Gb/s.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Leader session 4 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>The ratio to remember</b><span>S3 storage $0.023/GB-month vs egress $0.09/GB. One read costs ~3.9x a month of storage. All rates fetched 2026-08-06/07.</span></div>
+      <div class="cheat-item"><b>The egress headline</b><span>100 TB out in one month: $0 on R2 · $0 on Wasabi only if you store 100 TB+ · ~$8,563 on AWS.</span></div>
+      <div class="cheat-item"><b>The demo number</b><span>50 TB stored, 20 TB out: Wasabi $400 · R2 $768 · S3 $2,961 ($1,784 of it egress). S3 is $26,317/yr above R2.</span></div>
+      <div class="cheat-item"><b>Free egress is not one thing</b><span>Wasabi's 1:1 cap is a suspension right, not a billed overage: "we reserve the right to limit or suspend your service." R2 has no ratio clause.</span></div>
+      <div class="cheat-item"><b>List vs market GPU</b><span>AWS p5 on-demand $6.88 · 3yr reserved $2.587 · SemiAnalysis index $2.82 · Azure spot $2.27, below AWS 3yr reserved.</span></div>
+      <div class="cheat-item"><b>Prices move violently</b><span>AWS cut P5 44% effective 2025-06-01. Azure's $98.32/hr for 8xH100 is exactly AWS's pre-cut price. Re-price on a schedule.</span></div>
+      <div class="cheat-item"><b>The licensing trap</b><span>NVAIE $4,500/GPU/yr or $1/GPU-hr cloud (crossing ~51% utilization), charged per INSTALLED GPU. 8-GPU DGX B300 = $36,000/yr. Five years costs the same as four.</span></div>
+      <div class="cheat-item"><b>Sources and physics</b><span>Budget from first-party feeds (the top aggregator is 32% off) and by quote not catalog. Plan on ~14 kW/10U and ~12.5 Gb/s per GPU.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Leader session 4 of 6 · learn-ai-infra-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="a3-build-buy-rent.html">← a3 · Build vs buy vs rent</a> &nbsp;·&nbsp; <a href="../index.html">All sessions</a> &nbsp;·&nbsp; <a href="a5-launches-and-failures.html">Next: Real launches and honest failures →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/infra-live.js?v=1"></script>
+<script src="../assets/app.js?v=2"></script>
+</body>
+</html>

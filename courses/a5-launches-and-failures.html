@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leader session 5 · Real launches and honest failures - learn ai infra with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-infra-with-phoebe</a> / Leader session 5 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Infra with Phoebe · Leader track · Session 5 of 6</div>
+    <h1>Real launches, <span class="accent">honest failures</span></h1>
+    <p class="sub">Four sessions of layers and rate cards. Tonight we look at what companies actually built and what it actually did for them, using only numbers those companies published themselves. Then we look at the failures - and run into a finding that turns out to be the most useful thing in the session: the data-platform failures are not published at all. The ones we can study are ERP disasters, and they fail for reasons that transfer exactly.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Leader track</span>
+      <span class="chip audience">CDAIOs · heads of data · platform sponsors</span>
+      <span class="chip audience">No code, decisions only</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:5">3-18 · What actually shipped, with numbers</span>
+      <span class="a3" style="flex:8">18-42 · What actually failed</span>
+      <span class="a4" style="flex:1">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>The rule for tonight</h2>
+    </div>
+    <p class="lede">Only two kinds of evidence get on these slides. Numbers a company published on its own engineering blog about its own platform, and findings from an independent audit. Everything else - the vendor case study, the analyst statistic, the conference keynote - is labelled as what it is. That rule is restrictive enough that it removes most of the material usually shown in this session, and what survives is worth far more than what it replaces.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - read after class</span>
+      <span class="pill inkpill">Official sources covered</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      Airbnb's six-year sequence as your reference for what "building a platform" actually looks like on a calendar, one migration case that publishes its effort as well as its saving, a reading test for the vendor case-study genre, and two audited failures whose root causes are governance and data modelling - not technology.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: WHAT SHIPPED ============ -->
+  <section class="section" id="shipped">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers Airbnb, Uber and LinkedIn engineering blogs</span>
+      <h2>What actually shipped, with numbers <span class="tag concept">10 min live</span></h2>
+    </div>
+    <p class="lede">Airbnb is the spine of this session because it is the only company that published the whole arc: three named artifacts, six years apart, on its own engineering blog, each one solving the problem the previous one left open. Read as a roadmap it is the most honest thing in this course, because it shows how long each step took and in which order the pain arrived.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Airbnb's three data platform artifacts on a six-year timeline: Dataportal in 2017 for discovery, Minerva in 2021 for metrics, Metis in 2023 for lineage and governance, each with its published numbers.">
+        <style>
+          .l5aH { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .l5aY { font: 700 13px Inter, sans-serif; fill: #3F6212; }
+          .l5aT { font: 700 14px Inter, sans-serif; fill: #FFFFFF; }
+          .l5aP { font: 400 11.5px Inter, sans-serif; fill: #FFFFFF; opacity: .92; }
+          .l5aN { font: 700 12px Inter, sans-serif; fill: #D9F99D; }
+          .l5aG { font: 700 11.5px Inter, sans-serif; fill: #FCA5A5; }
+          .l5aX { font: 600 12px Inter, sans-serif; fill: #3F6212; }
+        </style>
+        <text class="l5aH" x="40" y="26">One company, one engineering blog, six years. The platform evolved - it was never bought.</text>
+        <line x1="40" y1="70" x2="840" y2="70" stroke="#64748B" stroke-width="2"/>
+        <circle cx="165" cy="70" r="7" fill="#84CC16"/>
+        <circle cx="440" cy="70" r="7" fill="#84CC16"/>
+        <circle cx="715" cy="70" r="7" fill="#84CC16"/>
+        <text class="l5aY" x="165" y="54" text-anchor="middle">2017</text>
+        <text class="l5aY" x="440" y="54" text-anchor="middle">2021-04-30</text>
+        <text class="l5aY" x="715" y="54" text-anchor="middle">2023-06-08</text>
+
+        <rect x="40" y="92" width="250" height="170" rx="8" fill="#1E293B"/>
+        <text class="l5aT" x="58" y="120">Dataportal</text>
+        <text class="l5aP" x="58" y="144">solved: where is the data?</text>
+        <text class="l5aP" x="58" y="168">discovery replaces tribal</text>
+        <text class="l5aP" x="58" y="186">knowledge, one place to look</text>
+        <text class="l5aG" x="58" y="224">gap left open:</text>
+        <text class="l5aG" x="58" y="242">what a metric means</text>
+
+        <rect x="315" y="92" width="250" height="170" rx="8" fill="#334155"/>
+        <text class="l5aT" x="333" y="120">Minerva</text>
+        <text class="l5aP" x="333" y="144">solved: one metric, one number</text>
+        <text class="l5aN" x="333" y="168">12,000+ metrics</text>
+        <text class="l5aN" x="333" y="186">4,000+ dimensions</text>
+        <text class="l5aN" x="333" y="204">200+ data producers</text>
+        <text class="l5aP" x="333" y="228">COVID dashboard in days,</text>
+        <text class="l5aP" x="333" y="246">11,000 views</text>
+
+        <rect x="590" y="92" width="250" height="170" rx="8" fill="#334155"/>
+        <text class="l5aT" x="608" y="120">Metis</text>
+        <text class="l5aP" x="608" y="144">solved: lineage, governance</text>
+        <text class="l5aN" x="608" y="168">100M+ lineage nodes</text>
+        <text class="l5aN" x="608" y="186">300M+ edges</text>
+        <text class="l5aN" x="608" y="204">1,000+ weekly users</text>
+        <text class="l5aP" x="608" y="228">Dataportal UI + metadata</text>
+        <text class="l5aP" x="608" y="246">service, on Apache Atlas</text>
+
+        <rect x="40" y="282" width="14" height="14" rx="3" fill="#84CC16"/>
+        <text class="l5aX" x="64" y="294">Each artifact answers the question the previous one made unavoidable.</text>
+        <rect x="40" y="306" width="14" height="14" rx="3" fill="#84CC16"/>
+        <text class="l5aX" x="64" y="318">Airbnb reached governance in year six, not year one. Nobody starts at the top.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the six-year arc, with the numbers each stage published</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Reading the arc as a plan, not a story<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Three things to take from the timeline, in the order a sponsor cares about them.</p>
+        <ul>
+          <li><strong>The order was forced, not chosen.</strong> Discovery came first because people could not find tables. Metrics came second because once everyone could find tables, everyone reported a different number for the same question. Lineage and governance came third because once 12,000 metrics existed, somebody had to answer where each one came from.</li>
+          <li><strong>Minerva's scale is the argument for funding metric work.</strong> 12,000+ metrics, 4,000+ dimensions and 200+ data producers is not a YAML file somebody writes in a sprint. It is a standing function.</li>
+          <li><strong>The payoff line is Minerva's COVID dashboard: built in days, 11,000 views.</strong> That speed was only possible because the definitions already existed. The value showed up in a crisis, four years after the first investment - which is precisely the funding problem this course exists to name.</li>
+        </ul>
+        <div class="callout tip">
+          <strong>The sponsor question this answers</strong>
+          "How long does a data platform take?" Airbnb, at Airbnb's resources, took six years to get from discovery to governed lineage - and published each step. If your own plan compresses that into two quarters, the plan is not ambitious, it is mis-specified.
+        </div>
+      </div>
+    </details>
+
+    <p>Three more builds, all with numbers from the companies themselves. Read the middle column as evidence of what these platforms are asked to carry, and the right column as the decision it should inform.</p>
+
+    <table class="clean">
+      <thead>
+        <tr><th>Platform</th><th>Published numbers</th><th>What a leader should take</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Uber Hudi</strong><br>2026-01-16, own blog</td><td>19,500 datasets · 350 logical PB · <strong>6 trillion rows/day</strong> · 10 PB/day ingested · 4 million analytical queries/week</td><td>Open table formats are not an experiment. This is the format layer under a production business at the top of the scale range.</td></tr>
+        <tr><td><strong>Uber Michelangelo</strong><br>own blog</td><td>~400 active ML projects · <strong>5,000+ models in production</strong> · 10M real-time predictions/sec at peak</td><td>5,000 models in production is a registry problem, not a modelling problem. The governance layer is the constraint at scale.</td></tr>
+        <tr><td><strong>LinkedIn OpenHouse</strong><br>own blog</td><td>3,500+ managed tables · 550+ daily active users · <strong>6+ months reduction in time-to-market</strong> for dbt · 50% less end-user operational overhead</td><td>The clearest published statement of what a platform layer buys: time, and someone else's operational load.</td></tr>
+      </tbody>
+    </table>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Two contrasts worth knowing<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Netflix does not publish an Airbnb-style portal.</strong> They publish Maestro for orchestration and Metaflow for the ML surface, with 3,000+ AI/ML projects on Metaflow, and no single unified all-persona front door. Two very capable companies, two different answers about whether one portal is the goal. If somebody tells you the unified portal is settled best practice, that is one company's choice, not an industry consensus.</p>
+        <p><strong>Spotify Backstage is a category error if you cite it as a data platform.</strong> It is a software and service catalog, a developer portal for services and ownership. It is genuinely the canonical "one internal portal" pattern - but for engineering assets, not for data. The mistake is common enough in board decks that it is worth naming out loud before someone builds a data strategy on it.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: THE HONEST MIGRATION ============ -->
+  <section class="section" id="migration">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers GetYourGuide (2025-01-29) and the vendor case-study genre</span>
+      <h2>The one case that publishes its cost <span class="tag concept">7 min live</span></h2>
+    </div>
+    <p class="lede">Almost every migration story you will be shown publishes the benefit and hides the effort. GetYourGuide published both, on their own blog, which is why it is the case in this course. It is not the largest migration and not the most impressive saving. It is the only one you can plan against.</p>
+
+    <div class="steps">
+      <div class="step"><p><strong>The move:</strong> Snowflake to Databricks, <strong>750 tables</strong>.</p></div>
+      <div class="step"><p><strong>The benefit:</strong> <strong>20% operational cost reduction</strong>. A real number, and a modest one - note that it is not the 60-80% a vendor deck would headline.</p></div>
+      <div class="step"><p><strong>The effort, published:</strong> proof of concept <strong>1.5 months at 1 FTE</strong>, then migration <strong>4.5 months at roughly 2 FTE</strong>. Six months of elapsed time and about ten person-months of work.</p></div>
+      <div class="step"><p><strong>The quality bar they reported:</strong> <strong>98%+ of queries working</strong> after migration, <strong>72% completing under 10 seconds</strong>. They told you what did not work as well as what did.</p></div>
+    </div>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Do the arithmetic in front of your board<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>This is the only case in the session where a sponsor can compute a payback period without inventing an input. Take your own platform's annual operational spend, apply 20%, and set it against six months of elapsed time plus about ten person-months of engineering. If the resulting payback does not clear your organization's hurdle, that is a finding, and it is a finding you reached with published numbers rather than a vendor's model.</p>
+        <p>Two cautions before it becomes a benchmark:</p>
+        <ul>
+          <li><strong>750 tables is a specific size.</strong> Effort does not scale linearly with table count, but it does not stay flat either. Your estimate should move with your estimate of your own sprawl.</li>
+          <li><strong>20% is their saving on their workload.</strong> A migration between the same two products at a different company, with different query patterns and a different contract, has no reason to land on the same number.</li>
+        </ul>
+        <p>What genuinely transfers is the <em>shape</em>: a defensible platform migration is a two-quarter project with a couple of engineers on it, and the honest headline is a fifth off operations rather than a transformation.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The genre test: read a vendor case study for what is missing<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Set GetYourGuide against the standard artifact. <strong>JPMorgan's data mesh case study, co-authored with AWS, is headlined "drive significant value" and contains zero cost figures, zero timelines, zero scale numbers and zero adoption numbers.</strong> Not weak numbers. No numbers.</p>
+        <p>That is not an accusation of dishonesty. It is a description of a genre. A co-authored case study is a marketing artifact with a customer's logo on it, approved by two communications teams, and the absence of numbers is the predictable output of that process. Treat it as evidence that a large regulated organization attempted a data mesh, and as evidence of nothing else.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p><strong>The four-question test to run on any case study handed to you in a procurement cycle.</strong> Who published it - the customer, the vendor, or both? Does it state effort as well as benefit? Does it carry a date? Does any single number in it have a denominator? GetYourGuide passes all four. Most of what you will be sent passes none.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: WHAT FAILED ============ -->
+  <section class="section" id="failed">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers Birmingham City Council, Lidl, and the publication vacuum</span>
+      <h2>What actually failed <span class="tag concept">14 min live</span></h2>
+    </div>
+    <p class="lede">This part started as a search for cancelled data platforms and returned a structural finding instead. <strong>No named company has publicly cancelled a data-platform program with disclosed losses in 2024-2026.</strong> Not one. That vacuum is not evidence that these programs succeed - it is evidence about who is forced to disclose.</p>
+
+    <div class="callout tip">
+      <strong>Why the good failure cases are all ERP</strong>
+      An ERP failure hits the general ledger, so auditors and shareholders force it into public documents. A data-platform failure shows up as an underused tool, a quietly reassigned team and a renewal that does not happen - none of which triggers a disclosure obligation. So the honest teaching move is to use the audited ERP failures, because their root causes are governance and data modelling, and both transfer directly to the platform you are funding.
+    </div>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Birmingham City Council and Oracle Fusion: the audited one<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>This is the strongest case available because it is independently audited, still unfolding, and documented in public council papers rather than in anyone's marketing.</p>
+        <ul>
+          <li><strong>The cost trajectory:</strong> original estimate <strong>£19M</strong> in 2018 with a December 2020 go-live target. Approved budget <strong>£131M</strong> by 2024. Total forecast <strong>£144.4M</strong> through 2027/28, with a separate report putting the cumulative cost at <strong>£216.5M by 2026</strong>.</li>
+          <li><strong>The decision that did the damage:</strong> the system went live in April 2022 <em>knowing it was unfit</em>. Testing was incomplete because the build was too unstable to test.</li>
+          <li><strong>What broke:</strong> custom bank reconciliation failed, leaving the council unable to produce auditable accounts. The <strong>fraud-detection audit trail was disabled for 18+ months</strong>. And <strong>£2 billion in transactions were misallocated to the wrong fiscal years.</strong></li>
+          <li><strong>The audit finding, which is the whole point:</strong> Grant Thornton's 66-page report concluded the failures were <strong>process failures - governance, technical oversight and vendor management</strong> - not resourcing failures and not technical failures.</li>
+        </ul>
+        <p>Sit with that last line, because it is the one that applies to you. The technology was not the thing that failed. The governance around the technology was. Every layer of the stack you are funding has an owner question attached to it, and Birmingham is what "we will sort the ownership out later" costs when the number is audited.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Lidl and SAP: a data model, not a system<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Abandoned in 2018 after seven years. Roughly <strong>€201M budgeted, about €500M spent</strong>, and Lidl reverted to its legacy system.</p>
+        <p>The root cause is the reason this case is in a data course rather than an ERP course. <strong>Lidl runs inventory on purchase price. SAP for Retail assumes retail price.</strong> That is a conflict between one company's data model and one product's data model - a single modelling assumption, sitting under everything.</p>
+        <p>Lidl refused to change the process, so the software was customized to fit the model instead. The customization grew until it consumed the project. Seven years, half a billion euros, and a return to the starting point, over which price a stock figure is held at.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p><strong>This maps exactly onto the choice every semantic layer forces on you.</strong> When you adopt a platform, you either conform your definitions to its model or you bend the platform to yours. Both are legitimate. What is not legitimate is choosing to bend without pricing it, because bending has no natural stopping point - each customization makes the next upgrade harder, and the project ends when the bending cost overtakes the benefit. Lidl found that point at roughly €500M. Ask which of your metric definitions are genuinely non-negotiable, and be strict, because everything on that list is a customization you have agreed to fund forever.</p>
+        </div>
+      </div>
+    </details>
+
+    <p>Side by side, the two cases fail differently and transfer differently. Neither root cause is a product choice, which is the reason both are in a course about platform funding.</p>
+
+    <table class="clean">
+      <thead>
+        <tr><th></th><th>Birmingham City Council / Oracle</th><th>Lidl / SAP</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Money</strong></td><td>£19M estimated (2018) → £131M approved by 2024 → <strong>£144.4M forecast</strong> through 2027/28; a separate report puts it at £216.5M by 2026</td><td>~€201M budgeted → <strong>~€500M spent</strong></td></tr>
+        <tr><td><strong>Duration</strong></td><td>2018 to at least 2027/28, still unfolding</td><td>Seven years, abandoned 2018, reverted to legacy</td></tr>
+        <tr><td><strong>Root cause</strong></td><td><strong>Process</strong>: governance, technical oversight, vendor management, per Grant Thornton's 66-page audit</td><td><strong>Data model</strong>: inventory on purchase price versus a product assuming retail price</td></tr>
+        <tr><td><strong>Transfers to you as</strong></td><td>Every layer needs a named owner and an oversight cadence, decided before go-live rather than after</td><td>Conform to the platform's semantic layer or bend it - and price the bending, because it has no natural stopping point</td></tr>
+      </tbody>
+    </table>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What the vacuum means for your own reporting<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>If nobody publishes data-platform failures, two things follow for how you run yours.</p>
+        <ul>
+          <li><strong>You cannot benchmark your risk externally.</strong> Any confidence interval you have been shown about data-platform success rates is built on surveys and predictions, not on disclosed outcomes. Treat the absence of a denominator as the default state of this evidence base.</li>
+          <li><strong>Your internal reporting has to do the job disclosure does elsewhere.</strong> That means publishing adoption per persona, cost per layer and the definition backlog to your own board on a fixed cadence - so that a failing program surfaces while it is still cheap, rather than at renewal.</li>
+        </ul>
+        <p>Put plainly: the discipline auditors impose on ERP is the discipline you have to impose on yourself, because nobody is going to impose it on you.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Before session 6</span>
+      <h2>Bring these to the roadmap workshop <span class="tag exercise">◐ 30 min</span></h2>
+    </div>
+    <ul>
+      <li>Write your own version of the Airbnb arc: which of the three problems - discovery, definitions, lineage - is currently hurting most in your organization? That is where the sequence starts, and it is rarely where the budget is pointed.</li>
+      <li>Take the last vendor case study anyone sent you and run the four-question test. Note which of the four it fails.</li>
+      <li>Estimate your GetYourGuide arithmetic: 20% of your platform's annual operational spend, against six months and about ten person-months. Decide whether that clears your hurdle before anyone demos anything.</li>
+      <li>List the metric definitions your organization genuinely cannot change to fit a platform. Keep the list short and be honest about it - each entry is a Lidl-shaped commitment you are agreeing to fund indefinitely.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Official sources covered</h2>
+    </div>
+    <p class="lede">Every number tonight came from a company's own engineering blog or from an independent audit, with the date attached. Vendor-authored material appears only as an example of its genre, labelled as such. This page covers:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Airbnb engineering blog - Dataportal (2017), Minerva (2021-04-30), Metis (2023-06-08)</span><span class="note">Part 1 · the six-year arc and its published scale numbers</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Uber engineering blog - Hudi (2026-01-16) and Michelangelo</span><span class="note">Part 1 · 6 trillion rows/day · 5,000+ models in production</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">GetYourGuide engineering blog - Snowflake to Databricks (2025-01-29)</span><span class="note">Part 2 · the only case publishing effort beside benefit</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">LinkedIn engineering blog - OpenHouse</span><span class="note">Part 1 · 6+ months off dbt time-to-market, 50% less operational overhead</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Birmingham City Council papers and Grant Thornton audit · Lidl and SAP reporting</span><span class="note">Part 3 · the two audited failures, and their non-technical root causes</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">JPMorgan data mesh case study, co-authored with AWS (vendor-authored marketing)</span><span class="note">Part 2 · shown as an example of the genre, not as evidence</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · Airbnb shipped Dataportal in 2017, Minerva in 2021 and Metis in 2023. What does that arc prove about sequencing?</p>
+      <button class="qopt" type="button">A · Airbnb moved unusually slowly and a modern platform can compress this into two quarters</button>
+      <button class="qopt" type="button">B · The order was forced by the problems: discovery first, then metric definitions once everyone could find tables, then lineage and governance once 12,000+ metrics existed - governance arrived in year six, not year one</button>
+      <button class="qopt" type="button">C · Each artifact replaced the previous one, so only the latest layer matters</button>
+      <p class="qwhy">Metis did not replace Dataportal, it absorbed its UI and added a metadata and lineage service. Each stage answered the question the previous stage made unavoidable, and Minerva's 12,000+ metrics and 4,000+ dimensions are what made governance a necessity rather than a preference.</p>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · Why is GetYourGuide's migration the case study used in this course rather than a larger one?</p>
+      <button class="qopt" type="button">A · Because the 20% cost reduction is the largest saving anyone has published</button>
+      <button class="qopt" type="button">B · Because 750 tables is close to the average enterprise size</button>
+      <button class="qopt" type="button">C · Because it publishes effort beside benefit - PoC 1.5 months at 1 FTE, migration 4.5 months at about 2 FTE - so a sponsor can compute a payback period without inventing an input</button>
+      <p class="qwhy">20% is a modest saving, deliberately so. The unusual part is the cost side: almost nobody publishes it. Compare with JPMorgan's AWS-co-authored data mesh case study, headlined "drive significant value" with no cost, time, scale or adoption numbers at all.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · Grant Thornton's 66-page audit of Birmingham City Council's Oracle program found the failures were primarily what?</p>
+      <button class="qopt" type="button">A · Process failures - governance, technical oversight and vendor management - not resourcing or technical failures</button>
+      <button class="qopt" type="button">B · Software defects in the vendor's product</button>
+      <button class="qopt" type="button">C · Insufficient budget and headcount from the start</button>
+      <p class="qwhy">The program ran from a £19M estimate in 2018 to a £144.4M forecast through 2027/28, went live in April 2022 knowing the system was unfit, left the fraud-detection audit trail disabled 18+ months and misallocated £2 billion in transactions to the wrong fiscal years. The audit still landed on governance, not technology.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Leader session 5 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Airbnb's arc</b><span>Dataportal 2017 (discovery) → Minerva 2021 (metrics) → Metis 2023 (lineage). Six years, one company, own blog.</span></div>
+      <div class="cheat-item"><b>Minerva's scale</b><span>12,000+ metrics, 4,000+ dimensions, 200+ data producers. COVID dashboard built in days, 11,000 views.</span></div>
+      <div class="cheat-item"><b>Metis's scale</b><span>100M+ lineage nodes, 300M+ edges, 1,000+ weekly users, on Apache Atlas.</span></div>
+      <div class="cheat-item"><b>The load these carry</b><span>Uber Hudi: 6 trillion rows/day, 10 PB/day, 19,500 datasets. Michelangelo: 5,000+ models in production.</span></div>
+      <div class="cheat-item"><b>What a layer buys</b><span>LinkedIn OpenHouse: 6+ months off dbt time-to-market, 50% less end-user operational overhead.</span></div>
+      <div class="cheat-item"><b>The honest migration</b><span>GetYourGuide: 750 tables, 20% saving, PoC 1.5 months/1 FTE + migration 4.5 months/~2 FTE, 98%+ queries working.</span></div>
+      <div class="cheat-item"><b>The publication vacuum</b><span>No named company has publicly cancelled a data platform with disclosed losses in 2024-2026. ERP failures get audited; ours stay private.</span></div>
+      <div class="cheat-item"><b>The two root causes</b><span>Birmingham £144.4M: governance, oversight, vendor management. Lidl ~€500M: a data model conflict nobody would concede.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Leader session 5 of 6 · learn-ai-infra-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="a4-cost-model.html">← a4 · The cost model</a> &nbsp;·&nbsp; <a href="../index.html">All sessions</a> &nbsp;·&nbsp; <a href="a6-your-roadmap.html">Next: Your platform roadmap →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=2"></script>
+</body>
+</html>

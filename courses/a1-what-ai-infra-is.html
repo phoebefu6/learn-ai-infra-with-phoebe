@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leader session 1 · What AI infra actually is now - learn ai infra with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-infra-with-phoebe</a> / Leader session 1 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Infra with Phoebe · Leader track · Session 1 of 6</div>
+    <h1>What AI infra <span class="accent">actually is</span> now</h1>
+    <p class="sub">You are asked to approve platform spend for a thing nobody in the room can define the same way twice. So we define it. A data platform is eight jobs, not eight products, and each job exists to unblock a specific person. Then we look at what genuinely changed in 2025 and 2026, because the platform question quietly moved from "where does the data live" to "what does the agent see when it asks" - and every major launch of the last eighteen months is an answer to that second question.</p>
+    <div class="chip-row">
+      <span class="chip level">🟢 Leader track</span>
+      <span class="chip audience">CDAIOs · heads of data · platform sponsors</span>
+      <span class="chip audience">No code, decisions only</span>
+      <span class="chip time">Start here</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:5">3-18 · The eight layers in plain language</span>
+      <span class="a3" style="flex:8">18-42 · What changed in 2025-2026</span>
+      <span class="a4" style="flex:1">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ PART 0 ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>How the leader track works</h2>
+    </div>
+    <p class="lede">Six sessions, forty-five minutes each, and every one of them ends with decisions rather than homework. There is no code on these pages by design. The deliverable is <strong>a reference architecture for five personas</strong> - your data engineer, your analyst, your data scientist, your AI engineer, and the business client who just wants an answer they can put in a board pack. Sessions a2 and a3 give you the map and the build-versus-buy argument, a4 gives you the cost model, a5 gives you real launches and honest failures, and a6 turns all of it into a funding sequence you can defend. The practitioner track running alongside this one builds what you are learning to fund, which means the two tracks meet in the middle: you learn what to ask for, they learn what it takes to deliver.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - read after class</span>
+      <span class="pill inkpill">Official sources covered</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      A definition of "AI infrastructure" you can say out loud in a budget meeting without hedging, the eight layers and the five people they serve, the reason the two cheapest-sounding layers are the ones that sink programmes, and the single sentence that explains why every vendor launched a semantic or context product in the same eighteen months.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: THE EIGHT LAYERS ============ -->
+  <section class="section" id="eight-layers">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · the map of the whole course</span>
+      <h2>Eight jobs, five people <span class="tag concept">15 min live</span></h2>
+    </div>
+    <p class="lede">Whatever logos are on your architecture diagram, the platform underneath is these eight jobs. Not eight products - eight <em>jobs</em>, some of which one product covers and some of which quietly need three. This is the most useful thing a sponsor can hold in their head, because every vendor pitch you will ever sit through is a claim about which of these boxes the product fills, and most pitches are vague about it on purpose.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 460" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The eight platform layers as a stack, with the persona each layer unblocks shown in a column to the left, from storage at the base to self-serve and governance at the top.">
+        <style>
+          .w1-t { font: 700 13px Inter, sans-serif; fill: #FFFFFF; }
+          .w1-s { font: 400 11.5px Inter, sans-serif; fill: #FFFFFF; opacity: .9; }
+          .w1-p { font: 700 11.5px Inter, sans-serif; fill: #1E293B; }
+          .w1-g { font: 600 11.5px Inter, sans-serif; fill: #64748B; }
+          .w1-h { font: 700 11px Inter, sans-serif; fill: #3F6212; letter-spacing: .5px; }
+          .w1-n { font: 400 12px Inter, sans-serif; fill: #64748B; }
+        </style>
+
+        <text class="w1-h" x="40" y="22">WHO IT UNBLOCKS</text>
+        <text class="w1-h" x="210" y="22">THE JOB THE LAYER DOES</text>
+
+        <rect x="210" y="34" width="630" height="36" rx="7" fill="#334155"/>
+        <text class="w1-t" x="226" y="51">8 · Self-serve + governance</text>
+        <text class="w1-s" x="226" y="65">talk-to-data, permissions, lineage, cost attribution</text>
+        <rect x="40" y="34" width="150" height="36" rx="7" fill="#D9F99D"/>
+        <text class="w1-p" x="56" y="57">business clients</text>
+
+        <rect x="210" y="78" width="630" height="36" rx="7" fill="#334155"/>
+        <text class="w1-t" x="226" y="95">7 · LLM gateway + app runtime</text>
+        <text class="w1-s" x="226" y="109">routing, cost control, caching, observability</text>
+        <rect x="40" y="78" width="150" height="36" rx="7" fill="#D9F99D"/>
+        <text class="w1-p" x="56" y="101">AI engineers</text>
+
+        <rect x="210" y="122" width="630" height="36" rx="7" fill="#334155"/>
+        <text class="w1-t" x="226" y="139">6 · Compute + MLOps</text>
+        <text class="w1-s" x="226" y="153">train, register, deploy, monitor, CI/CD</text>
+        <rect x="40" y="122" width="150" height="36" rx="7" fill="#D9F99D"/>
+        <text class="w1-p" x="56" y="145">data scientists</text>
+
+        <rect x="210" y="166" width="630" height="36" rx="7" fill="#334155"/>
+        <text class="w1-t" x="226" y="183">5 · Semantic layer + BI</text>
+        <text class="w1-s" x="226" y="197">agreed metrics, dashboards, reports</text>
+        <rect x="40" y="166" width="150" height="36" rx="7" fill="#D9F99D"/>
+        <text class="w1-p" x="56" y="189">analysts</text>
+
+        <rect x="210" y="210" width="630" height="36" rx="7" fill="#1E293B"/>
+        <text class="w1-t" x="226" y="227">4 · Lakehouse engine + transform</text>
+        <text class="w1-s" x="226" y="241">SQL at scale, modelled marts</text>
+
+        <rect x="210" y="254" width="630" height="36" rx="7" fill="#1E293B"/>
+        <text class="w1-t" x="226" y="271">3 · Ingestion + orchestration</text>
+        <text class="w1-s" x="226" y="285">data arrives reliably, on schedule, observably</text>
+
+        <rect x="210" y="298" width="630" height="36" rx="7" fill="#1E293B"/>
+        <text class="w1-t" x="226" y="315">2 · Table format + catalog</text>
+        <text class="w1-s" x="226" y="329">ACID and one source of truth on object storage</text>
+
+        <rect x="40" y="210" width="150" height="124" rx="7" fill="#D9F99D"/>
+        <text class="w1-p" x="56" y="266">data engineers</text>
+        <text class="w1-p" x="56" y="284">(then analysts,</text>
+        <text class="w1-p" x="56" y="302">from layer 4 up)</text>
+
+        <rect x="210" y="342" width="630" height="36" rx="7" fill="#1E293B"/>
+        <text class="w1-t" x="226" y="359">1 · Storage</text>
+        <text class="w1-s" x="226" y="373">cheap durable bytes in open formats</text>
+        <rect x="40" y="342" width="150" height="36" rx="7" fill="#F8FAFC" stroke="#64748B"/>
+        <text class="w1-g" x="56" y="365">nobody, directly</text>
+
+        <text class="w1-n" x="40" y="404">Eight jobs, not eight products. Every vendor pitch is a claim about which of these boxes it fills.</text>
+        <text class="w1-n" x="40" y="422">Layers 1-2 unblock nobody directly - hardest to fund, most expensive to retrofit later.</text>
+        <text class="w1-n" x="40" y="440">Read it bottom-up and it is a dependency chain. Top-down it is a list of business outcomes.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - eight jobs, and who each one lets go to work</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The five people you are actually buying for<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Layers are abstract. People are not, and people are what a budget conversation is really about. Every platform decision in this course resolves to one of five personas, and the discipline is to name the person before naming the product:</p>
+        <ul>
+          <li><strong>The data engineer</strong> ingests, moves and cleans. Their job is that data arrives, on time, in a shape someone else can use, and that they find out when it does not.</li>
+          <li><strong>The analyst</strong> builds dashboards, writes SQL and answers business questions. Their job is a number that survives being challenged in a meeting.</li>
+          <li><strong>The data scientist</strong> trains, deploys and maintains models. Their job includes the unglamorous half: knowing what is in production and how to roll it back.</li>
+          <li><strong>The AI engineer</strong> ships LLM applications. Newest of the five, and the one most likely to be building on infrastructure nobody approved.</li>
+          <li><strong>The business client</strong> wants to ask a question in plain language and get an answer they can act on. They do not want a platform. They want an answer, which is precisely why they are the hardest to serve honestly.</li>
+        </ul>
+        <p>Write those five job descriptions down before your next vendor meeting. Then, when the demo happens, ask which of the five just got unblocked and which layer the product assumes you already have. The second half of that question is where the honest conversation starts.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The two layers nobody defends in a budget review<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Look again at the bottom of the diagram. Layers 1 and 2 - storage, and the table format plus catalog that sits on it - unblock <em>nobody on their own</em>. Nobody's job title is "uses the object store." No business case has ever been written that opens with "we need a catalog."</p>
+        <p>That is not a curiosity. It is the structural reason platform programmes go wrong, and it plays out the same way in every organisation:</p>
+        <ul>
+          <li>The layers with no visible beneficiary get trimmed first, because trimming them appears to cost nothing this quarter.</li>
+          <li>Everything above them is then built on foundations that were sized for a pilot.</li>
+          <li>Retrofitting a catalog underneath live workloads costs several times what installing it first would have cost, and the bill arrives at the exact moment the platform is finally being used.</li>
+        </ul>
+        <p>So the leader's move is not to defend the catalog on its own merits. It is to fund it as part of the outcome above it. You are not approving a catalog; you are approving the analyst's trustworthy number, and the catalog is what that number stands on.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p><strong>Airbnb published this exact progression over six years on their own engineering blog.</strong> Dataportal in 2017 solved discovery, because nobody could find the data. Minerva in 2021 solved metric definitions - 12,000+ metrics, 4,000+ dimensions, 200+ data producers - because teams kept reporting conflicting numbers for the same question. Metis in 2023 added governance and lineage, a graph of 100M+ nodes and 300M+ edges serving 1,000+ weekly data users. Three artifacts, one company, in that order. Nobody starts at layer 8, including the companies whose talk-to-your-data demos look effortless.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why "just buy a platform" does not collapse the list<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Databricks, Snowflake and Microsoft Fabric each sell something they call a unified platform, and all three genuinely cover several of these layers. But read their own documentation and they are unifying <em>different axes</em>:</p>
+        <ul>
+          <li><strong>Databricks</strong> unifies <em>workloads</em> - BI and ML running on one copy of the data.</li>
+          <li><strong>Microsoft Fabric</strong> unifies <em>organisational storage</em> - one OneLake per tenant, and their docs are blunt about the consequence: "You can't delete OneLake or create multiple OneLakes."</li>
+          <li><strong>Snowflake</strong> unifies <em>workload types including transactional</em> - running operational workloads alongside analytics.</li>
+        </ul>
+        <p>None of these is wrong. They are answers to different pains. So the evaluation question is never "is this platform unified?" - it is "which axis does my actual pain sit on?" A group drowning in duplicate departmental lakes has a completely different problem from a group whose ML and BI numbers disagree, and the two should buy differently. If your team cannot state which axis hurts, the procurement is being driven by the demo rather than the diagnosis.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: WHAT CHANGED ============ -->
+  <section class="section" id="what-changed">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · the eighteen months that reframed the question</span>
+      <h2>What actually changed in 2025-2026 <span class="tag concept">24 min live</span></h2>
+    </div>
+    <p class="lede">If you last formed a view on this market in 2023, one thing has changed and it is not the thing the headlines suggest. The models got better, yes. But look at what the platform vendors shipped, and every significant launch is about the same problem: <strong>giving an agent enough governed context to answer correctly.</strong> That is a coordinated shift in what the platform is <em>for</em>, and it is worth twenty minutes of a leadership team's attention.</p>
+
+    <table class="clean">
+      <thead>
+        <tr><th>Launch</th><th>Date</th><th>What it is really about</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Unity Catalog Metrics, GA</strong> (Databricks, at DAIS)</td><td>2026-06-16</td><td>KPIs become governed objects in the catalog, not definitions scattered across dashboards. One place to ask "what does revenue mean here?"</td></tr>
+        <tr><td><strong>Snowflake's two semantic layers</strong> - Horizon Context and Cortex Sense (at Summit)</td><td>2026-06</td><td>Business meaning shipped as a first-class product surface, so an agent has something authoritative to read before it writes SQL</td></tr>
+        <tr><td><strong>Apache Polaris graduates to Top-Level Project</strong></td><td>2026-02-19</td><td>The open catalog stops being one vendor's project. Catalog neutrality becomes a governable choice rather than a promise</td></tr>
+        <tr><td><strong>MCP donated to the Linux Foundation</strong></td><td>2025-12-09</td><td>How an agent reaches your tools and data becomes shared infrastructure with neutral governance, not a vendor protocol</td></tr>
+        <tr><td><strong>Databricks Lakebase, GA</strong></td><td>2026-02-03</td><td>Managed Postgres inside the lakehouse - operational and analytical state stop living in separate universes</td></tr>
+        <tr><td><strong>Amazon S3 Tables, GA</strong> (announced 2024-12-03)</td><td>2025-03-13</td><td>The table format moves into the storage service itself. Open tables become the default rather than a project</td></tr>
+        <tr><td><strong>Iceberg v3</strong> - deletion vectors, row lineage, VARIANT and geospatial types (Databricks shipped v3 GA plus managed Iceberg in Unity Catalog 2026-05-28)</td><td>spec 2025</td><td>Row-level change tracking becomes a query rather than a nightly diff job, which is what agent-era freshness needs</td></tr>
+      </tbody>
+    </table>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The shift, in one sentence<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Here is the line to take away from this session:</p>
+        <div class="callout tip">
+          <strong>The platform question moved</strong>
+          It used to be <em>"where does the data live?"</em> It is now <em>"what does the agent see when it asks?"</em>
+        </div>
+        <p>Consider how differently those two questions procure. The first is answered by a storage and warehouse decision, and once made it stays made for years. The second is answered by the quality of your metric definitions, your table and column descriptions, your access rules and your lineage - all of which are <em>work your own people do</em>, not a product you install. That is why the vendors spent eighteen months shipping context and semantic products: they are selling you the container for work only you can do.</p>
+        <p>Three consequences for how you sponsor this:</p>
+        <ul>
+          <li><strong>Metadata quality became a capital item.</strong> Descriptions and definitions used to be hygiene. They are now the input that determines whether an AI answer is right, which makes them fundable.</li>
+          <li><strong>Neutral governance of the connective tissue is now real.</strong> Polaris at the Apache Foundation and MCP at the Linux Foundation both moved the same way in the same window. Ask any vendor how their agent access path relates to those two.</li>
+          <li><strong>"Unified" moved up the stack.</strong> The unification fight in 2023 was about storage and formats. In 2026 it is about meaning. That is a much harder thing to buy and a much better thing to own.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What this does not mean<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A market moving in one direction is not the same as a problem being solved, and a leader's job here is to separate the two.</p>
+        <ul>
+          <li><strong>The format war is over; the catalog contest is not.</strong> Open table formats have effectively converged in practice - the arguments moved to the catalog, because the catalog is what controls access, vends credentials and sequences commits. The vendors know this. It is why the last three years of acquisitions and donations all cluster there.</li>
+          <li><strong>Interoperability translates metadata, not data.</strong> When a vendor says their format talks to another format, what crosses is the metadata dialect. The underlying files were always compatible. This is a smaller claim than it sounds and worth checking every time you hear it.</li>
+          <li><strong>Announced is not shipped.</strong> Roadmap convergence between the major table formats has been proposed, not delivered. Treat proposals as proposals in your planning, however confident the keynote was.</li>
+          <li><strong>Nobody has solved talk-to-your-data.</strong> Session a2 shows you the failure mode and the practitioner track spends a whole session on the evidence. For now, hold this: the tools are real and useful, and the framing of "ask anything of all your data" is not.</li>
+        </ul>
+        <p>The healthy posture is neither dismissal nor enthusiasm. It is: the ground under the context question genuinely moved, our own semantic groundwork is the part that determines whether we benefit, and that groundwork is not something a purchase order can produce.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The dates worth remembering, and why<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>You do not need to memorise a product timeline. You need three anchors so that you can tell whether a vendor is describing 2023 or 2026:</p>
+        <ul>
+          <li><strong>2025-12-09, MCP to the Linux Foundation.</strong> If someone pitches you a proprietary agent connectivity story, this is the date that makes you ask why.</li>
+          <li><strong>2026-02-19, Polaris to Apache Top-Level Project.</strong> If someone tells you catalog neutrality is theoretical, this is the date that says otherwise.</li>
+          <li><strong>2026-06, the semantic launches.</strong> Unity Catalog Metrics GA on 2026-06-16 and Snowflake's Horizon Context and Cortex Sense in the same month. Two competitors solving the same problem in the same weeks is the strongest available signal that the problem is real.</li>
+        </ul>
+        <p>One honest caveat to carry with all of it: this subject goes stale faster than anything else you sponsor. Every date and price in this course carries the date it was checked, and you should demand the same discipline from anyone briefing you.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: THE FIVE QUESTIONS ============ -->
+  <section class="section" id="five-questions">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · self-study</span>
+      <h2>Five questions that unstick a stalled platform conversation <span class="tag exercise">◐ 6 min read</span></h2>
+    </div>
+    <p class="lede">Most platform discussions stall because they are being held at the wrong altitude. The room is arguing about which product to buy when the actual disagreement is about which layer is missing. These five questions move the conversation from "which product" to "which layer", and they work in a steering committee, a vendor meeting or a corridor.</p>
+
+    <div class="steps">
+      <div class="step"><p><strong>1 · "Which of the five people does this unblock, and what can they not do today?"</strong> A product that cannot be tied to a named person doing a named job is a product looking for a problem. If two people in the room name different personas, you have found the real disagreement.</p></div>
+      <div class="step"><p><strong>2 · "Which of the eight layers does this fill, and which layers does it assume we already have?"</strong> The second half is the one vendors skip. Almost every disappointing platform purchase was a layer-8 product bought by an organisation missing layers 2 and 5.</p></div>
+      <div class="step"><p><strong>3 · "If two teams answer this question differently today, where would we go to settle it?"</strong> If the answer is a person rather than a system, you are missing the semantic layer, and no amount of AI will fix it - it will only produce disagreement faster and more confidently.</p></div>
+      <div class="step"><p><strong>4 · "What stops someone going around this control?"</strong> The chokepoint test, which session a2 builds out in full. If the answer is "policy" rather than "architecture", you have a suggestion rather than a control.</p></div>
+      <div class="step"><p><strong>5 · "What would an agent read before answering this question, and who wrote it?"</strong> The 2026 question. It converts an abstract AI ambition into a specific, assignable piece of work: someone has to write the definitions, and the honest answer is often "nobody has."</p></div>
+    </div>
+
+    <div class="callout tip">
+      <strong>How to use these</strong>
+      Do not fire all five. Pick the one that matches where the room is stuck. Question 1 unsticks a debate about priorities, question 2 unsticks a debate about products, question 3 unsticks a debate about numbers, question 4 unsticks a debate about governance, and question 5 unsticks a debate about AI ambition. Each one reframes without accusing anybody of being wrong, which is why they survive contact with a real meeting.
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Before session a2</span>
+      <h2>Three things to do this week <span class="tag exercise">◐ 30 min total</span></h2>
+    </div>
+    <ul>
+      <li>Map your own organisation onto the eight layers. For each one: which product fills it, or is it empty? An empty layer is not automatically wrong. An empty layer with a persona depending on it is a diagnosis, and it is the first slide of your funding case.</li>
+      <li>For each of the five personas, write one sentence describing what they cannot currently do. Those five sentences are your roadmap in priority order, and they persuade a budget holder far better than a tool list does.</li>
+      <li>Pick the last platform product your organisation bought and answer question 2 about it in writing: which layer did it fill, and which layers did it assume? Bring the answer to a2. If it assumed a layer you do not have, you already know why adoption is disappointing.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Official sources covered</h2>
+    </div>
+    <p class="lede">This track is built on vendors' own documentation and billing feeds, published engineering blogs from the companies that built these platforms, and peer-reviewed work where it exists - with marketing claims labelled as such. Every price and product date carries the date it was checked. This page covers:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Databricks, Snowflake and Microsoft Fabric platform documentation</span><span class="note">The three unification axes · the "which axis is my pain on" question</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Apache Polaris Top-Level Project (2026-02-19) · MCP to the Linux Foundation (2025-12-09)</span><span class="note">Neutral governance of catalog and agent connectivity · catalog detail in a2</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Iceberg v3 spec (2025) - deletion vectors, row lineage, VARIANT, geospatial</span><span class="note">Named here as the freshness enabler · format detail lives in the practitioner track</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Airbnb engineering blog - Dataportal (2017), Minerva (2021), Metis (2023)</span><span class="note">The six-year platform arc · told in full in a5</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · A vendor tells your board their platform "covers the whole stack." What is the eight-layer frame actually telling you to check?</p>
+      <button class="qopt" type="button">A · Whether they have eight separate products, one per layer</button>
+      <button class="qopt" type="button">B · The layers are eight jobs, not eight products - so the question is which jobs this product genuinely does and which it assumes you already have</button>
+      <button class="qopt" type="button">C · Whether the layers appear in the same order on their architecture diagram as on ours</button>
+      <p class="qwhy">One product can cover several jobs, and some single jobs need three products. Every pitch is a claim about which boxes get filled, and the revealing half of the question is always the assumed layers rather than the delivered ones.</p>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · Storage and the catalog are the first two layers to get trimmed in almost every budget review. Why?</p>
+      <button class="qopt" type="button">A · They are the most expensive layers, so they attract the most scrutiny</button>
+      <button class="qopt" type="button">B · They are optional if the layers above them are strong enough</button>
+      <button class="qopt" type="button">C · They unblock nobody directly - no persona's job improves the day they land - which makes them the easiest to defer and the most expensive to retrofit later</button>
+      <p class="qwhy">Nobody's job title is "uses the object store." Foundation layers pay off indirectly, through every layer above them. Fund them as part of the outcome they enable rather than on their own merits, or they will lose every time they are argued in isolation.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · Unity Catalog Metrics went GA on 2026-06-16, Snowflake shipped Horizon Context and Cortex Sense at Summit in the same month, and MCP went to the Linux Foundation on 2025-12-09. What is the common thread?</p>
+      <button class="qopt" type="button">A · Every major launch is about grounding context for agents - the platform question moved from "where does the data live" to "what does the agent see when it asks"</button>
+      <button class="qopt" type="button">B · The vendors are consolidating storage pricing ahead of an expected market shift</button>
+      <button class="qopt" type="button">C · Open source has replaced commercial platforms in the catalog category</button>
+      <p class="qwhy">Two direct competitors solving the same problem in the same weeks, plus neutral governance arriving for both the catalog and the agent connectivity protocol, is the strongest available signal that the industry agrees on where the bottleneck is. The uncomfortable part for a sponsor: the context itself is work your own people have to do.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Leader session 1 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>The eight layers</b><span>Storage · table format + catalog · ingestion + orchestration · engine + transform · semantic + BI · compute + MLOps · LLM gateway · self-serve + governance.</span></div>
+      <div class="cheat-item"><b>The five personas</b><span>Data engineer ingests and cleans · analyst builds dashboards and answers questions · data scientist trains and deploys · AI engineer ships LLM apps · client wants an answer.</span></div>
+      <div class="cheat-item"><b>Jobs, not products</b><span>Eight jobs. One product may cover several; one job may need three. Every pitch is a claim about which boxes it fills.</span></div>
+      <div class="cheat-item"><b>The underfunding trap</b><span>Layers 1-2 unblock nobody directly. Easiest to cut, most expensive to retrofit. Fund them as part of the outcome above them.</span></div>
+      <div class="cheat-item"><b>The 2026 shift</b><span>From "where does the data live" to "what does the agent see when it asks." Every major launch of the last eighteen months answers the second question.</span></div>
+      <div class="cheat-item"><b>The dates that anchor it</b><span>MCP to the Linux Foundation 2025-12-09 · Polaris to Apache TLP 2026-02-19 · Unity Catalog Metrics GA 2026-06-16 · Snowflake Horizon Context + Cortex Sense, Summit 2026-06.</span></div>
+      <div class="cheat-item"><b>Three unification axes</b><span>Databricks unifies workloads · Fabric unifies organisational storage · Snowflake unifies workload types including transactional. Ask which axis your pain is on.</span></div>
+      <div class="cheat-item"><b>The five questions</b><span>Who does it unblock · which layer does it fill and which does it assume · where do we settle a disagreement · what stops someone going around it · what would an agent read first, and who wrote it.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Leader session 1 of 6 · learn-ai-infra-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="../index.html">← All sessions</a> &nbsp;·&nbsp; <a href="a2-layer-map.html">Next: The layer map →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=2"></script>
+</body>
+</html>

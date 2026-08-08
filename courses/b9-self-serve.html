@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practitioner session 9 · Self-serve, and why it comes last - learn ai infra with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-infra-with-phoebe</a> / Practitioner session 9 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Infra with Phoebe · Practitioner track · Session 9 of 10</div>
+    <h1>Self-serve, and why it <span class="accent">comes last</span></h1>
+    <p class="sub">This is the layer your executives already want and the demo that already impressed them: someone types a question in English and a chart appears. It is also the layer with the widest gap between what is demonstrated and what is measured. Tonight is an evidence session. You will see the number that separates demo conditions from your warehouse, the three-configuration experiment that proves the model is not the bottleneck, and a peer-reviewed finding that the benchmarks everyone quotes are themselves substantially wrong. Then you will know exactly what to promise.</p>
+    <div class="chip-row">
+      <span class="chip level">🔴 Practitioner track</span>
+      <span class="chip audience">Platform · DE · architects</span>
+      <span class="chip audience">Evidence-led · vendor claims labelled</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · The evidence, and what it measures</span>
+      <span class="a3" style="flex:5">18-42 · Build-along: the trap, and what to promise</span>
+      <span class="a4" style="flex:1">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ PART 1: THE GAP ============ -->
+  <section class="section" id="the-gap">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers Spider 2.0 (ICLR 2025), BIRD, LiveSQLBench</span>
+      <h2>The number that sets expectations <span class="tag concept">8 min live</span></h2>
+    </div>
+    <p class="lede">One model, two benchmarks. <strong>GPT-4o scores 86.6% on Spider 1.0 and 10.1% on Spider 2.0.</strong> Nothing about the model changed. What changed was the conditions: Spider 2.0 uses 632 real enterprise workflow problems on databases with over 1,000 columns - the largest exceeding 3,000 - across multiple SQL dialects, with solutions that often run past 100 lines. That collapse is the precise distance between the demo you were shown and the warehouse you actually own.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bar comparison showing GPT-4o at 86.6 percent on Spider 1.0 versus 10.1 percent on Spider 2.0, with the conditions that differ listed between them.">
+        <style>
+          .gpT { font: 700 13px Inter, sans-serif; fill: #FFFFFF; }
+          .gpI { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .gpX { font: 400 12px Inter, sans-serif; fill: #64748B; }
+          .gpN { font: 600 13px Inter, sans-serif; fill: #3F6212; }
+          .gpBig { font: 800 26px Inter, sans-serif; fill: #FFFFFF; }
+        </style>
+        <text class="gpI" x="40" y="38">Same model. Same task type. Different conditions.</text>
+        <rect x="40" y="56" width="500" height="70" rx="8" fill="#334155"/>
+        <text class="gpBig" x="60" y="98">86.6%</text>
+        <text class="gpT" x="180" y="86">Spider 1.0</text>
+        <text class="gpT" x="180" y="108">academic schemas, single dialect</text>
+        <rect x="40" y="140" width="88" height="70" rx="8" fill="#991B1B"/>
+        <text class="gpBig" x="56" y="182">10%</text>
+        <text class="gpT" x="150" y="170">Spider 2.0</text>
+        <text class="gpT" x="150" y="192">1,000+ column schemas, many dialects</text>
+        <rect x="580" y="56" width="260" height="154" rx="8" fill="#F8FAFC" stroke="#334155" stroke-width="2"/>
+        <text class="gpI" x="598" y="82">What Spider 2.0 adds</text>
+        <text class="gpX" x="598" y="106">632 real workflow problems</text>
+        <text class="gpX" x="598" y="128">schemas over 1,000 columns</text>
+        <text class="gpX" x="598" y="150">multiple SQL dialects</text>
+        <text class="gpX" x="598" y="172">queries often over 100 lines</text>
+        <text class="gpX" x="598" y="194">multi-step workflows</text>
+        <rect x="40" y="252" width="14" height="14" rx="3" fill="#84CC16"/>
+        <text class="gpN" x="64" y="264">Every vendor demo you have seen was closer to Spider 1.0 than to your warehouse.</text>
+        <rect x="40" y="282" width="14" height="14" rx="3" fill="#84CC16"/>
+        <text class="gpN" x="64" y="294">Human performance on BIRD, for scale: 92.96%. The best system: 81.95%.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the demo-to-enterprise gap, measured</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What the academic baselines actually say<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>BIRD</strong> (12,751 question-SQL pairs, 95 databases, 33.4 GB): human performance is <strong>92.96%</strong>. Not 100 - people get this wrong too. The best leaderboard system reaches <strong>81.95%</strong>. So the human-machine gap is about 11 points, and neither is close to perfect.</li>
+          <li><strong>LiveSQLBench</strong>, built specifically to resist contamination by pulling from live, regularly-updated databases: the leader sat at <strong>48%</strong> as of March 2026, with most systems clustering at 35-40%.</li>
+          <li><strong>Spider 2.0-Snow leaderboards</strong> show entries above 96%. Hold that thought - Part 3 explains why that number is not what it appears to be.</li>
+        </ul>
+        <p>The honest framing for a stakeholder: on genuinely enterprise-shaped problems, contamination-controlled measurement puts the state of the art below half. Everything above that number depends on work <em>you</em> do, not on the model.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Who publishes accuracy figures, and who does not<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Worth knowing before any procurement conversation:</p>
+        <ul>
+          <li><strong>Snowflake Cortex Analyst</strong> is the only vendor publishing a number: <em>"90%+ SQL accuracy."</em> To their credit they published methodology - and the methodology is an <strong>internal, unpublished 150-question suite</strong>. They also published the baseline, which is the more useful figure: GPT-4o single-shot scored <strong>51%</strong> on that same internal eval despite 86.6% on public Spider 1.0. And a semantic model lifted the same LLM from <strong>57% to 78%</strong> on BIRD.</li>
+          <li><strong>Databricks, ThoughtSpot and Microsoft publish no accuracy figure at all</strong> for their conversational analytics products.</li>
+        </ul>
+        <p>Treat that absence as informative. Nobody in this category wants to be measured on a public enterprise benchmark - which tells you roughly where they expect to land.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: THE FIX ============ -->
+  <section class="section" id="the-fix">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the Microsoft ISE evaluation, 2026-05-07</span>
+      <h2>The bottleneck is metadata, and it was measured <span class="tag concept">8 min live</span></h2>
+    </div>
+    <p class="lede">Microsoft's engineering team ran Databricks Genie against LiveSQLBench in three configurations, publishing their methodology. Same product, same benchmark, same questions. Only the semantic context around the data changed - and accuracy moved by a factor of seven. This is the strongest evidence in the whole course for why the semantic layer exists, and it did not come from a company selling semantic layers.</p>
+
+    <table class="clean">
+      <thead>
+        <tr><th>Configuration</th><th>Accuracy</th><th>What changed</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Genie, empty configuration</td><td><strong>9.50%</strong></td><td>the product, pointed at raw tables</td></tr>
+        <tr><td>Genie + column descriptions</td><td><strong>69.23%</strong></td><td>somebody wrote down what the columns mean</td></tr>
+        <tr><td>Genie + feedback mechanism (3 iterations)</td><td><strong>88.50%</strong></td><td>the system learns from corrections</td></tr>
+        <tr><td>GitHub Copilot CLI, metadata only</td><td>66.70%</td><td>(comparison point)</td></tr>
+        <tr><td>GitHub Copilot CLI + domain hints</td><td>80.77%</td><td>(comparison point)</td></tr>
+      </tbody>
+    </table>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What you are actually buying<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Read those first two rows again: <strong>9.50% to 69.23%</strong>, a 7x improvement, from column descriptions. Not a better model. Not a bigger context window. Somebody documenting what the columns mean.</p>
+        <p>Which reframes the purchase entirely. <strong>You are not buying accuracy. You are buying a tool that will be exactly as accurate as the metadata work underneath it.</strong> Two consequences for how you plan:</p>
+        <ul>
+          <li>The licence cost is the small number. The metadata work is the real project, and it is the one nobody scopes.</li>
+          <li>A pilot on a well-documented data mart tells you almost nothing about performance on the undocumented warehouse - which is exactly why pilots succeed and rollouts disappoint.</li>
+        </ul>
+        <div class="callout tip">
+          <strong>Bias flag, stated honestly</strong>
+          This is Microsoft evaluating a Databricks product, so it is not a neutral party. But it is published methodology on a public benchmark with reproducible conditions - which is more than any vendor accuracy claim in this category offers. Weigh it accordingly, and note that the finding cuts <em>against</em> Microsoft's interest in the first configuration and <em>for</em> the general category in the third.
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The vendors' own fine print<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Two product pages say the quiet part, and both are worth reading aloud in a planning meeting.</p>
+        <p><strong>Databricks' best-practices page</strong> states that "Quality table and column descriptions in Unity Catalog are critical for Genie accuracy," that <strong>"Genie Agents support up to 30 tables or views,"</strong> and recommends: <strong>"Aim for five or fewer tables. The more focused your selection, the better."</strong></p>
+        <p>Five tables is a curated data mart. Set that against any framing of "ask any question of all your data," including from the same vendor. The tool is real and genuinely useful within its scope; the marketing frame is not the product spec.</p>
+        <p><strong>Microsoft's Power BI Copilot documentation</strong> is the most candid vendor statement in this category:</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>"You need to prepare data to work with Copilot. Model owners need to invest in prepping their data for AI to ensure Copilot understands the unique business context... <strong>Without this prep, Copilot can struggle to interpret data correctly - leading to generic, inaccurate, or even misleading outputs.</strong>"</p>
+          <p>A vendor stating that its own product produces misleading outputs without upstream investment is more useful than any benchmark, and it is the right sentence to put in front of an executive before a rollout, not after.</p>
+        </div>
+        <p>One more from the same docs, easy to miss and consequential: when a question cannot be answered from the semantic model, Copilot "answers from the large language model's general knowledge." The system does not fail closed. It fails <em>plausibly</em>.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: DISTRUST THE BENCHMARKS ============ -->
+  <section class="section" id="broken-benchmarks">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers Jin, Choi, Zhu &amp; Kang, CIDR 2026 (peer-reviewed)</span>
+      <h2>The benchmarks are broken too <span class="tag concept">6 min live</span></h2>
+    </div>
+    <p class="lede">Here is the move that separates a sophisticated evaluation from a credulous one. Vendor claims are unaudited - fine, we knew that. But the independent benchmarks we would use to audit them turn out to be substantially mis-annotated. A peer-reviewed CIDR 2026 paper from the University of Illinois examined the ground truth itself.</p>
+
+    <div class="steps">
+      <div class="step"><p><strong>In BIRD Mini-Dev, 52.8% of problems contain annotation errors</strong> - 16.7 points higher than the previously reported rate.</p></div>
+      <div class="step"><p><strong>In Spider 2.0-Snow, among the 121 problems with open-sourced gold SQL, the annotation error rate is 66.1%.</strong> Two thirds.</p></div>
+      <div class="step"><p>Re-evaluating five leading agents after corrections moved scores by up to 19 points and rankings by up to 3 places. <strong>One agent, CHESS, went from 62% to 81% - and from 4th place to 1st.</strong></p></div>
+      <div class="step"><p>The authors' conclusion: "annotation errors remain a barrier to robust benchmarking in text-to-SQL, with direct implications for leaderboard validity."</p></div>
+    </div>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>So what about those 96% leaderboard scores?<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Spider 2.0-Snow's leaderboard shows entries above 96%. Four things to know before quoting them:</p>
+        <ul>
+          <li>They are <strong>commercial vendor submissions of their own products</strong>, with no evidence of independent validation by the benchmark maintainers.</li>
+          <li>The benchmark being topped has a <strong>66.1% annotation error rate</strong> on its open-gold subset. A near-perfect score on a two-thirds mis-annotated benchmark measures something, but not capability.</li>
+          <li>The maintainers themselves warn against fine-tuning on the released gold SQL "as it may affect the fairness of evaluation." Public gold plus commercial incentive is a well-known saturation path.</li>
+          <li><strong>Contamination-controlled LiveSQLBench tells a different story: 48%.</strong></li>
+        </ul>
+        <p><strong>The honest position to hold: nobody currently has a trustworthy public measurement of enterprise text-to-SQL accuracy.</strong> Any single number - 90% or 10% - is a claim about a specific setup, not a property of the technology. That is not cynicism; it is the accurate state of the evidence, and it is a far more defensible thing to tell your executives than a vendor's percentage.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The failure mode that actually matters<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Microsoft's evaluation found something more important than the headline numbers: <strong>the majority of remaining failures across every system were business logic errors</strong> - incomplete aggregations, incorrect metric calculations, ambiguous interpretations needing domain expertise - not broken SQL.</p>
+        <p>Sit with the implication. A query that errors out is safe: someone notices. A syntactically valid query that returns a confidently wrong number is dangerous, because <strong>nothing flags it</strong>. It goes in a deck. It informs a decision. The failure surfaces months later, if ever.</p>
+        <p>This is precisely why metric definitions live in a semantic layer rather than in each question. The layer does not make the model smarter - it removes the ambiguity the model would otherwise resolve by guessing.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO ============ -->
+  <section class="section" id="demo">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>The trap, in your platform <span class="tag demo">★ 12 min · everyone runs it</span></h2>
+    </div>
+    <p class="lede">Back to the simulator, with all eight layers on. Switch off the semantic layer and watch the business-client card. They stay unblocked - the tool keeps answering - and turn red. That single state change is this entire session, rendered in your own architecture.</p>
+
+    <div class="steps">
+      <div class="step"><p>All eight layers on: the client card is green, "asks questions and self-builds dashboards on governed metrics." Five of five personas working.</p></div>
+      <div class="step"><p>Switch <strong>Semantic layer + BI</strong> off. The count drops to 3 of 5, and the client goes red: <em>"Answering confidently from ungoverned metrics - plausible SQL, wrong business logic."</em> They are not blocked. They are being answered, wrongly, with confidence.</p></div>
+      <div class="step"><p>Note which other persona went red-adjacent: your analyst is now blocked too, because they needed that layer as well. The semantic layer serves both - which is the argument for funding it that actually lands.</p></div>
+      <div class="step"><p>Switch it back on. That toggle, in a real organization, is somewhere between three months and a year of metric definition work. Price the toggle accordingly when you build the roadmap in b10.</p></div>
+    </div>
+
+    <div class="infrabox" data-mode="ladder"></div>
+
+    <div class="callout tip">
+      <strong>What to promise, concretely</strong>
+      Not "ask anything of your data." Promise this instead: a defined set of certified metrics, over a scoped set of tables, answerable in natural language, with the generated SQL visible and a feedback path when it is wrong. That is a promise the evidence supports - and it is what Databricks' own five-table recommendation describes.
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 30-40 min total</span></h2>
+    </div>
+    <ul>
+      <li>Pick the five tables your business asks about most. Check honestly: do their columns have descriptions? That audit is the difference between 9.50% and 69.23%, and it takes an afternoon to assess.</li>
+      <li>Write the one-paragraph promise you would make to an executive about self-serve at your organization, using only claims the evidence in this session supports. Bring it to b10.</li>
+      <li>If you already run a conversational analytics tool, sample twenty real questions and check the generated SQL against what an analyst would have written. Count business-logic errors separately from failures - the ratio is the interesting number.</li>
+      <li>Optional read: the CIDR 2026 paper on text-to-SQL annotation errors. It is short, and it will permanently change how you read a leaderboard.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Official sources covered</h2>
+    </div>
+    <p class="lede">This session is deliberately structured as vendor claim versus independent evidence, because the gap between them is the lesson. This page covers:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Spider 2.0 (ICLR 2025) and BIRD - academic benchmarks and human baselines</span><span class="note">Part 1 · the 86.6% to 10.1% collapse, BIRD human performance 92.96%</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Microsoft ISE evaluation of Databricks Genie on LiveSQLBench (2026-05-07)</span><span class="note">Part 2 · the 9.50 / 69.23 / 88.50 ladder · bias-flagged, published methodology</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Jin, Choi, Zhu &amp; Kang, CIDR 2026 - text-to-SQL benchmark annotation errors</span><span class="note">Part 3 · 52.8% and 66.1% error rates, peer-reviewed</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Databricks Genie best practices · Microsoft Power BI Copilot documentation</span><span class="note">Part 2 · the five-table recommendation and the misleading-outputs disclaimer</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Snowflake Cortex Analyst engineering blog (2024-08-29)</span><span class="note">The only published vendor accuracy figure, on an internal 150-question suite</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · Genie scored 9.50% with an empty configuration and 69.23% with column descriptions. What does that prove?</p>
+      <button class="qopt" type="button">A · Genie is a weak product compared with its competitors</button>
+      <button class="qopt" type="button">B · The bottleneck is semantic context, not the model - you are buying a tool that will be as accurate as the metadata work beneath it</button>
+      <button class="qopt" type="button">C · Column descriptions are a Databricks-specific requirement</button>
+      <p class="qwhy">Same product, same benchmark, same questions - only the surrounding metadata changed, and accuracy moved 7x. The comparison systems showed the same pattern (66.70% to 80.77% with domain hints). The licence is the small cost; the metadata work is the real project.</p>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · A vendor cites a 96% score on the Spider 2.0-Snow leaderboard. What is the strongest objection?</p>
+      <button class="qopt" type="button">A · Leaderboards only test simple queries</button>
+      <button class="qopt" type="button">B · 96% is within normal variance of other systems</button>
+      <button class="qopt" type="button">C · That benchmark has a 66.1% annotation error rate on its open-gold subset, the entries are unvalidated vendor self-submissions, and contamination-controlled LiveSQLBench puts the leader at 48%</button>
+      <p class="qwhy">The peer-reviewed CIDR 2026 audit found corrections moved one agent from 62% to 81% and from 4th to 1st place. A near-perfect score on a two-thirds mis-annotated benchmark is not a capability measurement.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · Why is a confidently wrong answer worse than a blocked user?</p>
+      <button class="qopt" type="button">A · Nothing flags it - syntactically valid SQL with wrong business logic enters a deck and informs a decision, while a blocked user knows they are blocked</button>
+      <button class="qopt" type="button">B · It consumes more compute</button>
+      <button class="qopt" type="button">C · It is not worse - any answer beats no answer</button>
+      <p class="qwhy">Microsoft's evaluation found most remaining failures across all systems were business logic errors, not SQL failures. A query that errors out is safe because someone notices. That asymmetry is why self-serve sits above the semantic layer rather than beside it.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Practitioner session 9 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>The expectation-setting number</b><span>GPT-4o: 86.6% on Spider 1.0, 10.1% on Spider 2.0. Same model - enterprise conditions are the difference.</span></div>
+      <div class="cheat-item"><b>The metadata ladder</b><span>Genie: 9.50% empty → 69.23% with column descriptions → 88.50% with feedback. A 7x gain from documentation.</span></div>
+      <div class="cheat-item"><b>What you are buying</b><span>Not accuracy - a tool as accurate as the metadata beneath it. The licence is small; the metadata work is the project.</span></div>
+      <div class="cheat-item"><b>The vendor spec</b><span>Databricks: "up to 30 tables or views," "aim for five or fewer." That is a curated data mart, not a warehouse.</span></div>
+      <div class="cheat-item"><b>The candid disclaimer</b><span>Microsoft: without data prep, Copilot gives "generic, inaccurate, or even misleading outputs." And it answers from general knowledge when the model cannot.</span></div>
+      <div class="cheat-item"><b>The benchmarks are broken</b><span>BIRD Mini-Dev 52.8% annotation errors; Spider 2.0-Snow 66.1%. One agent moved 62%→81% and 4th→1st after correction.</span></div>
+      <div class="cheat-item"><b>The honest position</b><span>Nobody has a trustworthy public measurement of enterprise text-to-SQL accuracy. Any number is a claim about a setup.</span></div>
+      <div class="cheat-item"><b>What to promise</b><span>Certified metrics, scoped tables, visible SQL, a feedback path. Not "ask anything of your data."</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Practitioner session 9 of 10 · learn-ai-infra-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="b8-llm-gateway.html">← b8 · The LLM gateway</a> &nbsp;·&nbsp; <a href="../index.html">All sessions</a> &nbsp;·&nbsp; <a href="b10-capstone-architecture.html">Next: Capstone →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/infra-live.js?v=1"></script>
+<script src="../assets/app.js?v=2"></script>
+</body>
+</html>

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practitioner session 2 · Storage + open table formats - learn ai infra with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-infra-with-phoebe</a> / Practitioner session 2 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Infra with Phoebe · Practitioner track · Session 2 of 10</div>
+    <h1>Cheap bytes, <span class="accent">expensive reads</span></h1>
+    <p class="sub">Layer one looks like the boring layer. It is the layer that quietly decides your architecture, because storage prices differ about 3x across vendors and egress prices differ by infinity. Tonight you price the same 50 TB three ways, read the fine print that vendors do not put on the pricing page, and then climb to layer two: the transactional metadata that turns a directory of Parquet files into a table you can trust.</p>
+    <div class="chip-row">
+      <span class="chip level">🟢 Practitioner track</span>
+      <span class="chip audience">Platform · DE · architects</span>
+      <span class="chip audience">Vendor-neutral · real rate cards</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:5">3-18 · Egress decides architecture</span>
+      <span class="a3" style="flex:8">18-42 · Build-along: the format war</span>
+      <span class="a4" style="flex:1">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we are in the stack</h2>
+    </div>
+    <p class="lede">b1 gave you eight layers and the chokepoint frame: in every layer there is a narrow waist where truth is decided and where lock-in actually lives. Tonight covers layers one and two. <strong>Layer one is storage, and its chokepoint is egress economics plus retention terms</strong> - what it costs to read your own data, and whether you can leave. <strong>Layer two is the table format</strong>, the transactional metadata that makes object storage behave like a database. Both layers unblock nobody on their own, which is precisely why they get underfunded and why everything above them fails when they are skipped.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - read after class</span>
+      <span class="pill peach">▶ Live platform sim - real rate-card arithmetic</span>
+      <span class="pill inkpill">Official sources covered</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      The storage rate cards from five vendors with fetch dates attached, the one ratio that explains every lakehouse architecture decision, the three pieces of fine print that turn a cheap price into an expensive commitment, and a clear-eyed read on the table format war - including which parts of it are settled and which parts are still a proposal that vendors are already selling as a roadmap.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: STORAGE ECONOMICS ============ -->
+  <section class="section" id="storage-economics">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · the layer that decides the architecture</span>
+      <h2>Storage is cheap, reading it is not <span class="tag concept">8 min live</span></h2>
+    </div>
+    <p class="lede">Every price below was fetched on 6-7 August 2026, from the vendors' own machine-readable billing feeds where one exists (AWS Price List API, Azure Retail Prices API) and from the published rate card otherwise. Read the two columns separately. The storage column is a normal competitive market with roughly a 3x spread. The egress column is not a market at all - it is a strategic weapon, and the gap between $0 and $0.09 per GB is what actually shapes where your compute has to live.</p>
+
+    <table class="clean">
+      <thead>
+        <tr><th>Provider (first tier, fetched 2026-08-06/07)</th><th>$/TB-month</th><th>Egress to internet</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Wasabi Pay-Go</td><td><strong>$7.99</strong></td><td>$0, but capped 1:1 against stored volume</td></tr>
+        <tr><td>Cloudflare R2 Standard</td><td><strong>$15.36</strong> ($0.015/GB)</td><td><strong>$0, no ratio clause</strong></td></tr>
+        <tr><td>Cloudflare R2 Infrequent Access</td><td><strong>$10.24</strong> ($0.01/GB)</td><td>$0 plus $0.01/GB retrieval, 30-day minimum</td></tr>
+        <tr><td>Azure Blob Hot LRS (East US)</td><td><strong>~$21.30</strong> ($0.0208/GB)</td><td>100 GB free, then $0.08/GB</td></tr>
+        <tr><td>AWS S3 Standard (us-east-1)</td><td><strong>~$23.55</strong> ($0.023/GB)</td><td>100 GB free, then $0.09/GB</td></tr>
+      </tbody>
+    </table>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Horizontal bar chart of monthly storage cost at fifty terabytes stored and twenty terabytes egressed, for Wasabi, Cloudflare R2 and AWS S3, with the egress portion of the S3 bar shaded separately.">
+        <style>
+          .s2T { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .s2L { font: 700 12px Inter, sans-serif; fill: #334155; }
+          .s2V { font: 600 12px Inter, sans-serif; fill: #3F6212; }
+          .s2I { font: 700 12px Inter, sans-serif; fill: #FFFFFF; }
+          .s2N { font: 400 12px Inter, sans-serif; fill: #64748B; }
+          .s2K { font: 600 11.5px Inter, sans-serif; fill: #334155; }
+        </style>
+        <rect x="0" y="0" width="880" height="320" fill="#F8FAFC"/>
+        <text class="s2T" x="40" y="28">Monthly bill at 50 TB stored + 20 TB egressed, list prices 2026-08-06/07</text>
+        <rect x="40" y="42" width="14" height="14" rx="3" fill="#334155"/>
+        <text class="s2K" x="60" y="54">storage</text>
+        <rect x="140" y="42" width="14" height="14" rx="3" fill="#991B1B"/>
+        <text class="s2K" x="160" y="54">egress</text>
+
+        <text class="s2L" x="40" y="94">Wasabi Pay-Go</text>
+        <rect x="200" y="76" width="80" height="30" rx="5" fill="#334155"/>
+        <text class="s2V" x="290" y="96">$400 - all storage, $0 egress</text>
+
+        <text class="s2L" x="40" y="154">Cloudflare R2</text>
+        <rect x="200" y="136" width="154" height="30" rx="5" fill="#334155"/>
+        <text class="s2V" x="364" y="156">$768 - all storage, $0 egress, no ratio clause</text>
+
+        <text class="s2L" x="40" y="214">AWS S3 Standard</text>
+        <rect x="200" y="196" width="235" height="30" rx="5" fill="#334155"/>
+        <text class="s2I" x="216" y="216">$1,177</text>
+        <rect x="435" y="196" width="357" height="30" rx="5" fill="#991B1B"/>
+        <text class="s2I" x="451" y="216">$1,784 egress</text>
+        <text class="s2V" x="800" y="216">$2,961</text>
+
+        <text class="s2N" x="40" y="262">S3 costs $2,193/month more than R2 - $26,317 a year, almost all of it egress.</text>
+        <text class="s2N" x="40" y="282">On S3, downloading a byte once costs about 3.9x storing it for a month.</text>
+        <text class="s2N" x="40" y="302">Wasabi's $0 egress is capped 1:1 vs stored volume - a ToS risk, not a billed rate.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the storage bars are close, the egress bar is the architecture</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The ratio: 3.9x, and why it moves your compute<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Here is the single number to carry out of this session. On AWS S3, storage is <strong>$0.023 per GB-month</strong> and egress to the internet is <strong>$0.09 per GB</strong> after the free allowance. <strong>Downloading a byte once costs about 3.9x storing it for a whole month.</strong> Not 4% more. Nearly four times.</p>
+        <p>The published S3 egress tiers, from the Price List API with publicationDate 2026-08-06: the first <strong>100 GB per month is free</strong> (account-wide, across all regions), then <strong>$0.090/GB</strong> up to 10 TB, <strong>$0.085/GB</strong> for the next 40 TB, <strong>$0.070/GB</strong> for the next 100 TB, and <strong>$0.050/GB</strong> above 150 TB. Storage tiers down too, but far more gently: $0.023, then $0.022 above 50 TB, then $0.021 above 500 TB.</p>
+        <p><strong>The headline arithmetic:</strong> egressing 100 TB in one month costs <strong>$0 on Cloudflare R2</strong>, <strong>$0 on Wasabi only if you also store at least 100 TB</strong>, and <strong>about $8,563 on AWS</strong>. Storage prices differ roughly 3x across vendors. The egress gap is effectively infinite.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>This ratio is why "just point the BI tool at the data lake" is an architecture decision and not a convenience. Every design pattern you have been told is best practice - keep compute in the same region as storage, cache aggressively, push filters down into the scan, prune columns and partitions - is at least partly a reaction to a single line on a rate card. The b1 trap lever costs $1,784 a month for exactly the same work, and the work did not change. Only the path the bytes took did.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The fine print that turns a cheap price into a commitment<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Wasabi is the cheapest storage line on the table by a wide margin, and there are three published conditions attached. All three are on Wasabi's own pages. Read them in order.</p>
+        <p><strong>1 · The 1:1 free-egress policy, verbatim.</strong> Wasabi states: <em>"If your monthly egress data transfer is less than or equal to your active storage volume, then your storage use case is a good fit for Wasabi's free egress policy."</em> And, for the other side of that line: <em>"If your monthly egress data transfer is greater than your active storage volume, then your storage use case is not a good fit"</em>, with the consequence stated as <em>"we reserve the right to limit or suspend your service."</em></p>
+        <p><strong>Read that consequence carefully, because it is the whole point.</strong> This is a <strong>terms-of-service risk, not a metered overage</strong>. There is no published penalty rate. If you exceed the ratio on S3 you get a larger invoice, which is unpleasant but predictable and can be modelled. If you exceed it here, the published remedy is limitation or suspension of service. Those are materially different risk profiles, and a finance-led vendor comparison that only compares dollar figures will not surface the difference at all.</p>
+        <p><strong>2 · Minimum storage duration, verbatim:</strong> <em>"if stored objects are deleted before they have been stored with Wasabi for a certain number of days, a Timed Deleted Storage charge equal to the storage charge for the remaining days will be applied."</em> That period is <strong>90 days on Pay-Go</strong> and 30 days on Reserved Capacity.</p>
+        <p><strong>3 · A 1 TB minimum billing</strong> on Pay-Go (10 TB for Cloud NAS).</p>
+        <p>Put the three together and the conclusion is specific rather than negative: <strong>Wasabi is actively bad for short-lived, high-churn data.</strong> Staging areas, scratch space, CI artifacts, anything with a 7-day lifecycle rule - you pay 90 days for 7 days of use. For large, cold, rarely-rewritten archives read at a modest ratio, the same rate card is excellent. The vendor is not the answer; the workload shape is.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>R2's stronger claim, and the 10% operations undercut<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Cloudflare R2 is more expensive per TB than Wasabi and cheaper than S3, and it makes the <strong>stronger of the two zero-egress claims: there is no ratio clause at all.</strong> When you compare "free egress" offers, that clause is the entire comparison. One is free egress; the other is free egress within a bound, enforced by a right to suspend.</p>
+        <p>R2 also prices operations <strong>exactly 10% under AWS</strong>, which is too precise to be a coincidence and reads as deliberate positioning:</p>
+        <ul>
+          <li><strong>Class A</strong> (writes and lists) <strong>$4.50/million</strong> vs S3 PUT/COPY/POST/LIST <strong>$5.00/million</strong>.</li>
+          <li><strong>Class B</strong> (reads) <strong>$0.36/million</strong> vs S3 GET <strong>$0.40/million</strong>.</li>
+        </ul>
+        <p>The strategic reading: zero egress is the headline, and the 10% undercut removes the obvious counter-argument that operations charges quietly claw the savings back. Note that operations matter enormously for small-file workloads - a table with millions of tiny Parquet files pays in request count, not in bytes, which is one of several reasons compaction exists.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>"But AWS made egress free" - what that announcement actually says<span class="mini">2 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>You will hear this in vendor conversations, so know the shape of it. AWS announced free transfer-out for customers migrating off AWS on <strong>2024-03-05</strong>, and it is still live. Four qualifiers, all from AWS's own terms:</p>
+        <ul>
+          <li><strong>Request-based</strong> - you apply, it is not automatic.</li>
+          <li><strong>Approval-gated</strong> - AWS decides.</li>
+          <li><strong>Credited after the fact</strong> - you pay the egress, then receive a credit.</li>
+          <li><strong>Time-boxed to 90 days.</strong></li>
+        </ul>
+        <p>And the motivation is regulatory: the EU Data Act, not competitive repricing. <strong>This is an exit path, not a rate-card change.</strong> It does nothing for the ordinary case that dominates your bill, which is reading your own data every day while staying exactly where you are. Treat it as evidence that egress pricing is now a policy question in Europe, and price your architecture on the standing rate card.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO 1 ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Demo 1 of 1</span>
+      <h2>Price the same 50 TB three ways <span class="tag demo">★ 12 min · everyone runs it</span></h2>
+    </div>
+    <p class="lede">The simulator below is in egress mode. It holds your stored volume and your monthly egress volume and recomputes each vendor's bill live from the published tiers fetched on 6-7 August 2026 - including the S3 egress bands, so the marginal rate falls correctly as volume rises. Start with the defaults, then push the egress slider past your stored volume and watch what happens to the Wasabi row.</p>
+
+    <div class="steps">
+      <div class="step"><p>Defaults are <strong>50 TB stored, 20 TB egressed</strong> per month. Read the three bills: <strong>Wasabi $400</strong>, <strong>Cloudflare R2 $768</strong>, <strong>AWS S3 $2,961</strong>. Annualized that is $4,794, $9,216 and $35,533.</p></div>
+      <div class="step"><p>Now decompose the S3 number. Of that $2,961, <strong>$1,784 is egress</strong> and only $1,177 is storage. <strong>Egress is 60% of the S3 bill at a ratio most teams would call modest.</strong> Nobody budgets for the 60%; everybody budgets for the 40%.</p></div>
+      <div class="step"><p><strong>S3 costs $2,193 a month more than R2 - $26,317 a year</strong>, and almost all of the difference is one line item. That is the salary line of a junior engineer, spent on the privilege of reading data you already own.</p></div>
+      <div class="step"><p>Drop egress to near zero and watch the three bills converge toward the storage-only spread. This is the honest version of the vendor comparison: <strong>at low read ratios the vendors look similar; at high read ratios they are not in the same business.</strong></p></div>
+      <div class="step"><p>Now push <strong>egress above stored volume</strong> - try 50 TB stored and 60 TB egressed. The Wasabi row flips to a warning, because you have left the 1:1 free-egress policy. Note what the warning does <em>not</em> say: it does not quote a penalty rate, because there is not one. It is a suspension risk.</p></div>
+      <div class="step"><p>Finally, set the inputs to your own organization's real numbers if you know them. If you do not know your egress volume, that is itself the finding, and it is the first homework item.</p></div>
+    </div>
+
+    <div class="infrabox" data-mode="egress"></div>
+
+    <div class="callout tip">
+      <strong>What this model is and is not</strong>
+      The arithmetic is real and recomputes live from published list prices fetched 2026-08-06/07. It is <em>list</em> price: enterprise agreements, committed-use discounts and private pricing all move these numbers, and typically move the AWS number most. What transfers regardless of your discount is the shape - storage is a competitive market with a 3x spread, egress is not a market, and the ratio between the two is what your architecture is actually optimizing against.
+    </div>
+  </section>
+
+  <!-- ============ PART 2: TABLE FORMATS ============ -->
+  <section class="section" id="table-formats">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · layer two, bottom half</span>
+      <h2>What a table format actually adds <span class="tag concept">10 min live</span></h2>
+    </div>
+    <p class="lede">Start from the deficit, not the feature list. <strong>Object stores give you cheap, durable, effectively unlimited scale with no transactions, no schema enforcement, and no atomic multi-file operations.</strong> A "table" on object storage is a directory of Parquet files. If a writer crashes halfway through replacing forty of them, readers see forty files from two different states and nothing tells them so. Open table formats exist to close exactly that gap: they add a transactional metadata layer over immutable data files. The data files were never the problem.</p>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Iceberg v3: deletion vectors, row lineage, VARIANT, geospatial<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The v3 spec landed in 2025 and four additions matter for platform work:</p>
+        <ul>
+          <li><strong>Deletion vectors</strong> - row-level deletes without paying the merge-on-read cost on every query.</li>
+          <li><strong>Row lineage</strong> - a row ID plus a last-modified sequence number. This is the one to underline: <strong>it makes incremental processing and CDC a query rather than a diff job.</strong> Instead of comparing two snapshots yourself and reasoning about what changed, you ask the table which rows moved since a sequence number. A large category of bespoke pipeline code stops needing to exist.</li>
+          <li><strong>VARIANT type</strong> - semi-structured data as a first-class column rather than a string you re-parse on every read.</li>
+          <li><strong>Geospatial types.</strong></li>
+        </ul>
+        <p>Delta Lake and Apache Hudi solve the same core deficit with different mechanics and different histories - Hudi in particular came out of upsert-heavy ingestion at Uber and shows it in the design. All three are real, production-grade, and running enormous workloads today. The question worth your time is not which is technically superior. It is which one your engines, your catalog and your vendors will all still speak to in five years.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The format war is settled directionally - here is the evidence<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Be careful about how strong a claim you make here, because there is no trustworthy public market-share measurement for Iceberg versus Delta and any number you are shown is a vendor artifact. What <em>is</em> observable is the direction of the engineering, and it points one way.</p>
+        <p><strong>The two structural tells:</strong></p>
+        <ul>
+          <li><strong>Both competitors build translation layers pointing AT Iceberg.</strong> Delta ships UniForm, which generates Iceberg metadata alongside Delta metadata. Hudi is paired with Apache XTable, which translates between formats. Nobody builds a bridge toward a destination they expect to be abandoned.</li>
+          <li><strong>Both Databricks and Snowflake ship managed Iceberg.</strong> The company that owns Delta and the company that seeded Polaris both sell you Iceberg as a managed product. Watch what vendors build, not what they say in a keynote.</li>
+        </ul>
+        <p>The dated record, in order:</p>
+        <table class="clean">
+          <thead>
+            <tr><th>Date</th><th>Event</th><th>How to label it</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>2024-06-03</td><td>Snowflake announces Polaris</td><td>vendor announcement</td></tr>
+            <tr><td><strong>2024-06-04</strong></td><td><strong>Databricks agrees to acquire Tabular</strong>, the company founded by Iceberg's creators, reported north of $1B</td><td><strong>REPORTED</strong> - press-reported, never disclosed by either party. Cite the acquisition as fact, the price as reporting.</td></tr>
+            <tr><td>2024-12-03</td><td>AWS ships S3 Tables</td><td>vendor release</td></tr>
+            <tr><td><strong>2026-02-19</strong></td><td><strong>Apache Polaris graduates to Top-Level Project</strong></td><td>ASF governance fact</td></tr>
+            <tr><td><strong>2026-05-28</strong></td><td><strong>Databricks ships Iceberg v3 GA plus managed Iceberg in Unity Catalog</strong></td><td>vendor release, Databricks' own blog</td></tr>
+          </tbody>
+        </table>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Two of those dates are one day apart. Snowflake announced Polaris on 3 June 2024 and Databricks agreed to acquire Tabular on 4 June 2024. That is not a coincidence of the calendar, it is two companies deciding in the same week that the interoperability layer was the thing worth owning. b3 picks up exactly where this leaves off, because the fight then moved one layer up, to the catalog.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>XTable translates metadata, not data<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Say this one out loud in class, because almost everyone assumes the opposite. <strong>Apache XTable translates METADATA, not data.</strong> Students hear "converts between Iceberg, Delta and Hudi" and picture a job that rewrites terabytes of files. It does not. There is nothing to rewrite.</p>
+        <p><strong>The Parquet was always compatible.</strong> All three formats store the same columnar data files. Only the metadata dialects differed - how a snapshot is described, how manifests are laid out, how a commit is sequenced. XTable reads one dialect and writes another over the same untouched data files. The same is true of Delta UniForm, which generates Iceberg metadata over Delta data files, and of OneLake metadata virtualization.</p>
+        <p>Two consequences fall straight out of that, and they are why this matters beyond trivia:</p>
+        <ul>
+          <li><strong>Translation is cheap and fast</strong>, because it is metadata-sized rather than data-sized. That is why interop arrived so quickly once vendors decided to build it.</li>
+          <li><strong>Translation is a second source of truth.</strong> Which brings us to the trade-off nobody markets.</li>
+        </ul>
+        <div class="callout tip">
+          <strong>The honest trade-off</strong>
+          Every translation layer is a second source of truth that can drift. <strong>UniForm-generated Iceberg metadata is derived, not authoritative</strong> - the Delta log remains the real commit record, and the Iceberg view is a projection of it. In steady state this is invisible. Under concurrent writes, partial failures, or a version skew between the writer and the translator, "derived" and "authoritative" are not the same word. Databricks' own stated goal is to eliminate translation entirely rather than to perfect it, which tells you how they rate the trade-off.
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What is a proposal and must not be taught as fact<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Databricks has proposed that <strong>Delta 5.0 adopt Iceberg v4's adaptive metadata tree</strong>, which would eliminate translation layers by making the two formats converge on one metadata structure. It is a coherent proposal and it would be genuinely good news if it ships.</p>
+        <p><strong>Iceberg v4 and Delta 5.0 are proposals. Neither has shipped. Do not teach convergence as an accomplished fact</strong>, and be alert when a vendor deck presents it as one - the roadmap slide and the release-notes slide are different documents with very different obligations behind them. Design your architecture against what is GA today, and treat convergence as an upside case that reduces the cost of a decision you already have to make.</p>
+        <p>One related discipline for the same reason: <strong>medallion (bronze/silver/gold) is a naming convention, not a technology.</strong> Nothing in Delta, Iceberg or Hudi enforces it. Its value is a shared vocabulary for "how cleaned is this table," and its common failure is silver being bronze with renamed columns while gold is forty unmaintained project tables. b5 covers that honestly.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 30 min total</span></h2>
+    </div>
+    <ul>
+      <li>Find your actual monthly egress volume and your actual stored volume, and compute the ratio. Most teams cannot answer this from memory, and a surprising number cannot answer it from their billing console without help. The ratio, not the absolute number, is what decides whether a zero-egress vendor is interesting to you.</li>
+      <li>Take the two lowest-priced storage options you would realistically consider and write down, for each, the retention minimum, the billing minimum, and the exact remedy for exceeding any usage policy. Then mark which remedies are billed and which are contractual. That second column rarely appears in an internal comparison deck.</li>
+      <li>Pick one table in your platform and answer: which format is it in, who wrote that metadata, and is any of it derived by a translation layer rather than written authoritatively? If the answer involves UniForm or XTable, note what would happen if the derived side drifted.</li>
+      <li>Audit one vendor deck you have been given in the last year for the convergence claim. Is Iceberg v4 or Delta 5.0 presented as shipped? Roadmap presented as fact is the single most common failure mode in this category, and spotting it is a transferable skill.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Official sources covered</h2>
+    </div>
+    <p class="lede">Prices came from machine-readable billing feeds wherever one exists, never from marketing pages, and every figure carries the date it was fetched. Vendor claims are labelled as claims. This page covers:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">AWS Price List API and Azure Retail Prices API (publicationDate 2026-08-06)</span><span class="note">S3 and Blob storage tiers, S3 egress bands, request pricing · the whole cost model</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Wasabi and Cloudflare R2 published rate cards (fetched 2026-08-06/07)</span><span class="note">Storage prices, the 1:1 policy verbatim, retention minimums, Class A/B operations</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Apache Iceberg, Delta Lake and Apache Hudi specifications and docs</span><span class="note">The v3 additions, what the metadata layer adds, what XTable and UniForm translate</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Databricks Iceberg blog: v3 GA + managed Iceberg in Unity Catalog (2026-05-28)</span><span class="note">Vendor source · used for dated releases and for the convergence proposal, labelled as a proposal</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">AWS free-exit-egress announcement (2024-03-05) and EU Data Act context</span><span class="note">Read for its four qualifiers · catalog and governance detail continues in b3</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">1 · On AWS S3 at list price, how does the cost of reading a byte out compare with the cost of storing it?</p>
+      <button class="qopt" type="button">A · Reading is slightly cheaper, which is why lakes are read-heavy by design</button>
+      <button class="qopt" type="button">B · Roughly the same, within about 10%</button>
+      <button class="qopt" type="button">C · Downloading a byte once costs about 3.9x storing it for a whole month - $0.09/GB egress against $0.023/GB-month storage</button>
+      <p class="qwhy">That ratio is the reason your compute has to sit next to your storage, and the reason pushdown, pruning and caching are architecture rather than tuning. Egressing 100 TB in a month is $0 on R2 and about $8,563 on AWS. Prices fetched 2026-08-06/07.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">2 · You exceed Wasabi's 1:1 free-egress ratio for three months running. What actually happens?</p>
+      <button class="qopt" type="button">A · Nothing is billed - it is a terms-of-service risk, and the published remedy is that Wasabi "reserve the right to limit or suspend your service"</button>
+      <button class="qopt" type="button">B · You are billed at a published overage rate per GB above the ratio</button>
+      <button class="qopt" type="button">C · The account converts automatically to a Reserved Capacity plan</button>
+      <p class="qwhy">There is no penalty rate, because it is not a metered overage. That is a materially different risk profile from a larger invoice: one is predictable and can be modelled, the other is a service-continuity question. A comparison that only lines up dollar figures will never surface it.</p>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">3 · A colleague says XTable will let you "convert 400 TB from Hudi to Iceberg." What is the correction?</p>
+      <button class="qopt" type="button">A · Correct, but it will take days and cost significant egress</button>
+      <button class="qopt" type="button">B · XTable translates metadata, not data - the Parquet files were always compatible, only the metadata dialects differed, so nothing is rewritten</button>
+      <button class="qopt" type="button">C · Correct, but only for tables under 30 TB</button>
+      <p class="qwhy">Same for Delta UniForm and OneLake metadata virtualization. Because translation is metadata-sized it is cheap and fast - and because it produces a derived rather than authoritative metadata copy, it is also a second source of truth that can drift.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Practitioner session 2 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Storage, per TB-month</b><span>Wasabi $7.99 · R2 IA $10.24 · R2 Standard $15.36 · Azure Blob Hot ~$21.30 · S3 Standard ~$23.55. Fetched 2026-08-06/07.</span></div>
+      <div class="cheat-item"><b>S3 egress bands</b><span>First 100 GB/mo free, then $0.090 (to 10 TB) / $0.085 (next 40) / $0.070 (next 100) / $0.050 (&gt;150 TB) per GB.</span></div>
+      <div class="cheat-item"><b>THE RATIO</b><span>On S3, downloading a byte once costs ~3.9x storing it a month. 100 TB out = $0 on R2, ~$8,563 on AWS.</span></div>
+      <div class="cheat-item"><b>The demo numbers</b><span>50 TB stored / 20 TB out: Wasabi $400 · R2 $768 · S3 $2,961 ($1,784 of it egress). S3 is $26,317/yr over R2.</span></div>
+      <div class="cheat-item"><b>Wasabi fine print</b><span>1:1 egress cap is a ToS risk with no penalty rate · 90-day minimum retention on Pay-Go · 1 TB billing minimum. Bad for high-churn data.</span></div>
+      <div class="cheat-item"><b>R2's stronger claim</b><span>Zero egress with NO ratio clause, plus operations exactly 10% under S3: Class A $4.50/M vs $5.00, Class B $0.36/M vs $0.40.</span></div>
+      <div class="cheat-item"><b>What formats add</b><span>Object stores have no transactions, no schema enforcement, no atomic multi-file ops. A table is a directory of Parquet. Formats add transactional metadata.</span></div>
+      <div class="cheat-item"><b>Settled vs proposal</b><span>Settled directionally: both rivals build bridges to Iceberg, both Databricks and Snowflake ship managed Iceberg. NOT settled: Iceberg v4 / Delta 5.0 convergence is a proposal.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span><a href="b1-layers-and-personas.html">← b1 · The eight layers</a> &nbsp;·&nbsp; Practitioner session 2 of 10 · learn-ai-infra-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="../index.html">← All sessions</a> &nbsp;·&nbsp; <a href="b3-catalog-governance.html">Next: Catalog, lineage, governance →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/infra-live.js?v=1"></script>
+<script src="../assets/app.js?v=2"></script>
+</body>
+</html>

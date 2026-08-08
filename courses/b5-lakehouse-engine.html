@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practitioner session 5 · The lakehouse engine - learn ai infra with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-infra-with-phoebe</a> / Practitioner session 5 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Infra with Phoebe · Practitioner track · Session 5 of 10</div>
+    <h1>The lakehouse <span class="accent">engine</span></h1>
+    <p class="sub">Layer four is SQL at scale over the tables b2 and b3 gave you, plus the modelled marts your analysts actually query. It is also where two of the most repeated words in enterprise data live: <em>medallion</em> and <em>unified</em>. Tonight we take both apart. Medallion is a vocabulary, not a technology, and the three big vendors who all say "unified" are unifying three genuinely different axes. Knowing which axis your pain sits on is most of the evaluation.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Practitioner track</span>
+      <span class="chip audience">Platform · DE · architects</span>
+      <span class="chip audience">Vendor-neutral · real rate cards</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:5">3-18 · Medallion honestly + the three axes</span>
+      <span class="a3" style="flex:8">18-42 · The DA and DS working surface</span>
+      <span class="a4" style="flex:1">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we are in the stack</h2>
+    </div>
+    <p class="lede">Storage gave you cheap durable bytes. The table format and catalog gave you transactions and one source of truth over those bytes. Orchestration made data arrive. <strong>Layer four is the engine: SQL at scale, plus the transform work that turns landed data into modelled marts.</strong> This is the layer where the data engineer hands off and the analyst picks up, and in the ladder from b1 it is the step from $2,178 to $3,778 a month - real money, and still nobody new unblocked until the semantic layer arrives in b6.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - read after class</span>
+      <span class="pill inkpill">Official sources covered</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      The lakehouse thesis in the words of the people who proposed it, an honest reading of medallion including its two standard failure modes, the three unification axes and the question that picks between them, and a clear statement of what this layer does <em>not</em> solve - which is why b6 exists.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: THESIS + MEDALLION ============ -->
+  <section class="section" id="medallion">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the CIDR 2021 lakehouse paper and Databricks' medallion glossary</span>
+      <h2>The thesis, and medallion honestly <span class="tag concept">8 min live</span></h2>
+    </div>
+    <p class="lede">The lakehouse has an actual founding paper, which is unusual in this category and worth using. Zaharia, Ghodsi, Xin and Armbrust presented <strong>"Lakehouse: A New Generation of Open Platforms that Unify Data Warehousing and Advanced Analytics"</strong> at CIDR 2021. Read the title carefully: <em>unify</em> is in the thesis from day one, and everything the vendors have said since is a variation on it.</p>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What the paper actually proposed<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The argument in one sentence: <strong>turn data lakes built on open formats into systems that provide warehouse-grade performance and management, while keeping direct file I/O for advanced analytics.</strong> That last clause is the part people skip, and it is the whole reason the data scientist ends up on this layer rather than fighting a warehouse.</p>
+        <p>The paper names four enablers, and they map cleanly onto the layers you have already built:</p>
+        <ul>
+          <li><strong>A transactional metadata layer</strong> - this is b2 and b3. Open table formats and the catalog.</li>
+          <li><strong>Caching</strong> - keeping hot data close to compute rather than paying to read it from object storage repeatedly.</li>
+          <li><strong>Auxiliary data structures</strong> - statistics, indexes, and the metadata that lets a scan skip files it does not need.</li>
+          <li><strong>Data layout optimization</strong> - clustering, partitioning and file sizing, so the physical arrangement matches the query pattern.</li>
+        </ul>
+        <p>Notice that three of the four are performance engineering, not new abstractions. The lakehouse claim is not that a new kind of database was invented. It is that with a transaction log and enough layout work, a lake can be fast enough that you stop needing a second copy of everything in a warehouse.</p>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bronze, silver and gold shown as three bands with Databricks' own definition inside each and the common failure mode annotated beside each band.">
+        <style>
+          .e5H { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .e5T { font: 700 13px Inter, sans-serif; fill: #FFFFFF; }
+          .e5S { font: 400 11.5px Inter, sans-serif; fill: #FFFFFF; opacity: .9; }
+          .e5Td { font: 700 13px Inter, sans-serif; fill: #3F6212; }
+          .e5Sd { font: 400 11.5px Inter, sans-serif; fill: #3F6212; }
+          .e5F { font: 400 11.5px Inter, sans-serif; fill: #991B1B; }
+          .e5X { font: 400 12px Inter, sans-serif; fill: #64748B; }
+        </style>
+        <text class="e5H" x="30" y="34">What the layers are for</text>
+        <text class="e5H" x="520" y="34">What usually happens instead</text>
+
+        <rect x="30" y="50" width="470" height="76" rx="8" fill="#64748B"/>
+        <text class="e5T" x="48" y="74">Bronze</text>
+        <text class="e5S" x="48" y="94">"land all the data from external systems... as-is"</text>
+        <text class="e5S" x="48" y="112">for CDC, historical archive, lineage, reprocessing</text>
+        <rect x="520" y="58" width="330" height="60" rx="8" fill="#FEF2F2" stroke="#FCA5A5"/>
+        <text class="e5F" x="536" y="78">Bronze grows forever and nothing</text>
+        <text class="e5F" x="536" y="95">above is ever rebuilt from it - an</text>
+        <text class="e5F" x="536" y="112">archive nobody reprocesses.</text>
+
+        <rect x="30" y="138" width="470" height="76" rx="8" fill="#334155"/>
+        <text class="e5T" x="48" y="162">Silver</text>
+        <text class="e5S" x="48" y="182">"matched, merged, conformed and cleansed"</text>
+        <text class="e5S" x="48" y="200">an "Enterprise view" of key business entities</text>
+        <rect x="520" y="146" width="330" height="60" rx="8" fill="#FEF2F2" stroke="#FCA5A5"/>
+        <text class="e5F" x="536" y="166">Silver is bronze with renamed</text>
+        <text class="e5F" x="536" y="183">columns: no matching, no merging,</text>
+        <text class="e5F" x="536" y="200">no enterprise view anywhere.</text>
+
+        <rect x="30" y="226" width="470" height="76" rx="8" fill="#D9F99D"/>
+        <text class="e5Td" x="48" y="250">Gold</text>
+        <text class="e5Sd" x="48" y="270">consumption-ready "project-specific" databases</text>
+        <text class="e5Sd" x="48" y="288">de-normalized, read-optimized</text>
+        <rect x="520" y="234" width="330" height="60" rx="8" fill="#FEF2F2" stroke="#FCA5A5"/>
+        <text class="e5F" x="536" y="254">Gold has quietly become 40</text>
+        <text class="e5F" x="536" y="271">unmaintained project tables, each</text>
+        <text class="e5F" x="536" y="288">owned by someone who left.</text>
+
+        <text class="e5X" x="30" y="326">Medallion is a naming convention. Nothing in Delta, Iceberg or Hudi enforces any of it.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the definitions on the left are Databricks' own; the annotations are what teams report</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Medallion in Databricks' own definitions<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Use the vendor's own glossary rather than a blog paraphrase, because the vendor's version is more careful than the folklore:</p>
+        <ul>
+          <li><strong>Bronze</strong> - "land all the data from external source systems... as-is." The stated purposes are change data capture, historical archive, lineage, and the ability to reprocess without going back to the source.</li>
+          <li><strong>Silver</strong> - data that is "matched, merged, conformed and cleansed," so the organization gets "an 'Enterprise view' of all its key business entities." Four verbs, and every one of them is real work.</li>
+          <li><strong>Gold</strong> - consumption-ready "project-specific" databases, typically de-normalized and read-optimized.</li>
+        </ul>
+        <p>That is a coherent design. Bronze buys you re-playability, silver buys you agreement about entities, gold buys you query speed for a known consumer.</p>
+        <div class="callout tip">
+          <strong>Now the honest part</strong>
+          <strong>Medallion is a naming convention, not a technology.</strong> Nothing in Delta, Iceberg or Hudi enforces it - there is no bronze type, no promotion gate, no check that silver is cleaner than bronze. Its real value is a shared vocabulary for one question: <em>how cleaned is this table?</em> That is genuinely useful, and it is much less than what most architecture diagrams imply.
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The two failure modes you will actually meet<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The most common failure mode is a silver layer that is just bronze with renamed columns.</strong> Nobody matched, nobody merged, nobody conformed anything to a shared entity definition. The medallion diagram on the wall says the enterprise view exists; the tables say a rename happened. Because nothing enforces the convention, nothing catches this - it is caught by a person, in a review, or not at all.</p>
+        <p><strong>The second is a gold layer that has quietly become 40 unmaintained project-specific tables.</strong> "Project-specific" is in the definition, so each one was legitimate on the day it was built. The failure is cumulative: no owner, no retirement, no register of which of the 40 anybody still queries. This is the same shape as the governance-debt pattern from the data-lake literature, arriving through the front door rather than the back.</p>
+        <p>Both failures are diagnosable in an afternoon. For a sample of silver tables, ask which entities were conformed and against what. For gold, pull query logs and count how many tables were read in the last 90 days.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: THREE AXES ============ -->
+  <section class="section" id="axes">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers Microsoft OneLake documentation and Snowflake's own platform positioning</span>
+      <h2>Three vendors, three different "unified" <span class="tag concept">7 min live</span></h2>
+    </div>
+    <p class="lede">Databricks, Microsoft Fabric and Snowflake all sell a unified platform, and all three are telling the truth. <strong>They are unifying three different axes, and that is the whole competitive story.</strong> Read their own words rather than the comparison grids, and the category stops being confusing.</p>
+
+    <table class="clean">
+      <thead>
+        <tr><th>Vendor</th><th>The axis it unifies</th><th>What that buys</th><th>What it costs</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Databricks</strong></td>
+          <td><strong>workloads</strong> - BI and ML on one copy of the data</td>
+          <td>your dashboard numbers and your training features come from the same tables</td>
+          <td>the workload split was never your organization's actual complaint if the real pain is duplicate departmental estates</td>
+        </tr>
+        <tr>
+          <td><strong>Microsoft Fabric</strong></td>
+          <td><strong>organizational storage</strong> - one OneLake per tenant</td>
+          <td>simplicity: no provisioning decisions, no proliferation of storage accounts</td>
+          <td>your storage topology is now Microsoft's tenant model - simplicity bought, lock-in sold</td>
+        </tr>
+        <tr>
+          <td><strong>Snowflake</strong></td>
+          <td><strong>workload types including transactional</strong></td>
+          <td>"transactional applications, analytics and AI on one unified platform"</td>
+          <td>the widest claim of the three, and the one most worth testing against your own transactional latency requirements</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>OneLake, in Microsoft's own words<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The Fabric documentation is admirably blunt, and this verbatim line is the most useful sentence in the whole comparison:</p>
+        <p><strong>"You can't delete OneLake or create multiple OneLakes, and there's no infrastructure to provision or manage."</strong></p>
+        <p>Both halves of that sentence are the same design decision seen from two sides. Nothing to provision is a genuine operational gift, especially for an organization currently drowning in departmental storage accounts nobody can inventory. And it is also the statement that <strong>your storage topology is now Microsoft's tenant model</strong> - a shape you did not choose and cannot change.</p>
+        <p>Fabric does provide reach outward, and it is worth knowing what kind of reach:</p>
+        <ul>
+          <li><strong>Shortcuts</strong> to external sources including S3, ADLS and Iceberg data - references rather than copies.</li>
+          <li><strong>Mirroring</strong> from Snowflake and Databricks.</li>
+          <li><strong>Metadata virtualization</strong>, so that "Iceberg tables can be read as Delta Lake tables."</li>
+        </ul>
+        <p>Apply the b2 rule here: that last one <strong>translates metadata, not data</strong>. The Parquet files were always compatible. What differed was the metadata dialect, and a translation layer is a second source of truth that can drift from the first.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The question that actually decides it<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Ask which axis your actual pain sits on before you choose anything.</strong> Three organizations, three different right answers:</p>
+        <ul>
+          <li>"Our ML features and our BI dashboards disagree about what a customer is." That is a <em>workload</em> problem.</li>
+          <li>"We have 60 storage accounts, no inventory, and three teams paying for copies of the same data." That is an <em>organizational storage</em> problem.</li>
+          <li>"We run a nightly export from the application database and every analytics answer is a day old." That is a <em>workload type</em> problem.</li>
+        </ul>
+        <p>A team drowning in duplicate departmental lakes and a team whose ML and BI numbers disagree will sit through the same three demos and should buy differently. If you cannot state your pain in one of those three sentences, the honest conclusion is that you are not ready to pick a platform yet - which is a cheaper finding to reach in a workshop than in year two of a migration.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Reading "unified" in any pitch<span class="mini">2 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>"Unified" is a claim with a hidden argument place: unified <em>along what</em>. Every time you meet the word, finish the sentence for the vendor before they do. Then ask the follow-up that separates a platform claim from a product claim: <strong>what is now impossible to do separately?</strong></p>
+        <p>With OneLake the answer is concrete - you cannot create a second one. That is a strong form of unification and you should price it as such. Where a vendor's answer is "nothing, you can still do it the old way," the unification is a default rather than a constraint, which is a very different purchase.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: THE WORKING SURFACE ============ -->
+  <section class="section" id="surface">
+    <div class="section-kicker">
+      <span class="klabel">Build-along · the surface your people actually work on</span>
+      <h2>What the DA and the DS each get <span class="tag demo">★ 24 min · everyone does it</span></h2>
+    </div>
+    <p class="lede">Strip away the vocabulary and this layer is a working surface for two of your five personas. Write down, for your own platform, exactly what each of them can touch today. The gaps you find are the agenda for b6 and b7.</p>
+
+    <div class="steps">
+      <div class="step"><p><strong>The data analyst gets SQL and notebooks against modelled marts.</strong> Not against bronze, and ideally not against silver either - against gold, where the model has already been shaped for a known consumer. If your analysts are writing joins across raw landing tables, you do not have a gold layer, you have a permission grant.</p></div>
+      <div class="step"><p><strong>The data scientist gets direct file access for training.</strong> This is the one to sit with. It is the thing warehouses could not do, and it is the original argument for the lakehouse in the CIDR paper - keeping direct I/O on open formats so advanced analytics does not need an export. Before the lakehouse, the standard pattern was a nightly extract out of the warehouse into a pile of CSVs, at which point governance, lineage and freshness all stopped at the warehouse boundary.</p></div>
+      <div class="step"><p><strong>Check that both surfaces read the same tables.</strong> The unification claim is only real if the DS's training features and the DA's dashboard resolve to the same physical data. Two paths to one copy is the win. Two paths to two copies is the old architecture with new branding.</p></div>
+      <div class="step"><p><strong>Now write down what is not solved here.</strong> Metric definitions live one layer up. Nothing in this layer decides what "revenue" means, and nothing stops two gold tables from computing it two ways.</p></div>
+    </div>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The chokepoint for this layer: the compute contract<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Every layer in this course has a narrow waist where truth is decided. For storage it was egress economics; for the table format it was the catalog. <strong>For the engine it is the compute contract - and what it decides is who pays for a badly written query.</strong></p>
+        <p>That sounds like a finance question and it is really a design question, because the answer shapes behaviour:</p>
+        <ul>
+          <li>If compute is a shared pool with no attribution, a single unbounded scan is somebody else's dashboard timing out, and nobody can name the culprit.</li>
+          <li>If compute is attributed per team, the cost of a bad query lands on the team that wrote it, and query hygiene becomes self-correcting without a policy document.</li>
+          <li>If compute is attributed per query and visible to the author before they run it, you get the strongest version - feedback at the moment of the decision.</li>
+        </ul>
+        <p>Apply the chokepoint test from b1 as well: <em>what stops someone going around this?</em> If any team can spin up its own warehouse or cluster outside the attribution scheme, your compute contract governs exactly the people who were already being careful.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Is the warehouse and the lakehouse converging?<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The direction of travel is real and worth naming, but it is easy to overstate, so here is the careful version.</p>
+        <p><strong>What has shipped:</strong> Snowflake, historically the warehouse, now positions itself around "transactional applications, analytics and AI on one unified platform" - which is a warehouse reaching outward into workload types warehouses used to refuse. Fabric reads external Iceberg and ADLS data through shortcuts, mirrors from Snowflake and Databricks, and virtualizes metadata so that "Iceberg tables can be read as Delta Lake tables." Engines are learning to read each other's tables, and that part is not marketing.</p>
+        <p><strong>What has not shipped:</strong> the deeper format convergence is a set of proposals, not a delivered capability. Do not teach it as accomplished fact, and do not let a roadmap slide enter a decision document as a current feature. The b2 rule applies without exception: <strong>translation layers move metadata, not data</strong>, and derived metadata is a second source of truth that can drift from the authoritative one.</p>
+        <p>The practical reading for an architect: assume you will be reading other people's tables, plan for it, and assume you will still be choosing one authoritative writer per table for the foreseeable future.</p>
+      </div>
+    </details>
+
+    <div class="callout tip">
+      <strong>The gap this layer leaves open</strong>
+      <strong>Metric definitions live one layer up, in b6 - and that gap is exactly where "two dashboards disagree" comes from.</strong> It is worth being precise about the diagnosis, because teams routinely try to fix it here. You can have perfect bronze, genuinely conformed silver, fast gold, one copy of the data, and still have two dashboards reporting different revenue, because two analysts wrote two definitions against the same correct tables. That is not a data quality problem and no amount of engine work will close it.
+    </div>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The founding paper is also the honest scope statement.</strong> The CIDR 2021 proposal is about performance and management over open formats - a transactional metadata layer, caching, auxiliary data structures, and data layout optimization. Every one of those is a mechanism for making a lake behave like a warehouse under query. Not one of them is a mechanism for agreeing what a metric means. The lakehouse solved the problem it set out to solve, and the semantic gap that remains is not a failure of the architecture - it is the next layer, and it is the one most organizations never fund.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 30 min total</span></h2>
+    </div>
+    <ul>
+      <li>Take five tables from your silver layer and, for each, name the entities that were conformed and the sources they were merged from. If you cannot, you have found the renamed-columns failure mode.</li>
+      <li>Pull query logs for your gold layer and count tables read in the last 90 days against tables that exist. Publish the ratio. It is usually the most persuasive slide in a platform review.</li>
+      <li>Write your organization's pain in one sentence, then decide which of the three axes it names - workloads, organizational storage, or workload types. If it names none of them, write down what it does name.</li>
+      <li>Ask your data scientists how they currently get training data. If the answer involves an export, quantify how stale it is and what governance stops at the export boundary.</li>
+      <li>Find two dashboards in your organization that report the same metric, and trace both back to their tables. Note whether the disagreement is in the data or in the definition. Bring the answer to b6.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Official sources covered</h2>
+    </div>
+    <p class="lede">The definitions on this page are quoted from a peer-reviewed conference paper and from the vendors' own documentation, with vendor claims labelled as vendor claims. Where a vendor's own words are more honest than the marketing summary - and here they usually are - the vendor's words are used. This page covers:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Zaharia, Ghodsi, Xin &amp; Armbrust - "Lakehouse: A New Generation of Open Platforms that Unify Data Warehousing and Advanced Analytics," CIDR 2021</span><span class="note">The thesis and the four enablers · the direct-I/O argument the DS surface rests on</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Databricks glossary - medallion architecture, bronze / silver / gold definitions</span><span class="note">The vendor's own definitions, read against the two standard failure modes</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Microsoft OneLake documentation - one lake per tenant, shortcuts, mirroring, metadata virtualization</span><span class="note">Verbatim on what cannot be deleted or duplicated · translation is metadata, not data</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Snowflake platform positioning - transactional applications, analytics and AI on one platform</span><span class="note">The third unification axis · labelled as a vendor claim</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · An architecture review asks whether your platform "enforces medallion." What is the correct answer?</p>
+      <button class="qopt" type="button">A · Yes, if you are on Delta - the format validates the promotion from bronze to silver</button>
+      <button class="qopt" type="button">B · Nothing enforces it: medallion is a naming convention, not a technology, and its value is a shared vocabulary for how cleaned a table is</button>
+      <button class="qopt" type="button">C · Only Iceberg v3 enforces it, through row lineage</button>
+      <p class="qwhy">There is no bronze type and no promotion gate in Delta, Iceberg or Hudi. That is why the two standard failure modes go undetected: a silver layer that is bronze with renamed columns, and a gold layer that has become 40 unmaintained project-specific tables.</p>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · Databricks, Fabric and Snowflake all say "unified." What is the useful distinction?</p>
+      <button class="qopt" type="button">A · Only one of them is genuinely unified; the other two are marketing</button>
+      <button class="qopt" type="button">B · They unify the same axis and differ only on price and region availability</button>
+      <button class="qopt" type="button">C · Three different axes: Databricks unifies workloads, Fabric unifies organizational storage, Snowflake unifies workload types including transactional - so ask which axis your pain sits on</button>
+      <p class="qwhy">All three claims are true and none of them are the same claim. Microsoft's docs are the bluntest illustration: "You can't delete OneLake or create multiple OneLakes, and there's no infrastructure to provision or manage." That buys simplicity and sells lock-in, because your storage topology becomes Microsoft's tenant model.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · What did the lakehouse give the data scientist that a warehouse could not?</p>
+      <button class="qopt" type="button">A · Direct file access on open formats for training, which is the original argument in the CIDR 2021 paper - no export step, so governance and freshness do not stop at a boundary</button>
+      <button class="qopt" type="button">B · Faster SQL, which removed the need for feature engineering</button>
+      <button class="qopt" type="button">C · Agreed metric definitions shared with the BI layer</button>
+      <p class="qwhy">The paper proposes warehouse-grade performance and management over open formats while keeping direct I/O for advanced analytics. Option C is the trap: metric definitions live one layer up in b6, and that gap is where "two dashboards disagree" comes from.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Practitioner session 5 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>The founding paper</b><span>Zaharia, Ghodsi, Xin &amp; Armbrust, CIDR 2021: warehouse performance and management on open formats, plus direct I/O for advanced analytics.</span></div>
+      <div class="cheat-item"><b>The four enablers</b><span>Transactional metadata layer · caching · auxiliary data structures · data layout optimization. Three of four are performance engineering.</span></div>
+      <div class="cheat-item"><b>Bronze, silver, gold</b><span>Land as-is for CDC and reprocessing · matched, merged, conformed, cleansed into an enterprise view · consumption-ready project-specific marts.</span></div>
+      <div class="cheat-item"><b>The honest part</b><span>Medallion is a naming convention, not a technology. Nothing in Delta, Iceberg or Hudi enforces it. The value is shared vocabulary.</span></div>
+      <div class="cheat-item"><b>The two failure modes</b><span>Silver that is bronze with renamed columns · gold that is 40 unmaintained project tables. Both diagnosable in an afternoon.</span></div>
+      <div class="cheat-item"><b>Three axes of "unified"</b><span>Databricks = workloads · Fabric = organizational storage · Snowflake = workload types including transactional. Ask which is your pain.</span></div>
+      <div class="cheat-item"><b>OneLake, verbatim</b><span>"You can't delete OneLake or create multiple OneLakes, and there's no infrastructure to provision or manage." Simplicity bought, lock-in sold.</span></div>
+      <div class="cheat-item"><b>What this layer does not solve</b><span>Metric definitions live one layer up. Perfect tables plus two definitions still equals two dashboards that disagree. That is b6.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Practitioner session 5 of 10 · learn-ai-infra-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="b4-ingestion-orchestration.html">← b4 · Ingestion + orchestration</a> &nbsp;·&nbsp; <a href="../index.html">All sessions</a> &nbsp;·&nbsp; <a href="b6-semantic-bi.html">Next: Semantic layer, dashboards, reporting →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=2"></script>
+</body>
+</html>

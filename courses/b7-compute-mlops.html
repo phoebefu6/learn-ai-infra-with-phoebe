@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practitioner session 7 · Compute + MLOps - learn ai infra with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-infra-with-phoebe</a> / Practitioner session 7 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Infra with Phoebe · Practitioner track · Session 7 of 10</div>
+    <h1>GPU hours, and the <span class="accent">narrow waist</span></h1>
+    <p class="sub">This is the most expensive layer in the stack and the one where the published numbers are least trustworthy. Tonight has two halves. First, GPU economics as arithmetic rather than narrative: five rate cards side by side, two denominator traps that will make you wrong by a factor of eight, and a licence that is charged per installed GPU whether you use it or not. Then the part that survives every vendor change - the model registry as the governance chokepoint, and why one deprecation in MLflow taught the whole industry something.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Practitioner track</span>
+      <span class="chip audience">Platform · DE · architects</span>
+      <span class="chip audience">Vendor-neutral · real rate cards</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · GPU economics without the marketing</span>
+      <span class="a3" style="flex:5">18-42 · The registry as narrow waist</span>
+      <span class="a4" style="flex:1">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ PART 1: GPU ECONOMICS ============ -->
+  <section class="section" id="gpu-economics">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers AWS, Azure, CoreWeave, Lambda and RunPod rate cards, fetched 2026-08-07</span>
+      <h2>GPU economics without the marketing <span class="tag concept">8 min live</span></h2>
+    </div>
+    <p class="lede">Every price on this page was fetched on <strong>2026-08-07</strong> from first-party billing feeds, never from a comparison blog. That distinction is not pedantry - Part 1 ends with a 32% error in the most-linked aggregator in this category. Start with the raw list rate for one H100 SXM 80GB for one hour, across five providers.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 312" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bar chart of H100 SXM on-demand list price per GPU-hour: RunPod 2.69, Lambda 3.99, CoreWeave 6.155, AWS 6.88, Azure 12.29 dollars, with a dashed line at 2.82 dollars marking the SemiAnalysis composite market index.">
+        <style>
+          .g7-v { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .g7-p { font: 600 12px Inter, sans-serif; fill: #334155; }
+          .g7-r { font: 700 11.5px Inter, sans-serif; fill: #991B1B; }
+          .g7-a { font: 600 12px Inter, sans-serif; fill: #3F6212; }
+          .g7-n { font: 400 12px Inter, sans-serif; fill: #64748B; }
+          .g7-k { font: 400 11.5px Inter, sans-serif; fill: #64748B; }
+        </style>
+        <rect x="150" y="14" width="12" height="12" rx="2" fill="#84CC16"/>
+        <text class="g7-k" x="168" y="25">the real discounters</text>
+        <rect x="330" y="14" width="12" height="12" rx="2" fill="#334155"/>
+        <text class="g7-k" x="348" y="25">list-price incumbents</text>
+
+        <text class="g7-n" x="22" y="60">US$ per GPU-hour</text>
+        <text class="g7-n" x="22" y="78">H100 SXM 80GB</text>
+        <text class="g7-k" x="22" y="96">on demand, list</text>
+
+        <line x1="140" y1="260" x2="830" y2="260" stroke="#64748B" stroke-width="1"/>
+
+        <rect x="150" y="214" width="105" height="46" rx="4" fill="#84CC16"/>
+        <rect x="290" y="192" width="105" height="68" rx="4" fill="#84CC16"/>
+        <rect x="430" y="155" width="105" height="105" rx="4" fill="#334155"/>
+        <rect x="570" y="143" width="105" height="117" rx="4" fill="#334155"/>
+        <rect x="710" y="51" width="105" height="209" rx="4" fill="#1E293B"/>
+
+        <text class="g7-v" x="203" y="204" text-anchor="middle">$2.69</text>
+        <text class="g7-v" x="343" y="182" text-anchor="middle">$3.99</text>
+        <text class="g7-v" x="483" y="145" text-anchor="middle">$6.155</text>
+        <text class="g7-v" x="623" y="133" text-anchor="middle">$6.88</text>
+        <text class="g7-v" x="763" y="41" text-anchor="middle">$12.29</text>
+
+        <text class="g7-p" x="203" y="280" text-anchor="middle">RunPod</text>
+        <text class="g7-p" x="343" y="280" text-anchor="middle">Lambda</text>
+        <text class="g7-p" x="483" y="280" text-anchor="middle">CoreWeave</text>
+        <text class="g7-p" x="623" y="280" text-anchor="middle">AWS</text>
+        <text class="g7-p" x="763" y="280" text-anchor="middle">Azure</text>
+
+        <line x1="140" y1="212" x2="830" y2="212" stroke="#991B1B" stroke-width="1.5" stroke-dasharray="6 4"/>
+        <text class="g7-r" x="22" y="200">SemiAnalysis</text>
+        <text class="g7-r" x="22" y="216">composite index</text>
+        <text class="g7-r" x="22" y="232">$2.82/GPU-hr</text>
+
+        <text class="g7-a" x="553" y="118" text-anchor="middle">CoreWeave is only 11% under AWS</text>
+
+        <text class="g7-n" x="20" y="302">All rates fetched 2026-08-07 from first-party feeds · Azure H100 spot $2.27/GPU-hr.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - five list prices, and the line showing what the market actually pays</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>CoreWeave is not cheap on list<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The neocloud narrative says specialist GPU providers undercut the hyperscalers by two to three times. Check it against the rate card, all fetched 2026-08-07:</p>
+        <table class="clean">
+          <thead>
+            <tr><th>Provider</th><th>H100 SXM 80GB, per GPU-hour</th><th>Versus AWS</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>RunPod</td><td><strong>$2.69</strong></td><td>2.56x cheaper</td></tr>
+            <tr><td>Lambda</td><td><strong>$3.99</strong></td><td>1.72x cheaper</td></tr>
+            <tr><td>CoreWeave</td><td><strong>$6.155</strong></td><td>11% cheaper</td></tr>
+            <tr><td>AWS</td><td><strong>$6.88</strong></td><td>baseline</td></tr>
+            <tr><td>Azure</td><td><strong>$12.29</strong></td><td>79% more expensive</td></tr>
+          </tbody>
+        </table>
+        <p><strong>CoreWeave sits 11% below AWS, not 2-3x below.</strong> The real discounters on list are RunPod and Lambda. That does not make CoreWeave a bad buy - its value is in committed contracts and InfiniBand fabric, neither of which shows up in an on-demand rate. But if someone in your organization is proposing a neocloud on the grounds that it is dramatically cheaper, that claim does not survive the list price, and you should ask what the committed tiers actually are.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Two denominator traps that will make you wrong by 8x<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Both of these have put real numbers into real board decks. Neither is hidden - they are simply units nobody checks.</p>
+        <div class="callout tip">
+          <strong>Trap 1 · CoreWeave publishes per-instance prices</strong>
+          The number on the page is for the whole node, not for one GPU. Divide by 8 or be wrong by a factor of eight. And HGX shapes are sold as whole 8-GPU nodes only - there is no single-GPU SKU, so "we only need two GPUs" is not a purchasable configuration.
+        </div>
+        <div class="callout tip">
+          <strong>Trap 2 · Lambda's committed clusters are inverted</strong>
+          A 16-GPU H100 cluster runs <strong>$6.16/GPU-hour</strong> against the 8x on-demand rate of <strong>$3.99</strong> (both fetched 2026-08-07). That is <strong>54% more</strong> for committing. Everywhere else in cloud, commitment buys a discount. Here it does not, because what you are buying is fabric and guaranteed capacity - the interconnect and the promise that the machines exist when you need them.
+        </div>
+        <p>The general rule: before comparing any two GPU prices, write down the denominator of each one. Per GPU or per instance. Per hour or per month. With or without the interconnect. Two of the five providers above use a different denominator from the others, and nothing on their pages shouts about it.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Reserved, spot, and the price that is below the reserved price<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>List price is the worst rate available. Two commitments change the picture entirely, both fetched 2026-08-07:</p>
+        <ul>
+          <li><strong>AWS 3-year All Upfront: $2.587/GPU-hour</strong> - 62% off on-demand. The 1-year All Upfront rate is $4.045/GPU-hour, 41% off.</li>
+          <li><strong>Azure H100 spot: $2.27/GPU-hour</strong> - which is <em>below AWS's three-year reserved rate</em>, from the provider with the most expensive list price on the chart.</li>
+        </ul>
+        <p>Sit with that second one. Azure is 79% more expensive than AWS on list and cheaper than a three-year AWS commitment on spot. For <strong>interruptible batch work - backfills, embedding regeneration, offline scoring</strong> - spot capacity inside a contract you already have is frequently the cheapest compute available to you, and it does not require leaving your security perimeter or signing anything new.</p>
+        <p>The practical shape of a compute plan is therefore three tiers, not one: reserved for the steady-state baseline, on-demand for interactive work that cannot be interrupted, and spot for everything restartable. Teams that pick one tier and apply it to all workloads overpay in one direction or lose jobs in the other.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>These prices move violently, and lists overstate what the market pays<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Two facts that should change how long you let a GPU cost model stand without review.</p>
+        <ul>
+          <li><strong>AWS cut P5 pricing by 44%, effective 2025-06-01.</strong> Not a promotion - a rate-card change.</li>
+          <li><strong>Azure's $98.32/hour for 8xH100 is exactly AWS's pre-cut price.</strong> Azure never matched the cut. The most expensive bar on the chart is not a premium product; it is a stale number that a competitor moved away from.</li>
+        </ul>
+        <p>And the market clearing price is not the list price at all. The <strong>SemiAnalysis GPU Price Index composite puts H100 at $2.82/GPU-hour (April 2026), down 57% from $6.62 in the second half of 2023.</strong> That is the dashed line on the chart, and every list bar except RunPod's sits above it.</p>
+        <div class="callout win">
+          <strong>★ What to do with that gap</strong>
+          Published list prices substantially overstate what the market actually pays. When a vendor quotes you list, you are being quoted the opening position. Bring the index to the conversation, review any GPU cost model at least every six months, and never let a number older than a quarter go into a business case without a re-fetch.
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Data quality lesson: a 32% error in the most-linked aggregator<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The most-linked GPU pricing aggregator in this category labels AWS's <strong>3-year no-upfront</strong> rate as <strong>"1-Year Reserved."</strong> AWS's actual 1-year rates are materially higher. The error is roughly <strong>32%</strong>, and it sits on the single page most likely to be pasted into a planning document.</p>
+        <p>Nobody was being dishonest. Someone built a scraper, a label drifted, and thousands of people have since built cost models on top of it. That is how bad numbers propagate in this field: not through fabrication, but through a convenient intermediary that nobody re-checks against the source.</p>
+        <p>The rule that follows is short and worth writing on a wall: <strong>use first-party billing feeds.</strong> AWS Price List API, Azure Retail Prices API, the vendor's own published card. If a number in your business case came from an aggregator, it is unverified until you have fetched it yourself.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The licence charged per installed GPU, and the sizing rule<span class="mini">5 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>NVIDIA AI Enterprise</strong> is the one software rate card in this space published to the dollar. Prices from NVIDIA's own documentation page, updated 2026-06-08, re-checked 2026-08-07:</p>
+        <table class="clean">
+          <thead>
+            <tr><th>Term</th><th>List per GPU</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1 year</td><td><strong>$4,500</strong></td></tr>
+            <tr><td>3 years</td><td>$13,500</td></tr>
+            <tr><td>4 years</td><td>$18,000</td></tr>
+            <tr><td>5 years</td><td><strong>$18,000</strong> - five years for the price of four</td></tr>
+            <tr><td>Perpetual, including 5-year support</td><td>$22,500</td></tr>
+            <tr><td>Cloud marketplace</td><td><strong>$1.00/GPU-hour</strong>, plus the cloud provider's instance cost</td></tr>
+          </tbody>
+        </table>
+        <p>Two consequences worth more than the table itself.</p>
+        <ul>
+          <li><strong>The break-even is a utilization number.</strong> $1.00/GPU-hour is $8,760 per GPU-year at full use. Against the $4,500 self-managed annual price, the two cross at <strong>roughly 51% annual utilization</strong>. Below that, the hourly cloud entitlement wins. Above it, buy the term. Now ask what your actual GPU utilization is - most organizations do not know, which means most organizations cannot answer this question.</li>
+          <li><strong>It is licensed per INSTALLED GPU, not per GPU used</strong>, with one licence per physical GPU on a multi-GPU card. An 8-GPU DGX B300 therefore carries <strong>$36,000 per year</strong> in software licensing before a single dollar of hardware. This is the line item first-pass budgets miss, and it does not scale down when the machines are idle.</li>
+        </ul>
+        <p>One more planning number, because it turns a vendor conversation into arithmetic. The storage sizing rule is <strong>approximately 12.5 Gb/s of storage bandwidth per GPU, and it is linear</strong> - 16 GPUs need around 200 Gb/s. When a vendor tells you their array is fast enough for your cluster, that claim is now checkable in one line of multiplication.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: THE REGISTRY ============ -->
+  <section class="section" id="registry">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers MLflow model registry documentation and Google's skew-versus-drift guidance</span>
+      <h2>The model registry as the narrow waist <span class="tag demo">★ 12 min · everyone follows along</span></h2>
+    </div>
+    <p class="lede">Prices go stale in months. This does not. The registry is the chokepoint of the MLOps layer, and the reason is structural rather than a feature of any particular product. Here is the definition to carry out of the room: <strong>a model registry is the versioned system of record between experimentation and production - the place where a trained artifact becomes a governed, addressable, promotable object.</strong></p>
+
+    <div class="steps">
+      <div class="step"><p>Check the five properties against whatever you currently use. <strong>Named versioned artifacts</strong> - every model has an identity and a history, not a filename.</p></div>
+      <div class="step"><p><strong>Mutable pointers for promotion</strong> - something can be marked as the one serving traffic, and that mark can move without moving the artifact.</p></div>
+      <div class="step"><p><strong>Lineage to the training run and the training data</strong> - you can walk backwards from a prediction to the rows that produced the model.</p></div>
+      <div class="step"><p><strong>Metadata and annotations</strong> - metrics, parameters, evaluation results, and whatever your reviewers need to make a decision.</p></div>
+      <div class="step"><p><strong>Approval gates</strong> - a human step that produces a record, not a Slack message.</p></div>
+    </div>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why the registry, specifically, is the governance chokepoint<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Look at the shape of the traffic through it. <strong>Upstream is plural and messy</strong> - many experiments, many notebooks, many people, most of whose work will never ship. <strong>Downstream is singular and consequential</strong> - one artifact, serving real traffic, making real decisions about real people.</p>
+        <p>Anywhere a stack goes from plural to singular, you have a narrow waist. And the registry is the only point in the whole MLOps layer where all four governance questions can be answered <em>at the same time</em>:</p>
+        <ul>
+          <li>What is in production right now?</li>
+          <li>Where did it come from?</li>
+          <li>Who approved it?</li>
+          <li>How do I undo it?</li>
+        </ul>
+        <p>Ask those four questions of a training pipeline and you get two answers. Ask them of a serving endpoint and you get a different two. Only the registry holds all four.</p>
+        <div class="callout win">
+          <strong>★ The corollary, and it is the whole evaluation test</strong>
+          A registry that developers can bypass - by deploying an artifact straight from object storage - provides <strong>zero governance, regardless of how good its UI is</strong>. Not weak governance. Zero, for exactly the population you were worried about, because the people who go around it are the people the controls existed for. When a vendor demos approval workflows, the only question that matters is what stops someone skipping the whole thing.
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>MLflow deprecated Model Stages, and the reason is worth learning<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>MLflow deprecated Model Stages as of version 2.9.0</strong>, in favour of aliases plus tags. This is not a cosmetic API change - it is a design correction that any registry you build or buy has to get right.</p>
+        <p><strong>What was wrong with stages.</strong> A stage encoded the <em>environment</em> into the model object itself. So "Production" meant one thing in one cluster and something else in another, and the word travelled with the artifact into contexts where it was false. Worse, a model could occupy exactly one stage, so you could not have two candidates under evaluation at once - which is the normal state of a healthy team.</p>
+        <p><strong>What aliases fix.</strong> An alias is a pointer, decoupled from the artifact:</p>
+        <div class="prompt-box"><pre style="margin:0"><code>models:/MyModel@champion     # the version serving traffic today
+models:/MyModel@challenger   # the candidate under evaluation
+
+# promotion  = reassign @champion to the challenger version
+# rollback   = reassign @champion back to the previous version
+# the artifacts never move, and never change</code></pre></div>
+        <p>Three things fall out of that. <strong>@champion and @challenger coexist</strong>, so a real evaluation is expressible. <strong>The pointer belongs to the environment, not to the model</strong>, so the same artifact can be champion in one place and unused in another without lying about itself. And <strong>rollback becomes a pointer reassignment</strong> rather than a redeployment - seconds instead of a release cycle, at the moment you least want a release cycle.</p>
+        <p>Tags carry the rest: approval status, evaluation results, ticket references, whatever your reviewers need. The general principle transfers well beyond MLflow: <strong>never encode an environment into an artifact.</strong> Point at artifacts from environments instead.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Skew versus drift - two words that save weeks<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Most monitoring tools give you one bucket called "drift," and most teams therefore respond to two completely different problems with the same reflex, which is to retrain. Google's split is better, and it is the most immediately useful thing in this section:</p>
+        <table class="clean">
+          <thead>
+            <tr><th></th><th>Training-serving skew</th><th>Prediction drift</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>What it is</td><td>A bug you shipped - a preprocessing mismatch between training and serving</td><td>The world changing underneath a model that is still correct</td></tr>
+            <tr><td>When it appears</td><td><strong>Present on day one</strong>, whether or not you notice</td><td>Emerges over time as behaviour or conditions shift</td></tr>
+            <tr><td>The fix</td><td><strong>Fix the code.</strong> Retraining will not help and may hide it</td><td><strong>Retrain</strong> on recent data</td></tr>
+          </tbody>
+        </table>
+        <p>Blurring these wastes weeks. The classic sequence: a model underperforms, the team retrains, it underperforms again, they retrain on more data, it underperforms again - and eight weeks later someone notices that a feature is scaled in the training pipeline and not in the serving path. Skew was present from the first deployment. No amount of retraining addresses a preprocessing mismatch.</p>
+        <p>The diagnostic is simple. <strong>Was it ever right in production?</strong> If performance was poor from day one, suspect skew and go read the serving code. If it was good and decayed, suspect drift and retrain.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: VENDOR RISK ============ -->
+  <section class="section" id="vendor-risk">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers AWS SageMaker documentation, Vertex AI, and the Kubeflow 2023 survey</span>
+      <h2>Vendor risk, live <span class="tag concept">6 min live</span></h2>
+    </div>
+    <p class="lede">Everything above assumes the components you designed around still exist. That assumption is weaker than it looks, and the evidence is in the vendors' own documentation - one sentence, published quietly, with no announcement attached.</p>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Verbatim from AWS documentation:</strong> "Amazon SageMaker Model Monitor is no longer open to new customers."</p>
+      <p>Read what that sentence actually costs. Model Monitor is the <em>governance-critical</em> component of the service - the part that tells you whether the thing in production is still behaving. It was closed to new customers inside a flagship managed service, communicated through a docs banner rather than a deprecation notice, and anyone who designed a monitoring architecture around it in the preceding year is now rebuilding it.</p>
+      <p>Second example, same pattern, different shape: <strong>Vertex AI is now the "Gemini Enterprise Agent Platform."</strong> Renames are not deprecations, but they reorganize documentation, break links, shift feature boundaries and often mark a change in what a platform is for.</p>
+    </div>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The habit to build: check the notices before you design<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Before you design around any managed feature, open its documentation page and look for exactly this class of sentence. It takes two minutes per component and it is the cheapest risk control in this entire course.</p>
+        <ul>
+          <li><strong>"No longer open to new customers"</strong> - the component is in maintenance. Existing customers are usually safe for a while; new architectures should not depend on it.</li>
+          <li><strong>A rename or a repositioning</strong> - expect documentation churn and a possible change of strategic direction.</li>
+          <li><strong>No release notes in eighteen months</strong> - not an announcement, but the same signal arriving silently.</li>
+        </ul>
+        <p>Then weight the finding by where the component sits. A stalled visualization widget is an inconvenience. A stalled <em>governance</em> component is a compliance gap that appears at your next audit, not at your next sprint review. Governance components deserve the most scrutiny and usually get the least, because they are the boring part of the demo.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Kubeflow's honest cost, from its own survey<span class="mini">4 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Kubeflow's own 2023 community survey - <strong>90 responses</strong>, so directional rather than authoritative, and say so whenever you quote it - reports:</p>
+        <ul>
+          <li><strong>49% in production.</strong> Roughly half of adopters had it running in production at the time.</li>
+          <li><strong>Pipelines used by 90%</strong> of respondents, by a wide margin the most-used component.</li>
+          <li>Top gaps: <strong>documentation at 55%</strong> and <strong>installation at 39%</strong>.</li>
+        </ul>
+        <p>The gap list is the interesting half. Documentation and installation are not model-quality problems or scale problems - they are <em>platform operations</em> problems, and they are exactly what you inherit when you adopt a Kubernetes-native MLOps stack.</p>
+        <div class="callout tip">
+          <strong>The rule of thumb</strong>
+          You need a platform team already running Kubernetes competently before Kubeflow is a net win. Adopting Kubeflow in order to <em>acquire</em> Kubernetes competence is backwards - you will spend your first two quarters on installation and documentation gaps instead of on models, and the survey's own top-gap list tells you so before you start.
+        </div>
+        <p>There is a lighter path hiding in that 90% Pipelines number: most Kubeflow adoptions are, in practice, orchestration adoptions. If pipelines are what you actually want, ask whether you want them badly enough to run the cluster underneath them, or whether the orchestrator from b4 already covers the need.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 30-40 min total</span></h2>
+    </div>
+    <ul>
+      <li>Re-fetch one GPU price yourself from a first-party billing feed and compare it against whatever number is currently in your team's cost model. Note the date on the number you replaced.</li>
+      <li>Find your organization's GPU utilization percentage. If nobody can produce it, that is the finding - you cannot answer the NVIDIA AI Enterprise question at ~51% break-even without it, and you are probably guessing on reserved-versus-on-demand too.</li>
+      <li>Apply the registry corollary. Ask an engineer on your team, casually, how they would deploy a model this afternoon if the registry were down. Their answer tells you whether you have a chokepoint or a suggestion.</li>
+      <li>Look up any model currently serving traffic and try to answer all four questions - what, whence, who approved, how to roll back - inside ten minutes, using only systems of record.</li>
+      <li>Open the documentation page for one managed component you depend on and look for a maintenance notice. Do this for the governance components first.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Official sources covered</h2>
+    </div>
+    <p class="lede">First-party billing feeds and vendor documentation, every price carrying its fetch date, with sample sizes stated wherever a survey is quoted. This page covers:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">AWS, Azure, CoreWeave, Lambda and RunPod GPU rate cards (fetched 2026-08-07)</span><span class="note">Part 1 · the five-provider table, both denominator traps, reserved and spot rates</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">NVIDIA AI Enterprise pricing page (updated 2026-06-08, re-checked 2026-08-07)</span><span class="note">Part 1 · per-installed-GPU licensing, the ~51% break-even, the storage sizing rule</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">MLflow model registry documentation - Model Stages deprecated as of 2.9.0</span><span class="note">Part 2 · aliases and tags, why environment must not be encoded into an artifact</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">AWS SageMaker documentation · Google Cloud Vertex AI documentation</span><span class="note">Part 3 · the Model Monitor closure notice, verbatim · the Vertex rename</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Kubeflow community survey, 2023 (90 responses)</span><span class="note">Part 3 · 49% in production, Pipelines 90%, documentation and installation gaps</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · A colleague pastes CoreWeave's published H100 price into a cost model next to AWS's per-GPU rate. What is wrong?</p>
+      <button class="qopt" type="button">A · Nothing - CoreWeave is a neocloud, so the comparison correctly shows a 2-3x saving</button>
+      <button class="qopt" type="button">B · CoreWeave publishes per-instance prices, so the figure must be divided by 8 - and even then it lands at $6.155 against AWS $6.88, an 11% discount rather than 2-3x</button>
+      <button class="qopt" type="button">C · The comparison is invalid because CoreWeave does not offer H100 SXM</button>
+      <p class="qwhy">Two denominator problems in one line. CoreWeave quotes whole nodes and sells HGX shapes as 8-GPU nodes only, so the raw figure is 8x the per-GPU rate. And once corrected, the neocloud discount narrative does not survive contact with the rate card - the real discounters on list are RunPod at $2.69 and Lambda at $3.99 (all fetched 2026-08-07).</p>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · MLflow deprecated Model Stages in favour of aliases as of 2.9.0. What was the design flaw being corrected?</p>
+      <button class="qopt" type="button">A · Stages could not be renamed, so teams outgrew the fixed vocabulary</button>
+      <button class="qopt" type="button">B · Stages were stored separately from the artifact and could get out of sync during promotion</button>
+      <button class="qopt" type="button">C · Stages encoded the environment into the model object, so "Production" meant different things in different clusters and only one candidate could exist at a time</button>
+      <p class="qwhy">An alias is a pointer that belongs to the environment rather than to the artifact, so @champion and @challenger coexist, an evaluation is expressible, and rollback becomes a pointer reassignment instead of a redeployment. The transferable principle: never encode an environment into an artifact.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · A vendor demos a model registry with lineage, annotations and approval gates. What single question decides whether it governs anything?</p>
+      <button class="qopt" type="button">A · What stops an engineer deploying an artifact straight from object storage - because a registry that can be bypassed provides zero governance regardless of its UI</button>
+      <button class="qopt" type="button">B · How many model versions it can retain before archiving</button>
+      <button class="qopt" type="button">C · Whether the approval gate supports multi-person sign-off</button>
+      <p class="qwhy">The registry is the narrow waist between plural upstream experimentation and singular downstream serving, and it is the only place all four questions can be answered at once. But a waist only governs if it is the only door - and the people who route around it are precisely the population the controls existed for.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Practitioner session 7 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>H100 list, per GPU-hour</b><span>RunPod $2.69 · Lambda $3.99 · CoreWeave $6.155 · AWS $6.88 · Azure $12.29. All fetched 2026-08-07.</span></div>
+      <div class="cheat-item"><b>The neocloud correction</b><span>CoreWeave is 11% under AWS, not 2-3x. The real discounters on list are RunPod and Lambda.</span></div>
+      <div class="cheat-item"><b>Denominator traps</b><span>CoreWeave quotes per instance - divide by 8. Lambda's 16-GPU cluster at $6.16 is 54% MORE than 8x on-demand at $3.99.</span></div>
+      <div class="cheat-item"><b>Commitment and spot</b><span>AWS 3yr All Upfront $2.587/GPU-hr, 62% off. Azure spot $2.27 is below that - use it for restartable batch.</span></div>
+      <div class="cheat-item"><b>List overstates the market</b><span>SemiAnalysis composite H100 $2.82/GPU-hr, down 57% from $6.62. AWS cut P5 44% on 2025-06-01; Azure never matched.</span></div>
+      <div class="cheat-item"><b>NVIDIA AI Enterprise</b><span>$4,500/GPU/year vs $1/GPU-hour cloud, crossing at ~51% utilization. Per INSTALLED GPU - an 8-GPU DGX B300 is $36,000/year.</span></div>
+      <div class="cheat-item"><b>The registry corollary</b><span>Upstream plural, downstream singular. Bypassable by deploying from object storage means zero governance, whatever the UI shows.</span></div>
+      <div class="cheat-item"><b>Aliases, skew, drift</b><span>@champion and @challenger beat stages. Skew is a bug present day one - fix the code. Drift is the world moving - retrain.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Practitioner session 7 of 10 · learn-ai-infra-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="b6-semantic-bi.html">← b6 · Semantic layer, dashboards, reporting</a> &nbsp;·&nbsp; <a href="../index.html">All sessions</a> &nbsp;·&nbsp; <a href="b8-llm-gateway.html">Next: The LLM gateway →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=2"></script>
+</body>
+</html>
