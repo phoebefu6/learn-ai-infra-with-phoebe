@@ -193,6 +193,53 @@
           <li><strong>The break-even is a utilization number.</strong> $1.00/GPU-hour is $8,760 per GPU-year at full use. Against the $4,500 self-managed annual price, the two cross at <strong>roughly 51% annual utilization</strong>. Below that, the hourly cloud entitlement wins. Above it, buy the term. Now ask what your actual GPU utilization is - most organizations do not know, which means most organizations cannot answer this question.</li>
           <li><strong>It is licensed per INSTALLED GPU, not per GPU used</strong>, with one licence per physical GPU on a multi-GPU card. An 8-GPU DGX B300 therefore carries <strong>$36,000 per year</strong> in software licensing before a single dollar of hardware. This is the line item first-pass budgets miss, and it does not scale down when the machines are idle.</li>
         </ul>
+        <figure class="zoomable">
+          <svg viewBox="0 0 880 390" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A line chart of NVIDIA AI Enterprise cost per GPU-year against annual GPU utilization. The self-managed term price is flat at four thousand five hundred dollars per GPU-year regardless of utilization. The cloud marketplace entitlement at one dollar per GPU-hour rises linearly to eight thousand seven hundred and sixty dollars per GPU-year at full use. The two cross at roughly fifty-one percent annual utilization: below it the hourly entitlement is cheaper, above it the term is. The licence is charged per installed GPU rather than per GPU used, so an eight-GPU DGX B300 carries thirty-six thousand dollars a year before any hardware cost.">
+            <style>
+              .b7lcT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+              .b7lcA { font: 700 11px Inter, sans-serif; fill: #64748B; }
+              .b7lcS { font: 700 11.5px Inter, sans-serif; fill: #334155; }
+              .b7lcC { font: 700 11.5px Inter, sans-serif; fill: #B45309; }
+              .b7lcX { font: 700 11.5px Inter, sans-serif; fill: #1E293B; }
+              .b7lcB { font: 700 11.5px Inter, sans-serif; fill: #B45309; }
+              .b7lcBs { font: 400 11.5px Inter, sans-serif; fill: #64748B; }
+              .b7lcN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+            </style>
+            <rect x="0" y="0" width="880" height="390" fill="#F8FAFC"/>
+            <text class="b7lcT" x="40" y="28">The term price and the hourly price cross at about 51% utilization</text>
+
+            <g stroke="#E2E8F0" stroke-width="1">
+              <line x1="120" y1="60" x2="800" y2="60"/>
+              <line x1="120" y1="143" x2="800" y2="143"/>
+              <line x1="120" y1="230" x2="800" y2="230"/>
+            </g>
+            <text class="b7lcA" x="110" y="64" text-anchor="end">$8,760</text>
+            <text class="b7lcA" x="110" y="147" text-anchor="end">$4,500</text>
+            <text class="b7lcA" x="110" y="234" text-anchor="end">$0</text>
+            <text class="b7lcA" x="120" y="250" text-anchor="middle">0%</text>
+            <text class="b7lcA" x="460" y="250" text-anchor="middle">50%</text>
+            <text class="b7lcA" x="810" y="250" text-anchor="end">100% annual utilization</text>
+
+            <line x1="120" y1="230" x2="800" y2="60" stroke="#B45309" stroke-width="2.5"/>
+            <text class="b7lcC" x="310" y="204">$1.00/GPU-hr cloud entitlement</text>
+
+            <line x1="120" y1="143" x2="800" y2="143" stroke="#334155" stroke-width="2.5"/>
+            <text class="b7lcS" x="790" y="134" text-anchor="end">$4,500/GPU-yr self-managed term</text>
+
+            <line x1="467" y1="143" x2="467" y2="230" stroke="#1E293B" stroke-width="1.4" stroke-dasharray="5 4"/>
+            <circle cx="467" cy="143" r="6" fill="#1E293B"/>
+            <text class="b7lcX" x="467" y="110" text-anchor="middle">cross at ~51% utilization</text>
+
+            <rect x="40" y="272" width="800" height="48" rx="10" fill="#FFFFFF" stroke="#B45309"/>
+            <text class="b7lcB" x="58" y="294">Licensed per INSTALLED GPU, not per GPU used - one licence per physical GPU.</text>
+            <text class="b7lcBs" x="58" y="312">An 8-GPU DGX B300 carries $36,000 a year in licensing before any hardware cost.</text>
+
+            <text class="b7lcN" x="40" y="350">From NVIDIA's own documentation page, updated 2026-06-08, re-checked 2026-08-07.</text>
+            <text class="b7lcN" x="40" y="370">Five years costs $18,000 and four years also costs $18,000. Never buy the four-year term.</text>
+          </svg>
+          <figcaption>🔍 Click to zoom - you cannot answer this without knowing your real utilization</figcaption>
+        </figure>
+
         <p>One more planning number, because it turns a vendor conversation into arithmetic. The storage sizing rule is <strong>approximately 12.5 Gb/s of storage bandwidth per GPU, and it is linear</strong> - 16 GPUs need around 200 Gb/s. When a vendor tells you their array is fast enough for your cluster, that claim is now checkable in one line of multiplication.</p>
       </div>
     </details>
@@ -254,6 +301,57 @@ models:/MyModel@challenger   # the candidate under evaluation
       <summary><span class="mode live">Live</span>Skew versus drift - two words that save weeks<span class="mini">4 min</span><span class="caret">▶</span></summary>
       <div class="body">
         <p>Most monitoring tools give you one bucket called "drift," and most teams therefore respond to two completely different problems with the same reflex, which is to retrain. Google's split is better, and it is the most immediately useful thing in this section:</p>
+        <figure class="zoomable">
+          <svg viewBox="0 0 880 370" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A decision tree for diagnosing an underperforming model, using Google's split between training-serving skew and prediction drift. The question is whether the model was ever right in production. If performance was poor from day one, the cause is training-serving skew: a preprocessing mismatch between training and serving, present from the first deployment, and the fix is to change the code because retraining will not help. If performance was good and then decayed, the cause is prediction drift: the world changing under a model that is still correct, and the fix is to retrain on recent data.">
+            <style>
+              .b7sdT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+              .b7sdR { font: 700 12.5px Inter, sans-serif; fill: #FFFFFF; }
+              .b7sdE { font: 700 11px Inter, sans-serif; fill: #64748B; }
+              .b7sdA { font: 700 12.5px Inter, sans-serif; fill: #991B1B; }
+              .b7sdB { font: 700 12.5px Inter, sans-serif; fill: #3F6212; }
+              .b7sdS { font: 400 11.5px Inter, sans-serif; fill: #334155; }
+              .b7sdN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+            </style>
+            <defs>
+              <marker id="arrB7sd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B"/>
+              </marker>
+            </defs>
+            <rect x="0" y="0" width="880" height="370" fill="#F8FAFC"/>
+            <text class="b7sdT" x="40" y="28">One question separates a bug you shipped from the world moving</text>
+
+            <rect x="40" y="150" width="220" height="64" rx="8" fill="#1E293B"/>
+            <text class="b7sdR" x="58" y="180">A model is</text>
+            <text class="b7sdR" x="58" y="200">underperforming</text>
+            <line x1="260" y1="182" x2="294" y2="182" stroke="#64748B" stroke-width="1.6" marker-end="url(#arrB7sd)"/>
+
+            <rect x="300" y="150" width="230" height="64" rx="8" fill="#334155"/>
+            <text class="b7sdR" x="318" y="180">Was it ever right</text>
+            <text class="b7sdR" x="318" y="200">in production?</text>
+
+            <path d="M530,182 L564,118" fill="none" stroke="#64748B" stroke-width="1.6" marker-end="url(#arrB7sd)"/>
+            <text class="b7sdE" x="536" y="140">no</text>
+            <path d="M530,182 L564,246" fill="none" stroke="#64748B" stroke-width="1.6" marker-end="url(#arrB7sd)"/>
+            <text class="b7sdE" x="536" y="234">yes</text>
+
+            <rect x="570" y="70" width="270" height="90" rx="8" fill="#FFFFFF" stroke="#991B1B"/>
+            <text class="b7sdA" x="588" y="96">Training-serving skew</text>
+            <text class="b7sdS" x="588" y="116">A bug you shipped: a preprocessing</text>
+            <text class="b7sdS" x="588" y="134">mismatch. Present on day one.</text>
+            <text class="b7sdS" x="588" y="152">Fix the code, not the model.</text>
+
+            <rect x="570" y="204" width="270" height="92" rx="8" fill="#D9F99D"/>
+            <text class="b7sdB" x="588" y="230">Prediction drift</text>
+            <text class="b7sdS" x="588" y="250">The world changing under a model</text>
+            <text class="b7sdS" x="588" y="268">that is still correct.</text>
+            <text class="b7sdS" x="588" y="286">Retrain on recent data.</text>
+
+            <text class="b7sdN" x="40" y="326">Most tools give you one bucket called "drift", so teams answer both with a retrain.</text>
+            <text class="b7sdN" x="40" y="346">Eight weeks of retraining will not fix a feature scaled in training and not in serving.</text>
+          </svg>
+          <figcaption>🔍 Click to zoom - if it was never right, no amount of retraining will make it right</figcaption>
+        </figure>
+
         <table class="clean">
           <thead>
             <tr><th></th><th>Training-serving skew</th><th>Prediction drift</th></tr>

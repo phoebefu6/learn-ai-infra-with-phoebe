@@ -160,6 +160,61 @@
     </div>
     <p class="lede">Databricks, Microsoft Fabric and Snowflake all sell a unified platform, and all three are telling the truth. <strong>They are unifying three different axes, and that is the whole competitive story.</strong> Read their own words rather than the comparison grids, and the category stops being confusing.</p>
 
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 354" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three statements of organizational pain matched to the axis of unification each one calls for and the vendor whose thesis it is. ML features and BI dashboards disagreeing about what a customer is is a workloads problem, which is Databricks' axis of BI and ML on one copy of the data. Sixty storage accounts with no inventory and three teams paying for copies is an organizational storage problem, which is Microsoft Fabric's axis of one OneLake per tenant. A nightly export from the application database leaving every analytics answer a day old is a workload-types problem, which is Snowflake's axis including transactional workloads.">
+        <style>
+          .b5axT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .b5axH { font: 700 11px Inter, sans-serif; fill: #3F6212; letter-spacing: .5px; }
+          .b5axP { font: 400 11.5px Inter, sans-serif; fill: #334155; }
+          .b5axA { font: 700 12px Inter, sans-serif; fill: #FFFFFF; }
+          .b5axAs { font: 400 11px Inter, sans-serif; fill: rgba(255,255,255,.84); }
+          .b5axV { font: 700 12.5px Inter, sans-serif; fill: #3F6212; }
+          .b5axVs { font: 400 11px Inter, sans-serif; fill: #334155; }
+          .b5axN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+        </style>
+        <rect x="0" y="0" width="880" height="354" fill="#F8FAFC"/>
+        <text class="b5axT" x="40" y="28">Ask which axis your pain sits on, before you sit through three demos</text>
+
+        <text class="b5axH" x="40" y="54">IF YOUR PAIN SOUNDS LIKE THIS</text>
+        <text class="b5axH" x="440" y="54">THE AXIS UNIFIED</text>
+        <text class="b5axH" x="640" y="54">WHOSE THESIS IT IS</text>
+
+        <rect x="40" y="70" width="380" height="64" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+        <text class="b5axP" x="58" y="96">"Our ML features and our BI dashboards</text>
+        <text class="b5axP" x="58" y="114">disagree about what a customer is."</text>
+        <rect x="440" y="70" width="180" height="64" rx="8" fill="#334155"/>
+        <text class="b5axA" x="454" y="96">workloads</text>
+        <text class="b5axAs" x="454" y="114">BI and ML, one copy</text>
+        <rect x="640" y="70" width="200" height="64" rx="8" fill="#D9F99D"/>
+        <text class="b5axV" x="654" y="96">Databricks</text>
+        <text class="b5axVs" x="654" y="114">one copy for BI and ML</text>
+
+        <rect x="40" y="146" width="380" height="64" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+        <text class="b5axP" x="58" y="172">"We have 60 storage accounts, no inventory,</text>
+        <text class="b5axP" x="58" y="190">and three teams paying for copies."</text>
+        <rect x="440" y="146" width="180" height="64" rx="8" fill="#334155"/>
+        <text class="b5axA" x="454" y="172">org. storage</text>
+        <text class="b5axAs" x="454" y="190">one OneLake per tenant</text>
+        <rect x="640" y="146" width="200" height="64" rx="8" fill="#D9F99D"/>
+        <text class="b5axV" x="654" y="172">Microsoft Fabric</text>
+        <text class="b5axVs" x="654" y="190">storage topology is theirs</text>
+
+        <rect x="40" y="222" width="380" height="64" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+        <text class="b5axP" x="58" y="248">"We run a nightly export from the app DB</text>
+        <text class="b5axP" x="58" y="266">and every answer is a day old."</text>
+        <rect x="440" y="222" width="180" height="64" rx="8" fill="#334155"/>
+        <text class="b5axA" x="454" y="248">workload types</text>
+        <text class="b5axAs" x="454" y="266">including transactional</text>
+        <rect x="640" y="222" width="200" height="64" rx="8" fill="#D9F99D"/>
+        <text class="b5axV" x="654" y="248">Snowflake</text>
+        <text class="b5axVs" x="654" y="266">widest claim of the three</text>
+
+        <text class="b5axN" x="40" y="316">All three are telling the truth. They are unifying three different axes.</text>
+        <text class="b5axN" x="40" y="336">If you cannot state your pain in one of these three sentences, you are not ready to pick.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - "unified" has a hidden argument place: unified along what?</figcaption>
+    </figure>
+
     <table class="clean">
       <thead>
         <tr><th>Vendor</th><th>The axis it unifies</th><th>What that buys</th><th>What it costs</th></tr>
@@ -249,6 +304,50 @@
           <li>If compute is attributed per team, the cost of a bad query lands on the team that wrote it, and query hygiene becomes self-correcting without a policy document.</li>
           <li>If compute is attributed per query and visible to the author before they run it, you get the strongest version - feedback at the moment of the decision.</li>
         </ul>
+        <figure class="zoomable">
+          <svg viewBox="0 0 880 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three ways of writing the compute contract, from weakest to strongest, and the behaviour each produces. A shared pool with no attribution means a single unbounded scan is somebody else's dashboard timing out and nobody can name the culprit. Attribution per team means the cost of a bad query lands on the team that wrote it, so query hygiene becomes self-correcting without a policy document. Attribution per query, visible to the author before they run it, gives feedback at the moment of the decision and is the strongest version. None of them governs anything if a team can spin up its own cluster outside the scheme.">
+            <style>
+              .b5ccT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+              .b5ccH { font: 700 11px Inter, sans-serif; fill: #3F6212; letter-spacing: .5px; }
+              .b5ccL { font: 700 12.5px Inter, sans-serif; fill: #FFFFFF; }
+              .b5ccLs { font: 400 11px Inter, sans-serif; fill: rgba(255,255,255,.84); }
+              .b5ccX { font: 400 11.5px Inter, sans-serif; fill: #64748B; }
+              .b5ccB { font: 700 11.5px Inter, sans-serif; fill: #B45309; }
+              .b5ccBs { font: 400 11.5px Inter, sans-serif; fill: #64748B; }
+              .b5ccN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+            </style>
+            <rect x="0" y="0" width="880" height="380" fill="#F8FAFC"/>
+            <text class="b5ccT" x="40" y="28">Who pays for a badly written query is a design decision</text>
+            <text class="b5ccH" x="40" y="54">THE COMPUTE CONTRACT, WEAKEST TO STRONGEST</text>
+
+            <rect x="40" y="66" width="520" height="52" rx="10" fill="#64748B"/>
+            <text class="b5ccL" x="58" y="88">shared pool, no attribution</text>
+            <text class="b5ccLs" x="58" y="106">one unbounded scan, nobody to name</text>
+            <text class="b5ccX" x="590" y="88">A single unbounded scan is somebody</text>
+            <text class="b5ccX" x="590" y="106">else's dashboard timing out.</text>
+
+            <rect x="40" y="128" width="520" height="52" rx="10" fill="#334155"/>
+            <text class="b5ccL" x="58" y="150">attributed per team</text>
+            <text class="b5ccLs" x="58" y="168">the cost lands on whoever wrote it</text>
+            <text class="b5ccX" x="590" y="150">Query hygiene self-corrects, with</text>
+            <text class="b5ccX" x="590" y="168">no policy document required.</text>
+
+            <rect x="40" y="190" width="520" height="52" rx="10" fill="#1E293B"/>
+            <text class="b5ccL" x="58" y="212">attributed per query, shown first</text>
+            <text class="b5ccLs" x="58" y="230">visible to the author before they run it</text>
+            <text class="b5ccX" x="590" y="212">Feedback at the moment of the</text>
+            <text class="b5ccX" x="590" y="230">decision - the strongest version.</text>
+
+            <rect x="40" y="262" width="800" height="48" rx="10" fill="#FFFFFF" stroke="#B45309"/>
+            <text class="b5ccB" x="58" y="284">And the chokepoint test: what stops someone going around this?</text>
+            <text class="b5ccBs" x="58" y="302">If a team can spin up its own cluster outside the scheme, it governs only the careful.</text>
+
+            <text class="b5ccN" x="40" y="342">Every layer has a narrow waist. For the engine it is the compute contract.</text>
+            <text class="b5ccN" x="40" y="362">It sounds like a finance question. It is a design question, because it shapes behaviour.</text>
+          </svg>
+          <figcaption>🔍 Click to zoom - attribution at the moment of writing beats a policy document</figcaption>
+        </figure>
+
         <p>Apply the chokepoint test from b1 as well: <em>what stops someone going around this?</em> If any team can spin up its own warehouse or cluster outside the attribution scheme, your compute contract governs exactly the people who were already being careful.</p>
       </div>
     </details>

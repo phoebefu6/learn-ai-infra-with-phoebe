@@ -112,6 +112,60 @@
     </div>
     <p class="lede">Microsoft's engineering team ran Databricks Genie against LiveSQLBench in three configurations, publishing their methodology. Same product, same benchmark, same questions. Only the semantic context around the data changed - and accuracy moved by a factor of seven. This is the strongest evidence in the whole course for why the semantic layer exists, and it did not come from a company selling semantic layers.</p>
 
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Accuracy on LiveSQLBench across five configurations from Microsoft's engineering evaluation. Databricks Genie with an empty configuration scored nine point five zero percent. With column descriptions it scored sixty-nine point two three percent. With a feedback mechanism over three iterations it scored eighty-eight point five zero percent. For comparison, GitHub Copilot CLI with metadata only scored sixty-six point seven zero percent and with domain hints eighty point seven seven percent. The product, the benchmark and the questions were identical; only the semantic context around the data changed.">
+        <style>
+          .b9mdT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .b9mdK { font: 600 11.5px Inter, sans-serif; fill: #334155; }
+          .b9mdA { font: 700 11px Inter, sans-serif; fill: #64748B; }
+          .b9mdL { font: 600 12px Inter, sans-serif; fill: #1E293B; }
+          .b9mdV { font: 700 12px Inter, sans-serif; fill: #FFFFFF; }
+          .b9mdO { font: 700 12px Inter, sans-serif; fill: #991B1B; }
+          .b9mdN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+        </style>
+        <rect x="0" y="0" width="880" height="380" fill="#F8FAFC"/>
+        <text class="b9mdT" x="40" y="28">Only the context around the data changed, and accuracy moved 7x</text>
+
+        <rect x="40" y="42" width="14" height="14" rx="3" fill="#334155"/>
+        <text class="b9mdK" x="60" y="54">Databricks Genie</text>
+        <rect x="220" y="42" width="14" height="14" rx="3" fill="#64748B"/>
+        <text class="b9mdK" x="240" y="54">GitHub Copilot CLI, comparison point</text>
+
+        <text class="b9mdA" x="260" y="76" text-anchor="middle">0%</text>
+        <text class="b9mdA" x="500" y="76" text-anchor="middle">50%</text>
+        <text class="b9mdA" x="740" y="76" text-anchor="middle">100% accuracy</text>
+        <g stroke="#E2E8F0" stroke-width="1">
+          <line x1="260" y1="84" x2="260" y2="314"/>
+          <line x1="500" y1="84" x2="500" y2="314"/>
+          <line x1="740" y1="84" x2="740" y2="314"/>
+        </g>
+
+        <text class="b9mdL" x="240" y="110" text-anchor="end">Genie, empty config</text>
+        <rect x="260" y="90" width="46" height="30" rx="5" fill="#991B1B"/>
+        <text class="b9mdO" x="316" y="110">9.50%</text>
+
+        <text class="b9mdL" x="240" y="158" text-anchor="end">+ column descriptions</text>
+        <rect x="260" y="138" width="332" height="30" rx="5" fill="#334155"/>
+        <text class="b9mdV" x="272" y="158">69.23%</text>
+
+        <text class="b9mdL" x="240" y="206" text-anchor="end">+ feedback, 3 rounds</text>
+        <rect x="260" y="186" width="425" height="30" rx="5" fill="#334155"/>
+        <text class="b9mdV" x="272" y="206">88.50%</text>
+
+        <text class="b9mdL" x="240" y="254" text-anchor="end">Copilot CLI, metadata</text>
+        <rect x="260" y="234" width="320" height="30" rx="5" fill="#64748B"/>
+        <text class="b9mdV" x="272" y="254">66.70%</text>
+
+        <text class="b9mdL" x="240" y="302" text-anchor="end">Copilot CLI + hints</text>
+        <rect x="260" y="282" width="388" height="30" rx="5" fill="#64748B"/>
+        <text class="b9mdV" x="272" y="302">80.77%</text>
+
+        <text class="b9mdN" x="40" y="344">Microsoft's engineering team on LiveSQLBench, published methodology, 2026-05-07.</text>
+        <text class="b9mdN" x="40" y="364">The licence is the small number. The metadata work is the real project, and nobody scopes it.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - you are buying a tool as accurate as the metadata underneath it</figcaption>
+    </figure>
+
     <table class="clean">
       <thead>
         <tr><th>Configuration</th><th>Accuracy</th><th>What changed</th></tr>
@@ -172,6 +226,51 @@
       <div class="step"><p>Re-evaluating five leading agents after corrections moved scores by up to 19 points and rankings by up to 3 places. <strong>One agent, CHESS, went from 62% to 81% - and from 4th place to 1st.</strong></p></div>
       <div class="step"><p>The authors' conclusion: "annotation errors remain a barrier to robust benchmarking in text-to-SQL, with direct implications for leaderboard validity."</p></div>
     </div>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two findings from the CIDR 2026 peer-reviewed study of text-to-SQL benchmark ground truth. In BIRD Mini-Dev, fifty-two point eight percent of problems contain annotation errors, sixteen point seven points higher than previously reported. In Spider 2.0-Snow, among the one hundred and twenty-one problems with open-sourced gold SQL, the annotation error rate is sixty-six point one percent. After correcting the gold SQL, the agent CHESS moved from sixty-two percent and fourth place to eighty-one percent and first place.">
+        <style>
+          .b9anT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .b9anH { font: 700 11px Inter, sans-serif; fill: #3F6212; letter-spacing: .5px; }
+          .b9anL { font: 600 12px Inter, sans-serif; fill: #1E293B; }
+          .b9anV { font: 700 12px Inter, sans-serif; fill: #FFFFFF; }
+          .b9anN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+        </style>
+        <rect x="0" y="0" width="880" height="360" fill="#F8FAFC"/>
+        <text class="b9anT" x="40" y="28">The benchmarks used to audit the vendors are themselves mis-annotated</text>
+
+        <g stroke="#E2E8F0" stroke-width="1">
+          <line x1="300" y1="64" x2="300" y2="274"/>
+          <line x1="540" y1="64" x2="540" y2="274"/>
+          <line x1="780" y1="64" x2="780" y2="274"/>
+        </g>
+
+        <text class="b9anH" x="300" y="54">SHARE OF PROBLEMS WITH ANNOTATION ERRORS</text>
+
+        <text class="b9anL" x="290" y="88" text-anchor="end">BIRD Mini-Dev</text>
+        <rect x="300" y="66" width="253" height="32" rx="5" fill="#991B1B"/>
+        <text class="b9anV" x="312" y="88">52.8% of problems</text>
+
+        <text class="b9anL" x="290" y="136" text-anchor="end">Spider 2.0-Snow open gold</text>
+        <rect x="300" y="114" width="317" height="32" rx="5" fill="#991B1B"/>
+        <text class="b9anV" x="312" y="136">66.1% of the open-gold subset</text>
+
+        <text class="b9anH" x="300" y="180">THE SAME AGENT, RE-SCORED AFTER THE GOLD SQL WAS FIXED</text>
+
+        <text class="b9anL" x="290" y="214" text-anchor="end">CHESS, as scored</text>
+        <rect x="300" y="192" width="298" height="32" rx="5" fill="#64748B"/>
+        <text class="b9anV" x="312" y="214">62% · 4th place</text>
+
+        <text class="b9anL" x="290" y="262" text-anchor="end">CHESS, after correction</text>
+        <rect x="300" y="240" width="389" height="32" rx="5" fill="#334155"/>
+        <text class="b9anV" x="312" y="262">81% · 1st place</text>
+
+        <text class="b9anN" x="40" y="304">Jin, Choi, Zhu &amp; Kang, CIDR 2026, peer-reviewed. BIRD is 16.7 points above prior reports.</text>
+        <text class="b9anN" x="40" y="324">Re-scoring five leading agents moved results by up to 19 points and rankings by up to 3 places.</text>
+        <text class="b9anN" x="40" y="344">Nobody currently has a trustworthy public measurement of enterprise text-to-SQL accuracy.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - a near-perfect score on a two-thirds mis-annotated benchmark measures something else</figcaption>
+    </figure>
 
     <details class="card">
       <summary><span class="mode live">Live</span>So what about those 96% leaderboard scores?<span class="mini">4 min</span><span class="caret">▶</span></summary>

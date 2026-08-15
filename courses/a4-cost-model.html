@@ -125,6 +125,45 @@
       <summary><span class="mode live">Live</span>Leak 2: the list price is not the price<span class="mini">4 min</span><span class="caret">▶</span></summary>
       <div class="body">
         <p>Three numbers for the same accelerator, all fetched 2026-08-07. AWS p5 on-demand is <strong>$6.88 per GPU-hour</strong>. The same instance on a three-year all-upfront Savings Plan is <strong>$2.587 per GPU-hour</strong>. The SemiAnalysis composite index for H100 capacity sits at <strong>$2.82 per GPU-hour</strong> (April 2026), <strong>down 57% from $6.62 in the second half of 2023</strong>.</p>
+        <figure class="zoomable">
+          <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Four published rates per GPU-hour for the same accelerator class, all fetched on 2026-08-07. AWS p5 on-demand is six dollars eighty-eight. The SemiAnalysis composite index for H100 capacity is two dollars eighty-two. The AWS p5 three-year all-upfront Savings Plan rate is two dollars fifty-eight point seven. Azure H100 spot is two dollars twenty-seven, which is below the AWS three-year reserved rate. The on-demand list price that gets quoted most is more than double every other rate on the chart.">
+            <style>
+              .a4gpT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+              .a4gpK { font: 600 11.5px Inter, sans-serif; fill: #334155; }
+              .a4gpL { font: 600 12px Inter, sans-serif; fill: #1E293B; }
+              .a4gpV { font: 700 12px Inter, sans-serif; fill: #FFFFFF; }
+              .a4gpN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+            </style>
+            <rect x="0" y="0" width="880" height="320" fill="#F8FAFC"/>
+            <text class="a4gpT" x="40" y="28">The list price is not the price - four rates, US$ per GPU-hour</text>
+
+            <rect x="40" y="42" width="14" height="14" rx="3" fill="#64748B"/>
+            <text class="a4gpK" x="60" y="54">published on-demand list</text>
+            <rect x="240" y="42" width="14" height="14" rx="3" fill="#334155"/>
+            <text class="a4gpK" x="260" y="54">committed or market rate</text>
+
+            <text class="a4gpL" x="240" y="96" text-anchor="end">AWS p5 on-demand</text>
+            <rect x="260" y="76" width="480" height="30" rx="5" fill="#64748B"/>
+            <text class="a4gpV" x="272" y="96">$6.88</text>
+
+            <text class="a4gpL" x="240" y="144" text-anchor="end">SemiAnalysis index</text>
+            <rect x="260" y="124" width="197" height="30" rx="5" fill="#334155"/>
+            <text class="a4gpV" x="272" y="144">$2.82</text>
+
+            <text class="a4gpL" x="240" y="192" text-anchor="end">AWS p5 3yr reserved</text>
+            <rect x="260" y="172" width="180" height="30" rx="5" fill="#334155"/>
+            <text class="a4gpV" x="272" y="192">$2.587</text>
+
+            <text class="a4gpL" x="240" y="240" text-anchor="end">Azure H100 spot</text>
+            <rect x="260" y="220" width="158" height="30" rx="5" fill="#334155"/>
+            <text class="a4gpV" x="272" y="240">$2.27</text>
+
+            <text class="a4gpN" x="40" y="280">All fetched 2026-08-07. AWS cut P5 by 44% effective 2025-06-01, so a GPU line needs a re-price date.</text>
+            <text class="a4gpN" x="40" y="300">The SemiAnalysis composite is down 57% from $6.62 per GPU-hour in the second half of 2023.</text>
+          </svg>
+          <figcaption>🔍 Click to zoom - a model built on list is wrong in the direction that favours its author</figcaption>
+        </figure>
+
         <p>Two consequences worth stating out loud in a budget review:</p>
         <ul>
           <li><strong>Published list prices substantially overstate what the market pays.</strong> A model built on list is not conservative, it is wrong in a direction that happens to favour whoever built it.</li>
@@ -173,6 +212,54 @@
       <span class="ex-pill">Real world</span>
       <p><strong>The aggregator error.</strong> The most-linked GPU pricing aggregator (Vantage) labels AWS's three-year, no-upfront rate of $23.777 per hour as "1-Year Reserved." AWS's real one-year rates are in the $32-35 per hour range. That is a <strong>32% error in the single most cited GPU pricing reference</strong>, on the exact row a budget owner is most likely to copy into a model. Nobody is being dishonest; a label was mapped wrongly and then linked ten thousand times. <strong>Use first-party billing feeds.</strong></p>
     </div>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two bars on a dollars-per-hour axis showing the aggregator error. The most-linked GPU pricing aggregator labels a rate of twenty-three dollars seventy-seven point seven per hour as one-year reserved. AWS's real one-year rates from its own feed are in the thirty-two to thirty-five dollars per hour range. The figure the aggregator published is actually AWS's three-year no-upfront rate, mislabelled, which makes it a thirty-two percent error on the row a budget owner is most likely to copy.">
+        <style>
+          .a4agT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .a4agA { font: 700 11px Inter, sans-serif; fill: #64748B; }
+          .a4agL { font: 600 12px Inter, sans-serif; fill: #1E293B; }
+          .a4agV { font: 700 12px Inter, sans-serif; fill: #FFFFFF; }
+          .a4agO { font: 700 12px Inter, sans-serif; fill: #334155; }
+          .a4agE { font: 700 11.5px Inter, sans-serif; fill: #B45309; }
+          .a4agEs { font: 400 11.5px Inter, sans-serif; fill: #64748B; }
+          .a4agN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+        </style>
+        <rect x="0" y="0" width="880" height="320" fill="#F8FAFC"/>
+        <text class="a4agT" x="40" y="28">One mislabelled row, copied into ten thousand budgets</text>
+
+        <text class="a4agA" x="260" y="56" text-anchor="middle">$0</text>
+        <text class="a4agA" x="380" y="56" text-anchor="middle">$10</text>
+        <text class="a4agA" x="500" y="56" text-anchor="middle">$20</text>
+        <text class="a4agA" x="620" y="56" text-anchor="middle">$30</text>
+        <text class="a4agA" x="740" y="56" text-anchor="middle">$40 per hour</text>
+        <g stroke="#E2E8F0" stroke-width="1">
+          <line x1="260" y1="64" x2="260" y2="172"/>
+          <line x1="380" y1="64" x2="380" y2="172"/>
+          <line x1="500" y1="64" x2="500" y2="172"/>
+          <line x1="620" y1="64" x2="620" y2="172"/>
+          <line x1="740" y1="64" x2="740" y2="172"/>
+        </g>
+
+        <text class="a4agL" x="240" y="98" text-anchor="end">aggregator, mislabelled</text>
+        <rect x="260" y="76" width="285" height="32" rx="5" fill="#B45309"/>
+        <text class="a4agV" x="272" y="98">$23.777 called "1-Year Reserved"</text>
+
+        <text class="a4agL" x="240" y="150" text-anchor="end">AWS first-party feed</text>
+        <rect x="260" y="128" width="384" height="32" rx="5" fill="#334155"/>
+        <rect x="644" y="128" width="36" height="32" rx="5" fill="#334155" opacity=".45"/>
+        <text class="a4agV" x="272" y="150">real 1-year rate</text>
+        <text class="a4agO" x="692" y="150">$32-35</text>
+
+        <rect x="40" y="196" width="800" height="48" rx="10" fill="#FFFFFF" stroke="#B45309"/>
+        <text class="a4agE" x="58" y="218">$23.777 is really AWS's 3-year no-upfront rate - the term label was mapped wrongly.</text>
+        <text class="a4agEs" x="58" y="236">Then it was linked ten thousand times. Nobody is being dishonest; the row is simply wrong.</text>
+
+        <text class="a4agN" x="40" y="276">A 32% error in the single most cited GPU pricing reference, on the exact row budgets copy.</text>
+        <text class="a4agN" x="40" y="296">Budget from first-party billing feeds, never from an aggregator or a catalog page.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - check the byline on the price before you check the price</figcaption>
+    </figure>
 
     <details class="card">
       <summary><span class="mode live">Live</span>What is published to the dollar, and what is not<span class="mini">4 min</span><span class="caret">▶</span></summary>

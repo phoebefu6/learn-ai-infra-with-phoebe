@@ -171,6 +171,59 @@
       <div class="step"><p><strong>The quality bar they reported:</strong> <strong>98%+ of queries working</strong> after migration, <strong>72% completing under 10 seconds</strong>. They told you what did not work as well as what did.</p></div>
     </div>
 
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A six-month schedule for GetYourGuide's migration of 750 tables from Snowflake to Databricks, published on their own blog. A proof of concept ran for one and a half months at one full-time engineer, then the migration ran for four and a half months at roughly two full-time engineers, about ten person-months in total. The published results were a twenty percent operational cost reduction, more than ninety-eight percent of queries working, and seventy-two percent of queries completing in under ten seconds.">
+        <style>
+          .a5gyT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .a5gyA { font: 700 11px Inter, sans-serif; fill: #64748B; }
+          .a5gyL { font: 600 12px Inter, sans-serif; fill: #1E293B; }
+          .a5gyV { font: 700 12px Inter, sans-serif; fill: #FFFFFF; }
+          .a5gyH { font: 700 11px Inter, sans-serif; fill: #3F6212; letter-spacing: .5px; }
+          .a5gyC { font: 700 12px Inter, sans-serif; fill: #3F6212; }
+          .a5gyN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+        </style>
+        <rect x="0" y="0" width="880" height="320" fill="#F8FAFC"/>
+        <text class="a5gyT" x="40" y="28">The only migration case that publishes its effort as well as its benefit</text>
+
+        <text class="a5gyA" x="200" y="60" text-anchor="middle">start</text>
+        <text class="a5gyA" x="300" y="60" text-anchor="middle">1 mo</text>
+        <text class="a5gyA" x="400" y="60" text-anchor="middle">2 mo</text>
+        <text class="a5gyA" x="500" y="60" text-anchor="middle">3 mo</text>
+        <text class="a5gyA" x="600" y="60" text-anchor="middle">4 mo</text>
+        <text class="a5gyA" x="700" y="60" text-anchor="middle">5 mo</text>
+        <text class="a5gyA" x="800" y="60" text-anchor="middle">6 mo</text>
+        <g stroke="#E2E8F0" stroke-width="1">
+          <line x1="200" y1="68" x2="200" y2="180"/>
+          <line x1="300" y1="68" x2="300" y2="180"/>
+          <line x1="400" y1="68" x2="400" y2="180"/>
+          <line x1="500" y1="68" x2="500" y2="180"/>
+          <line x1="600" y1="68" x2="600" y2="180"/>
+          <line x1="700" y1="68" x2="700" y2="180"/>
+          <line x1="800" y1="68" x2="800" y2="180"/>
+        </g>
+
+        <text class="a5gyL" x="190" y="102" text-anchor="end">proof of concept</text>
+        <rect x="200" y="80" width="150" height="34" rx="6" fill="#64748B"/>
+        <text class="a5gyV" x="212" y="102">1.5 mo · 1 FTE</text>
+
+        <text class="a5gyL" x="190" y="154" text-anchor="end">migration</text>
+        <rect x="350" y="132" width="450" height="34" rx="6" fill="#334155"/>
+        <text class="a5gyV" x="362" y="154">4.5 mo · ~2 FTE</text>
+
+        <text class="a5gyH" x="40" y="202">WHAT THEY PUBLISHED AS THE RESULT</text>
+        <rect x="40" y="212" width="250" height="36" rx="8" fill="#D9F99D"/>
+        <text class="a5gyC" x="165" y="235" text-anchor="middle">20% operational cost cut</text>
+        <rect x="310" y="212" width="250" height="36" rx="8" fill="#D9F99D"/>
+        <text class="a5gyC" x="435" y="235" text-anchor="middle">98%+ of queries working</text>
+        <rect x="580" y="212" width="250" height="36" rx="8" fill="#D9F99D"/>
+        <text class="a5gyC" x="705" y="235" text-anchor="middle">72% complete under 10s</text>
+
+        <text class="a5gyN" x="40" y="280">750 tables, Snowflake to Databricks, published on their own blog on 2025-01-29.</text>
+        <text class="a5gyN" x="40" y="300">Six months elapsed, about ten person-months. Not 60-80% - a fifth off operations.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - a defensible migration is two quarters and a couple of engineers</figcaption>
+    </figure>
+
     <details class="card">
       <summary><span class="mode live">Live</span>Do the arithmetic in front of your board<span class="mini">4 min</span><span class="caret">▶</span></summary>
       <div class="body">
@@ -220,6 +273,47 @@
           <li><strong>What broke:</strong> custom bank reconciliation failed, leaving the council unable to produce auditable accounts. The <strong>fraud-detection audit trail was disabled for 18+ months</strong>. And <strong>£2 billion in transactions were misallocated to the wrong fiscal years.</strong></li>
           <li><strong>The audit finding, which is the whole point:</strong> Grant Thornton's 66-page report concluded the failures were <strong>process failures - governance, technical oversight and vendor management</strong> - not resourcing failures and not technical failures.</li>
         </ul>
+        <figure class="zoomable">
+          <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The published cost trajectory of Birmingham City Council's Oracle Fusion programme. The original 2018 estimate was nineteen million pounds with a December 2020 go-live target. The approved budget reached one hundred and thirty-one million pounds by 2024. The total forecast through 2027 to 2028 is one hundred and forty-four point four million pounds. A separate report puts the cumulative cost at two hundred and sixteen point five million pounds by 2026, on a different basis. Grant Thornton's audit found the failures were process failures rather than technical ones.">
+            <style>
+              .a5bcT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+              .a5bcK { font: 600 11.5px Inter, sans-serif; fill: #334155; }
+              .a5bcL { font: 600 12px Inter, sans-serif; fill: #1E293B; }
+              .a5bcV { font: 700 12px Inter, sans-serif; fill: #FFFFFF; }
+              .a5bcO { font: 700 12px Inter, sans-serif; fill: #334155; }
+              .a5bcN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+            </style>
+            <rect x="0" y="0" width="880" height="340" fill="#F8FAFC"/>
+            <text class="a5bcT" x="40" y="28">One programme's cost, as published: £19M to £216.5M</text>
+
+            <rect x="40" y="44" width="14" height="14" rx="3" fill="#334155"/>
+            <text class="a5bcK" x="60" y="56">council budget papers</text>
+            <rect x="240" y="44" width="14" height="14" rx="3" fill="#B45309"/>
+            <text class="a5bcK" x="260" y="56">separate cumulative-cost report</text>
+
+            <text class="a5bcL" x="240" y="96" text-anchor="end">2018 original estimate</text>
+            <rect x="260" y="76" width="42" height="30" rx="5" fill="#64748B"/>
+            <text class="a5bcO" x="312" y="96">£19M</text>
+
+            <text class="a5bcL" x="240" y="144" text-anchor="end">approved budget, 2024</text>
+            <rect x="260" y="124" width="290" height="30" rx="5" fill="#334155"/>
+            <text class="a5bcV" x="272" y="144">£131M</text>
+
+            <text class="a5bcL" x="240" y="192" text-anchor="end">forecast to 2027/28</text>
+            <rect x="260" y="172" width="320" height="30" rx="5" fill="#334155"/>
+            <text class="a5bcV" x="272" y="192">£144.4M</text>
+
+            <text class="a5bcL" x="240" y="240" text-anchor="end">cumulative by 2026</text>
+            <rect x="260" y="220" width="480" height="30" rx="5" fill="#B45309"/>
+            <text class="a5bcV" x="272" y="240">£216.5M</text>
+
+            <text class="a5bcN" x="40" y="280">The system went live in April 2022 knowing it was unfit - the build was too unstable to test.</text>
+            <text class="a5bcN" x="40" y="300">£2 billion misallocated to the wrong fiscal years; the fraud audit trail was off 18+ months.</text>
+            <text class="a5bcN" x="40" y="320">Grant Thornton's 66-page audit: process failures in governance, oversight and vendor management.</text>
+          </svg>
+          <figcaption>🔍 Click to zoom - the technology did not fail, the governance around it did</figcaption>
+        </figure>
+
         <p>Sit with that last line, because it is the one that applies to you. The technology was not the thing that failed. The governance around the technology was. Every layer of the stack you are funding has an owner question attached to it, and Birmingham is what "we will sort the ownership out later" costs when the number is audited.</p>
       </div>
     </details>

@@ -168,6 +168,63 @@
     </div>
     <p class="lede">Eight real options. Read the table with one question in hand rather than a feature checklist: <em>what problem was this built to solve, and is it my problem?</em> Several of these are not competitors at all - they are answers to different questions that happen to share a category name.</p>
 
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 370" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A decision tree grouping the eight catalog implementations by the question each one answers. Wanting the open standard self-hosted points to Polaris, which has the widest published engine interop, or Lakekeeper, which uses OpenFGA for authorization. Wanting a managed catalog on a platform already chosen points to Snowflake Open Catalog, Unity Catalog, Glue with S3 Tables, or BigLake Metastore. Needing multi-table branching and merge workflows points to Nessie, which has no built-in access control. Already having several catalogs points to Gravitino, which federates rather than consolidates.">
+        <style>
+          .b3dcT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .b3dcR { font: 700 12.5px Inter, sans-serif; fill: #FFFFFF; }
+          .b3dcQ { font: 600 11.5px Inter, sans-serif; fill: #FFFFFF; }
+          .b3dcO { font: 700 11.5px Inter, sans-serif; fill: #3F6212; }
+          .b3dcOs { font: 400 11px Inter, sans-serif; fill: #334155; }
+          .b3dcN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+        </style>
+        <defs>
+          <marker id="arrB3dc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B"/>
+          </marker>
+        </defs>
+        <rect x="0" y="0" width="880" height="370" fill="#F8FAFC"/>
+        <text class="b3dcT" x="40" y="28">Eight options, four decisions - group them by the question they answer</text>
+
+        <rect x="40" y="152" width="210" height="70" rx="8" fill="#1E293B"/>
+        <text class="b3dcR" x="58" y="182">What problem are you</text>
+        <text class="b3dcR" x="58" y="202">actually solving?</text>
+
+        <path d="M250,187 L294,84" fill="none" stroke="#64748B" stroke-width="1.4" marker-end="url(#arrB3dc)"/>
+        <path d="M250,187 L294,152" fill="none" stroke="#64748B" stroke-width="1.4" marker-end="url(#arrB3dc)"/>
+        <path d="M250,187 L294,220" fill="none" stroke="#64748B" stroke-width="1.4" marker-end="url(#arrB3dc)"/>
+        <path d="M250,187 L294,288" fill="none" stroke="#64748B" stroke-width="1.4" marker-end="url(#arrB3dc)"/>
+
+        <rect x="300" y="60" width="300" height="48" rx="8" fill="#334155"/>
+        <text class="b3dcQ" x="314" y="90">"the open standard, self-hosted"</text>
+        <rect x="630" y="60" width="210" height="48" rx="8" fill="#D9F99D"/>
+        <text class="b3dcO" x="644" y="82">Polaris or Lakekeeper</text>
+        <text class="b3dcOs" x="644" y="99">widest interop / OpenFGA</text>
+
+        <rect x="300" y="128" width="300" height="48" rx="8" fill="#334155"/>
+        <text class="b3dcQ" x="314" y="158">"managed, on the platform I picked"</text>
+        <rect x="630" y="128" width="210" height="48" rx="8" fill="#D9F99D"/>
+        <text class="b3dcO" x="644" y="150">Snowflake, Unity,</text>
+        <text class="b3dcOs" x="644" y="167">Glue / S3 Tables, BigLake</text>
+
+        <rect x="300" y="196" width="300" height="48" rx="8" fill="#334155"/>
+        <text class="b3dcQ" x="314" y="226">"multi-table branch and merge"</text>
+        <rect x="630" y="196" width="210" height="48" rx="8" fill="#D9F99D"/>
+        <text class="b3dcO" x="644" y="218">Nessie</text>
+        <text class="b3dcOs" x="644" y="235">no built-in access control</text>
+
+        <rect x="300" y="264" width="300" height="48" rx="8" fill="#334155"/>
+        <text class="b3dcQ" x="314" y="294">"I already have several catalogs"</text>
+        <rect x="630" y="264" width="210" height="48" rx="8" fill="#D9F99D"/>
+        <text class="b3dcO" x="644" y="286">Gravitino</text>
+        <text class="b3dcOs" x="644" y="303">federation, not one catalog</text>
+
+        <text class="b3dcN" x="40" y="336">Several of these are not competitors - they answer different questions under one name.</text>
+        <text class="b3dcN" x="40" y="356">If the platform is already chosen, the catalog decision is downstream. Say that out loud.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - pick the question first, and the shortlist writes itself</figcaption>
+    </figure>
+
     <table class="clean">
       <thead>
         <tr><th>Name</th><th>What it is</th><th>Notable</th></tr>
@@ -255,6 +312,56 @@
       <h2>Governance portability is the real lock-in surface <span class="tag concept">9 min live</span></h2>
     </div>
     <p class="lede">Here is the sentence this session exists to deliver. <strong>Row-level security written in Unity Catalog does not transfer to Polaris.</strong> Not "transfers with effort" - there is no standard target format to transfer it into. The REST spec standardized how an engine asks for a table; it did not standardize how you express who may see which rows. So every policy you author accumulates in one vendor's dialect, and the pile grows every quarter.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 376" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three layers of a lakehouse rated for portability. Data files in Parquet are portable and always were. Table metadata in Iceberg, Delta or Hudi is portable because translation is metadata-sized and cheap, as XTable and UniForm show. Governance - row filters, column masks, role hierarchies and tag policies - is not portable, because no standard target format exists to transfer it into. Row-level security written in Unity Catalog does not transfer to Polaris, and governance is the only one of the three that took two years of negotiation with risk, legal and audit to write.">
+        <style>
+          .b3gpT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .b3gpL { font: 700 12.5px Inter, sans-serif; fill: #FFFFFF; }
+          .b3gpLs { font: 400 11px Inter, sans-serif; fill: rgba(255,255,255,.84); }
+          .b3gpY { font: 700 11.5px Inter, sans-serif; fill: #3F6212; }
+          .b3gpNo { font: 700 11.5px Inter, sans-serif; fill: #FFFFFF; }
+          .b3gpX { font: 400 11.5px Inter, sans-serif; fill: #64748B; }
+          .b3gpB { font: 700 11.5px Inter, sans-serif; fill: #B45309; }
+          .b3gpBs { font: 400 11.5px Inter, sans-serif; fill: #64748B; }
+          .b3gpN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+        </style>
+        <rect x="0" y="0" width="880" height="376" fill="#F8FAFC"/>
+        <text class="b3gpT" x="40" y="28">Two layers are portable and loudly marketed. The third is neither.</text>
+
+        <rect x="40" y="60" width="300" height="52" rx="8" fill="#334155"/>
+        <text class="b3gpL" x="58" y="82">Your data files</text>
+        <text class="b3gpLs" x="58" y="100">Parquet, and always were</text>
+        <rect x="360" y="60" width="170" height="52" rx="8" fill="#D9F99D"/>
+        <text class="b3gpY" x="445" y="92" text-anchor="middle">PORTABLE</text>
+        <text class="b3gpX" x="550" y="82">Nothing to translate. The files were</text>
+        <text class="b3gpX" x="550" y="100">never the problem.</text>
+
+        <rect x="40" y="122" width="300" height="52" rx="8" fill="#334155"/>
+        <text class="b3gpL" x="58" y="144">Your table metadata</text>
+        <text class="b3gpLs" x="58" y="162">Iceberg, Delta, Hudi</text>
+        <rect x="360" y="122" width="170" height="52" rx="8" fill="#D9F99D"/>
+        <text class="b3gpY" x="445" y="154" text-anchor="middle">PORTABLE</text>
+        <text class="b3gpX" x="550" y="144">Translation is metadata-sized and</text>
+        <text class="b3gpX" x="550" y="162">cheap - XTable rewrites nothing.</text>
+
+        <rect x="40" y="184" width="300" height="52" rx="8" fill="#1E293B"/>
+        <text class="b3gpL" x="58" y="206">Your governance</text>
+        <text class="b3gpLs" x="58" y="224">row filters, masks, roles, tags</text>
+        <rect x="360" y="184" width="170" height="52" rx="8" fill="#991B1B"/>
+        <text class="b3gpNo" x="445" y="216" text-anchor="middle">NOT PORTABLE</text>
+        <text class="b3gpX" x="550" y="206">No standard target format exists to</text>
+        <text class="b3gpX" x="550" y="224">transfer it into. Not with effort.</text>
+
+        <rect x="40" y="256" width="800" height="48" rx="10" fill="#FFFFFF" stroke="#B45309"/>
+        <text class="b3gpB" x="58" y="278">Row-level security written in Unity Catalog does not transfer to Polaris.</text>
+        <text class="b3gpBs" x="58" y="296">It is also the only one of the three that took risk, legal and audit two years to write.</text>
+
+        <text class="b3gpN" x="40" y="336">Vendors compete loudly on the two portable layers and stay quiet about the third.</text>
+        <text class="b3gpN" x="40" y="356">Author policies as code in your own repo, so migration is a re-render, not a rewrite.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the layer nobody markets is the one you cannot take with you</figcaption>
+    </figure>
 
     <div class="callout tip">
       <strong>Where the switching cost actually sits</strong>

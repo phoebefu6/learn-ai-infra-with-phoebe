@@ -227,6 +227,66 @@
       "What stops someone going around this?" If the answer is architecture, you have a control. If the answer is policy, you have a suggestion. <strong>Architecture is a control; policy is a suggestion.</strong>
     </div>
 
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three chokepoints shown with the route that goes around each one. A data scientist holding a model artifact should pass through the model registry, which decides what is in production and how to roll it back, but can deploy straight from object storage instead. An analyst under deadline should pass through metric definitions, which decide what revenue means everywhere, but can write raw SQL in the BI tool instead. A team with a provider key should pass through the AI gateway, which decides which models run at what cost with what audit trail, but can call the provider directly instead. Each bypass makes the chart you are shown look complete while the bypassed traffic is missing from it.">
+        <style>
+          .a2cpT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .a2cpA { font: 600 11.5px Inter, sans-serif; fill: #1E293B; }
+          .a2cpC { font: 700 12px Inter, sans-serif; fill: #FFFFFF; }
+          .a2cpD { font: 400 11.5px Inter, sans-serif; fill: #64748B; }
+          .a2cpB { font: 700 11px Inter, sans-serif; fill: #B45309; }
+          .a2cpN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+        </style>
+        <defs>
+          <marker id="arrA2cp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155"/>
+          </marker>
+          <marker id="arrA2cpBy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#B45309"/>
+          </marker>
+        </defs>
+        <rect x="0" y="0" width="880" height="380" fill="#F8FAFC"/>
+        <text class="a2cpT" x="40" y="28">A chokepoint governs only if it cannot be bypassed</text>
+
+        <text class="a2cpB" x="350" y="54" text-anchor="middle">bypass: deploy straight from object storage</text>
+        <path d="M205,104 C250,54 450,54 493,100" fill="none" stroke="#B45309" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#arrA2cpBy)"/>
+        <text class="a2cpA" x="40" y="100">a data scientist with</text>
+        <text class="a2cpA" x="40" y="116">a model artifact</text>
+        <line x1="208" y1="104" x2="246" y2="104" stroke="#334155" stroke-width="1.6" marker-end="url(#arrA2cp)"/>
+        <rect x="250" y="84" width="200" height="40" rx="8" fill="#334155"/>
+        <text class="a2cpC" x="350" y="109" text-anchor="middle">the model registry</text>
+        <line x1="456" y1="104" x2="494" y2="104" stroke="#334155" stroke-width="1.6" marker-end="url(#arrA2cp)"/>
+        <text class="a2cpD" x="500" y="100">decides what is in production</text>
+        <text class="a2cpD" x="500" y="116">and how to roll it back</text>
+
+        <text class="a2cpB" x="350" y="150" text-anchor="middle">bypass: raw SQL in the BI tool</text>
+        <path d="M205,200 C250,150 450,150 493,196" fill="none" stroke="#B45309" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#arrA2cpBy)"/>
+        <text class="a2cpA" x="40" y="196">an analyst working</text>
+        <text class="a2cpA" x="40" y="212">to a deadline</text>
+        <line x1="208" y1="200" x2="246" y2="200" stroke="#334155" stroke-width="1.6" marker-end="url(#arrA2cp)"/>
+        <rect x="250" y="180" width="200" height="40" rx="8" fill="#334155"/>
+        <text class="a2cpC" x="350" y="205" text-anchor="middle">metric definitions</text>
+        <line x1="456" y1="200" x2="494" y2="200" stroke="#334155" stroke-width="1.6" marker-end="url(#arrA2cp)"/>
+        <text class="a2cpD" x="500" y="196">decides what "revenue"</text>
+        <text class="a2cpD" x="500" y="212">means, everywhere</text>
+
+        <text class="a2cpB" x="350" y="246" text-anchor="middle">bypass: call the provider directly</text>
+        <path d="M205,296 C250,246 450,246 493,292" fill="none" stroke="#B45309" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#arrA2cpBy)"/>
+        <text class="a2cpA" x="40" y="292">a team with a</text>
+        <text class="a2cpA" x="40" y="308">provider key</text>
+        <line x1="208" y1="296" x2="246" y2="296" stroke="#334155" stroke-width="1.6" marker-end="url(#arrA2cp)"/>
+        <rect x="250" y="276" width="200" height="40" rx="8" fill="#334155"/>
+        <text class="a2cpC" x="350" y="301" text-anchor="middle">the AI gateway</text>
+        <line x1="456" y1="296" x2="494" y2="296" stroke="#334155" stroke-width="1.6" marker-end="url(#arrA2cp)"/>
+        <text class="a2cpD" x="500" y="292">decides which models run,</text>
+        <text class="a2cpD" x="500" y="308">at what cost, with what audit</text>
+
+        <text class="a2cpN" x="40" y="344">Architecture is a control; policy is a suggestion. Ask what stops someone going around this.</text>
+        <text class="a2cpN" x="40" y="364">Bypassed traffic is absent from every chart you are shown - worse than no chart, because it looks complete.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the bypass route is the real answer to "do we have a control?"</figcaption>
+    </figure>
+
     <details class="card">
       <summary><span class="mode live">Live</span>Three ways a control turns out to be a suggestion<span class="mini">5 min</span><span class="caret">▶</span></summary>
       <div class="body">
@@ -266,6 +326,65 @@
       <div class="step"><p><strong>All eight on: $11,295 a month, $135,540 a year, all five people working.</strong> That is the honest annual price of the platform your organisation keeps calling "just a dashboard tool." Not a quote for your environment - your volumes and contracts will move it - but the right order of magnitude, from real rate cards.</p></div>
       <div class="step"><p><strong>Now break it.</strong> With everything on, turn the <strong>semantic layer off</strong> while <strong>self-serve stays on</strong>. Read the business-client card. It goes red, and it stays unblocked. That combination is the point.</p></div>
     </div>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A bar chart of the monthly platform bill at five rungs of the build ladder, with the count of unblocked personas beside each bar. Nothing on costs zero dollars a month and unblocks none of the five people. Storage plus catalog costs one thousand five hundred and seventy-eight dollars a month and still unblocks nobody. Adding orchestration costs two thousand one hundred and seventy-eight dollars and unblocks the data engineer. Adding the engine and the semantic layer costs five thousand eight hundred and seventy-eight dollars and unblocks the analyst as well. All eight layers on costs eleven thousand two hundred and ninety-five dollars a month, or one hundred and thirty-five thousand five hundred and forty dollars a year, and unblocks all five people.">
+        <style>
+          .a2ldT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .a2ldH { font: 700 11px Inter, sans-serif; fill: #3F6212; letter-spacing: .5px; }
+          .a2ldL { font: 600 12px Inter, sans-serif; fill: #1E293B; }
+          .a2ldV { font: 700 12px Inter, sans-serif; fill: #FFFFFF; }
+          .a2ldO { font: 700 12px Inter, sans-serif; fill: #334155; }
+          .a2ldN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+        </style>
+        <rect x="0" y="0" width="880" height="380" fill="#F8FAFC"/>
+        <text class="a2ldT" x="40" y="28">What you spend before anybody's job improves</text>
+        <text class="a2ldH" x="260" y="58">MONTHLY BILL, LIVE FROM PUBLISHED RATE CARDS</text>
+        <text class="a2ldH" x="810" y="58" text-anchor="middle">UNBLOCKED OF 5</text>
+
+        <text class="a2ldL" x="240" y="90" text-anchor="end">nothing on</text>
+        <text class="a2ldO" x="270" y="90">$0</text>
+        <g fill="#FFFFFF" stroke="#CBD5E1">
+          <circle cx="770" cy="85" r="6"/><circle cx="790" cy="85" r="6"/><circle cx="810" cy="85" r="6"/><circle cx="830" cy="85" r="6"/><circle cx="850" cy="85" r="6"/>
+        </g>
+
+        <text class="a2ldL" x="240" y="142" text-anchor="end">storage + catalog</text>
+        <rect x="260" y="122" width="67" height="30" rx="5" fill="#334155"/>
+        <text class="a2ldO" x="337" y="142">$1,578</text>
+        <g fill="#FFFFFF" stroke="#CBD5E1">
+          <circle cx="770" cy="137" r="6"/><circle cx="790" cy="137" r="6"/><circle cx="810" cy="137" r="6"/><circle cx="830" cy="137" r="6"/><circle cx="850" cy="137" r="6"/>
+        </g>
+
+        <text class="a2ldL" x="240" y="194" text-anchor="end">+ orchestration</text>
+        <rect x="260" y="174" width="93" height="30" rx="5" fill="#334155"/>
+        <text class="a2ldV" x="272" y="194">$2,178</text>
+        <g fill="#FFFFFF" stroke="#CBD5E1">
+          <circle cx="790" cy="189" r="6"/><circle cx="810" cy="189" r="6"/><circle cx="830" cy="189" r="6"/><circle cx="850" cy="189" r="6"/>
+        </g>
+        <circle cx="770" cy="189" r="6" fill="#84CC16"/>
+
+        <text class="a2ldL" x="240" y="246" text-anchor="end">+ engine + semantic</text>
+        <rect x="260" y="226" width="250" height="30" rx="5" fill="#334155"/>
+        <text class="a2ldV" x="272" y="246">$5,878</text>
+        <g fill="#FFFFFF" stroke="#CBD5E1">
+          <circle cx="810" cy="241" r="6"/><circle cx="830" cy="241" r="6"/><circle cx="850" cy="241" r="6"/>
+        </g>
+        <g fill="#84CC16">
+          <circle cx="770" cy="241" r="6"/><circle cx="790" cy="241" r="6"/>
+        </g>
+
+        <text class="a2ldL" x="240" y="298" text-anchor="end">all eight layers on</text>
+        <rect x="260" y="278" width="480" height="30" rx="5" fill="#1E293B"/>
+        <text class="a2ldV" x="272" y="298">$11,295</text>
+        <g fill="#84CC16">
+          <circle cx="770" cy="293" r="6"/><circle cx="790" cy="293" r="6"/><circle cx="810" cy="293" r="6"/><circle cx="830" cy="293" r="6"/><circle cx="850" cy="293" r="6"/>
+        </g>
+
+        <text class="a2ldN" x="40" y="336">$135,540 a year for all eight - the honest price of what gets called "just a dashboard tool."</text>
+        <text class="a2ldN" x="40" y="356">Two layers and $1,578 a month buy zero unblocked people. That stretch is what budget reviews cut.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the quiet quarter is a number, so put it in the paper before it happens</figcaption>
+    </figure>
 
     <div class="infrabox" data-mode="ladder" data-layers=""></div>
 

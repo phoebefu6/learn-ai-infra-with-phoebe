@@ -203,6 +203,47 @@
     </div>
     <p class="lede">Start from the deficit, not the feature list. <strong>Object stores give you cheap, durable, effectively unlimited scale with no transactions, no schema enforcement, and no atomic multi-file operations.</strong> A "table" on object storage is a directory of Parquet files. If a writer crashes halfway through replacing forty of them, readers see forty files from two different states and nothing tells them so. Open table formats exist to close exactly that gap: they add a transactional metadata layer over immutable data files. The data files were never the problem.</p>
 
+      <figure class="zoomable">
+        <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two stacked bars showing what an open table format adds to an object store. The lower bar is the object store: cheap durable bytes with no transactions, no schema enforcement and no atomic multi-file operations. The upper bar is the table format, which adds four capabilities shown as chips above it: atomic commits, schema enforcement, time travel and partition evolution. Together they equal a table readers can trust. The data files were never the problem.">
+        <style>
+          .s2aT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .s2aB { font: 700 13px Inter, sans-serif; fill: #FFFFFF; }
+          .s2aS { font: 400 11.5px Inter, sans-serif; fill: rgba(255,255,255,.84); }
+          .s2aC { font: 700 11px Inter, sans-serif; fill: #3F6212; }
+          .s2aE { font: 700 11.5px Inter, sans-serif; fill: #334155; }
+          .s2aN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+        </style>
+        <rect x="0" y="0" width="880" height="320" fill="#F8FAFC"/>
+        <text class="s2aT" x="40" y="28">Start from the deficit: what the metadata layer adds to a directory of Parquet</text>
+
+        <rect x="40" y="56" width="150" height="30" rx="8" fill="#D9F99D"/>
+        <text class="s2aC" x="115" y="76" text-anchor="middle">atomic commits</text>
+        <rect x="210" y="56" width="150" height="30" rx="8" fill="#D9F99D"/>
+        <text class="s2aC" x="285" y="76" text-anchor="middle">schema enforcement</text>
+        <rect x="380" y="56" width="150" height="30" rx="8" fill="#D9F99D"/>
+        <text class="s2aC" x="455" y="76" text-anchor="middle">time travel</text>
+        <rect x="550" y="56" width="150" height="30" rx="8" fill="#D9F99D"/>
+        <text class="s2aC" x="625" y="76" text-anchor="middle">partition evolution</text>
+
+        <rect x="40" y="104" width="660" height="56" rx="10" fill="#334155"/>
+        <text class="s2aB" x="60" y="128">TABLE FORMAT</text>
+        <text class="s2aS" x="60" y="147">Iceberg, Delta, Hudi - transactional metadata over the files</text>
+
+        <rect x="40" y="196" width="660" height="56" rx="10" fill="#64748B"/>
+        <text class="s2aB" x="60" y="220">OBJECT STORE</text>
+        <text class="s2aS" x="60" y="239">cheap, durable, unlimited - no transactions, no schema, no atomic ops</text>
+
+        <path d="M716,104 h14 v148 h-14" fill="none" stroke="#334155" stroke-width="1.6"/>
+        <text class="s2aE" x="740" y="174">= a table</text>
+        <text class="s2aE" x="740" y="190">you can trust</text>
+
+        <text class="s2aN" x="40" y="282">A writer that crashes mid-replace leaves readers seeing two states at once, with nothing to tell them so.</text>
+        <text class="s2aN" x="40" y="302">The format closes that gap. The data files were never the problem.</text>
+        </svg>
+        <figcaption>🔍 Click to zoom - the format adds transactions, not storage</figcaption>
+      </figure>
+
+
     <details class="card">
       <summary><span class="mode live">Live</span>Iceberg v3: deletion vectors, row lineage, VARIANT, geospatial<span class="mini">4 min</span><span class="caret">▶</span></summary>
       <div class="body">
@@ -227,6 +268,69 @@
           <li><strong>Both Databricks and Snowflake ship managed Iceberg.</strong> The company that owns Delta and the company that seeded Polaris both sell you Iceberg as a managed product. Watch what vendors build, not what they say in a keynote.</li>
         </ul>
         <p>The dated record, in order:</p>
+
+      <figure class="zoomable">
+        <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A timeline of five open table format events from June 2024 to May 2026, each tagged by how it should be cited. Snowflake announcing Polaris and AWS shipping S3 Tables and Databricks shipping Iceberg v3 are vendor releases. The Databricks acquisition of Tabular at a reported one billion dollars plus is press-reported and was never disclosed by either party. Apache Polaris graduating to Top-Level Project is a governance fact from the Apache Software Foundation. The direction is settled; the convergence is still a proposal.">
+        <style>
+          .s2tT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .s2tK { font: 600 11.5px Inter, sans-serif; fill: #334155; }
+          .s2tD { font: 700 11px Inter, sans-serif; fill: #64748B; }
+          .s2tL { font: 600 12px Inter, sans-serif; fill: #1E293B; }
+          .s2tB { font: 700 9.5px Inter, sans-serif; fill: #FFFFFF; letter-spacing: .04em; }
+          .s2tN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+        </style>
+        <rect x="0" y="0" width="880" height="300" fill="#F8FAFC"/>
+        <text class="s2tT" x="40" y="28">Two years of format moves - and how to cite each one</text>
+        <rect x="40" y="42" width="14" height="14" rx="3" fill="#334155"/>
+        <text class="s2tK" x="60" y="54">vendor release</text>
+        <rect x="176" y="42" width="14" height="14" rx="3" fill="#B45309"/>
+        <text class="s2tK" x="196" y="54">press-reported only</text>
+        <rect x="346" y="42" width="14" height="14" rx="3" fill="#3F6212"/>
+        <text class="s2tK" x="366" y="54">ASF governance fact</text>
+
+        <line x1="70" y1="130" x2="810" y2="130" stroke="#CBD5E1" stroke-width="2"/>
+
+        <circle cx="70" cy="130" r="7" fill="#334155"/>
+        <text class="s2tD" x="70" y="112" text-anchor="middle">2024-06-03</text>
+        <rect x="26" y="142" width="88" height="17" rx="8" fill="#334155"/>
+        <text class="s2tB" x="70" y="154" text-anchor="middle">VENDOR</text>
+        <text class="s2tL" x="70" y="178" text-anchor="middle">Snowflake</text>
+        <text class="s2tL" x="70" y="194" text-anchor="middle">announces Polaris</text>
+
+        <circle cx="255" cy="130" r="7" fill="#B45309"/>
+        <text class="s2tD" x="255" y="112" text-anchor="middle">2024-06-04</text>
+        <rect x="211" y="142" width="88" height="17" rx="8" fill="#B45309"/>
+        <text class="s2tB" x="255" y="154" text-anchor="middle">REPORTED</text>
+        <text class="s2tL" x="255" y="178" text-anchor="middle">Databricks buys</text>
+        <text class="s2tL" x="255" y="194" text-anchor="middle">Tabular, ~$1B</text>
+
+        <circle cx="440" cy="130" r="7" fill="#334155"/>
+        <text class="s2tD" x="440" y="112" text-anchor="middle">2024-12-03</text>
+        <rect x="396" y="142" width="88" height="17" rx="8" fill="#334155"/>
+        <text class="s2tB" x="440" y="154" text-anchor="middle">VENDOR</text>
+        <text class="s2tL" x="440" y="178" text-anchor="middle">AWS ships</text>
+        <text class="s2tL" x="440" y="194" text-anchor="middle">S3 Tables</text>
+
+        <circle cx="625" cy="130" r="7" fill="#3F6212"/>
+        <text class="s2tD" x="625" y="112" text-anchor="middle">2026-02-19</text>
+        <rect x="581" y="142" width="88" height="17" rx="8" fill="#3F6212"/>
+        <text class="s2tB" x="625" y="154" text-anchor="middle">ASF FACT</text>
+        <text class="s2tL" x="625" y="178" text-anchor="middle">Polaris graduates</text>
+        <text class="s2tL" x="625" y="194" text-anchor="middle">to Top-Level</text>
+
+        <circle cx="810" cy="130" r="7" fill="#334155"/>
+        <text class="s2tD" x="810" y="112" text-anchor="middle">2026-05-28</text>
+        <rect x="766" y="142" width="88" height="17" rx="8" fill="#334155"/>
+        <text class="s2tB" x="810" y="154" text-anchor="middle">VENDOR</text>
+        <text class="s2tL" x="810" y="178" text-anchor="middle">Iceberg v3 GA +</text>
+        <text class="s2tL" x="810" y="194" text-anchor="middle">managed Iceberg</text>
+
+        <text class="s2tN" x="40" y="248">Cite the acquisition as fact and the price as reporting - neither party ever disclosed it.</text>
+        <text class="s2tN" x="40" y="268">Settled directionally: both rivals build bridges to Iceberg. Not settled: v4 and Delta 5.0 convergence.</text>
+        </svg>
+        <figcaption>🔍 Click to zoom - the direction is settled, the convergence is a proposal</figcaption>
+      </figure>
+
         <table class="clean">
           <thead>
             <tr><th>Date</th><th>Event</th><th>How to label it</th></tr>

@@ -152,6 +152,56 @@
           <li><strong>Different aggregation</strong> - one team sums gross, the other sums net of refunds. These are genuinely two metrics and should be named as two metrics. This is rare.</li>
           <li><strong>Same aggregation, different filter or grain</strong> - one team excludes internal test accounts, one reports on order date and the other on ship date, one is in the reporting currency and one is not. This is the same metric, sliced differently. This is almost always what is happening.</li>
         </ul>
+        <figure class="zoomable">
+          <svg viewBox="0 0 880 370" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A decision tree for diagnosing why two teams report different revenue, taken from dbt's Semantic Layer FAQ. If the underlying aggregation is different - one team sums gross and the other sums net of refunds - these are genuinely two metrics and should be named as two, which is rare. If the aggregation is the same and only filters or grain differ - internal test accounts excluded, order date versus ship date, currency conversion - it is the same metric sliced differently, which is almost always what is happening.">
+            <style>
+              .b6dgT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+              .b6dgR { font: 700 12.5px Inter, sans-serif; fill: #FFFFFF; }
+              .b6dgE { font: 700 11px Inter, sans-serif; fill: #64748B; }
+              .b6dgO { font: 700 12.5px Inter, sans-serif; fill: #3F6212; }
+              .b6dgOs { font: 400 11.5px Inter, sans-serif; fill: #334155; }
+              .b6dgN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+            </style>
+            <defs>
+              <marker id="arrB6dg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B"/>
+              </marker>
+            </defs>
+            <rect x="0" y="0" width="880" height="370" fill="#F8FAFC"/>
+            <text class="b6dgT" x="40" y="28">Two teams, two numbers - and only one of the two causes is a definition problem</text>
+
+            <rect x="40" y="150" width="220" height="64" rx="8" fill="#1E293B"/>
+            <text class="b6dgR" x="58" y="180">Two teams report</text>
+            <text class="b6dgR" x="58" y="200">different revenue</text>
+            <line x1="260" y1="182" x2="294" y2="182" stroke="#64748B" stroke-width="1.6" marker-end="url(#arrB6dg)"/>
+
+            <rect x="300" y="150" width="230" height="64" rx="8" fill="#334155"/>
+            <text class="b6dgR" x="318" y="180">Is the underlying</text>
+            <text class="b6dgR" x="318" y="200">aggregation different?</text>
+
+            <path d="M530,182 L564,118" fill="none" stroke="#64748B" stroke-width="1.6" marker-end="url(#arrB6dg)"/>
+            <text class="b6dgE" x="536" y="140">yes</text>
+            <path d="M530,182 L564,246" fill="none" stroke="#64748B" stroke-width="1.6" marker-end="url(#arrB6dg)"/>
+            <text class="b6dgE" x="536" y="234">no</text>
+
+            <rect x="570" y="70" width="270" height="90" rx="8" fill="#D9F99D"/>
+            <text class="b6dgO" x="588" y="96">Genuinely two metrics</text>
+            <text class="b6dgOs" x="588" y="116">one sums gross, the other net of</text>
+            <text class="b6dgOs" x="588" y="134">refunds. Name them as two.</text>
+            <text class="b6dgOs" x="588" y="152">This is rare.</text>
+
+            <rect x="570" y="204" width="270" height="92" rx="8" fill="#D9F99D"/>
+            <text class="b6dgO" x="588" y="230">The same metric, sliced</text>
+            <text class="b6dgOs" x="588" y="250">test accounts excluded, order date</text>
+            <text class="b6dgOs" x="588" y="268">vs ship date, currency conversion.</text>
+            <text class="b6dgOs" x="588" y="286">Filter and grain, almost always.</text>
+
+            <text class="b6dgN" x="40" y="326">From dbt's own Semantic Layer FAQ. Diagnose which one you have before you act.</text>
+            <text class="b6dgN" x="40" y="346">Treat every disagreement as a definition problem and you get forty near-identical metrics.</text>
+          </svg>
+          <figcaption>🔍 Click to zoom - filters and grain look like definition fights and are not</figcaption>
+        </figure>
+
         <p>The practical consequence: <strong>most "our numbers disagree" fights are filter and grain disputes, not definition disputes.</strong> A semantic layer helps enormously with the second kind, because filters and grain become explicit parameters on a shared definition rather than invisible choices buried in someone's WHERE clause. But it only helps if you diagnose correctly first. Teams that treat every disagreement as a definition problem end up with forty near-identical metrics and are worse off than when they started.</p>
       </div>
     </details>
@@ -194,6 +244,65 @@ metric:
         <p>Take an orders table with one row per order, carrying an order total. Take a line-items table with one row per product in that order. Join them so an analyst can slice revenue by product category, then sum the order total.</p>
         <p>An order with three line items now contributes its total <strong>three times</strong>. The SQL is valid. The query runs. The dashboard renders. The number is wrong by however many line items the average order carries, and it is wrong in a way that scales with your business, which means it looks like growth.</p>
         <p>That is a fan-out join. A chasm join is its cousin: two independent one-to-many relationships hanging off one table, multiplied against each other. Both produce plausible, confident, wrong numbers - the same failure signature you will meet again in b9.</p>
+        <figure class="zoomable">
+          <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A fan-out join drawn as a mechanism. The orders table has one row per order carrying the order total. The line-items table has one row per product, so an order with three products has three rows. Joining them to slice revenue by product category produces three joined rows, each carrying the same order total, so summing the order total returns three times the true value. The SQL is valid, the query runs and the dashboard renders, but the number is wrong in proportion to the average number of line items per order.">
+            <style>
+              .b6foT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+              .b6foH { font: 700 11px Inter, sans-serif; fill: #3F6212; letter-spacing: .5px; }
+              .b6foR { font: 600 11.5px Inter, sans-serif; fill: #FFFFFF; }
+              .b6foJ { font: 600 11.5px Inter, sans-serif; fill: #991B1B; }
+              .b6foS { font: 700 12px Inter, sans-serif; fill: #FFFFFF; }
+              .b6foN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+            </style>
+            <defs>
+              <marker id="arrB6fo" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B"/>
+              </marker>
+            </defs>
+            <rect x="0" y="0" width="880" height="340" fill="#F8FAFC"/>
+            <text class="b6foT" x="40" y="28">One order, three line items, the total counted three times</text>
+
+            <text class="b6foH" x="40" y="54">ORDERS · 1 ROW PER ORDER</text>
+            <text class="b6foH" x="280" y="54">LINE_ITEMS · 1 ROW PER PRODUCT</text>
+            <text class="b6foH" x="560" y="54">JOINED, THEN SUMMED</text>
+
+            <rect x="40" y="112" width="200" height="34" rx="6" fill="#334155"/>
+            <text class="b6foR" x="56" y="134">order_1 · order_total</text>
+
+            <rect x="280" y="70" width="220" height="34" rx="6" fill="#64748B"/>
+            <text class="b6foR" x="296" y="92">order_1 · product A</text>
+            <rect x="280" y="112" width="220" height="34" rx="6" fill="#64748B"/>
+            <text class="b6foR" x="296" y="134">order_1 · product B</text>
+            <rect x="280" y="154" width="220" height="34" rx="6" fill="#64748B"/>
+            <text class="b6foR" x="296" y="176">order_1 · product C</text>
+
+            <g stroke="#64748B" stroke-width="1.4" fill="none">
+              <path d="M240,129 L274,89" marker-end="url(#arrB6fo)"/>
+              <path d="M240,129 L274,129" marker-end="url(#arrB6fo)"/>
+              <path d="M240,129 L274,169" marker-end="url(#arrB6fo)"/>
+              <path d="M500,87 L554,87" marker-end="url(#arrB6fo)"/>
+              <path d="M500,129 L554,129" marker-end="url(#arrB6fo)"/>
+              <path d="M500,171 L554,171" marker-end="url(#arrB6fo)"/>
+            </g>
+
+            <rect x="560" y="70" width="280" height="34" rx="6" fill="#FFFFFF" stroke="#FCA5A5"/>
+            <text class="b6foJ" x="576" y="92">product A · order_total</text>
+            <rect x="560" y="112" width="280" height="34" rx="6" fill="#FFFFFF" stroke="#FCA5A5"/>
+            <text class="b6foJ" x="576" y="134">product B · order_total</text>
+            <rect x="560" y="154" width="280" height="34" rx="6" fill="#FFFFFF" stroke="#FCA5A5"/>
+            <text class="b6foJ" x="576" y="176">product C · order_total</text>
+
+            <rect x="560" y="204" width="280" height="48" rx="8" fill="#991B1B"/>
+            <text class="b6foS" x="576" y="226">SUM(order_total) = 3 × order_total</text>
+            <text class="b6foS" x="576" y="244">valid SQL, wrong number</text>
+
+            <text class="b6foN" x="40" y="284">A chasm join is its cousin: two independent one-to-many paths multiplied together.</text>
+            <text class="b6foN" x="40" y="304">It is wrong in proportion to your average order size, so it looks like growth.</text>
+            <text class="b6foN" x="40" y="324">Do not ask how metrics are defined. Ask how the join path is resolved.</text>
+          </svg>
+          <figcaption>🔍 Click to zoom - the query runs, the dashboard renders, the number scales with your business</figcaption>
+        </figure>
+
         <div class="callout win">
           <strong>★ The line to remember</strong>
           A naive metrics layer silently double-counts on one-to-many joins. Students who learn only "define metrics in YAML" have missed the difficult part. When you evaluate any product in this category, do not ask how metrics are defined - ask how the join path is resolved, and what happens when two measures live at different grains.

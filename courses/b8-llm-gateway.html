@@ -180,6 +180,65 @@
     </div>
     <p class="lede">If you remember one sentence from layer seven, make it this one. <strong>The SDK gives one application many providers. The proxy gives many applications one governed door.</strong> They look similar in a demo because both let you swap a model name in a string. They are not similar at all, and the difference is not a matter of degree.</p>
 
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 370" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The seven gateway capabilities sorted by whether they can live inside a single application. Only the unified OpenAI-compatible API can. Routing and failover needs a live view of provider health across all callers. Cost tracking and budgets needs every team's traffic in one ledger. Token rate limiting needs central enforcement to mean anything. Semantic and exact caching only pays off when the cache is shared. Observability needs the whole estate as its evaluation set. Key management and guardrails cannot rotate keys that have been distributed to applications. Five of the seven are structurally impossible inside one process.">
+        <style>
+          .b8cpT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .b8cpH { font: 700 11px Inter, sans-serif; fill: #3F6212; letter-spacing: .5px; }
+          .b8cpL { font: 600 11.5px Inter, sans-serif; fill: #1E293B; }
+          .b8cpY { font: 700 11.5px Inter, sans-serif; fill: #3F6212; }
+          .b8cpP { font: 700 11.5px Inter, sans-serif; fill: #FFFFFF; }
+          .b8cpR { font: 400 11.5px Inter, sans-serif; fill: #64748B; }
+          .b8cpN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+        </style>
+        <rect x="0" y="0" width="880" height="370" fill="#F8FAFC"/>
+        <text class="b8cpT" x="40" y="28">Which capabilities can live in the application, and which cannot</text>
+
+        <text class="b8cpH" x="40" y="54">CAPABILITY</text>
+        <text class="b8cpH" x="420" y="54">WHERE IT CAN LIVE</text>
+        <text class="b8cpH" x="630" y="54">WHY</text>
+
+        <text class="b8cpL" x="40" y="85">Unified OpenAI-compatible API</text>
+        <rect x="420" y="66" width="190" height="28" rx="7" fill="#D9F99D"/>
+        <text class="b8cpY" x="434" y="85">possible in the SDK</text>
+        <text class="b8cpR" x="630" y="85">it can, and this one does</text>
+
+        <text class="b8cpL" x="40" y="119">Routing and failover</text>
+        <rect x="420" y="100" width="190" height="28" rx="7" fill="#334155"/>
+        <text class="b8cpP" x="434" y="119">needs the proxy</text>
+        <text class="b8cpR" x="630" y="119">needs health across callers</text>
+
+        <text class="b8cpL" x="40" y="153">Cost tracking and budgets</text>
+        <rect x="420" y="134" width="190" height="28" rx="7" fill="#334155"/>
+        <text class="b8cpP" x="434" y="153">needs the proxy</text>
+        <text class="b8cpR" x="630" y="153">every team in one ledger</text>
+
+        <text class="b8cpL" x="40" y="187">Token rate limiting</text>
+        <rect x="420" y="168" width="190" height="28" rx="7" fill="#334155"/>
+        <text class="b8cpP" x="434" y="187">needs the proxy</text>
+        <text class="b8cpR" x="630" y="187">quotas must be central</text>
+
+        <text class="b8cpL" x="40" y="221">Semantic and exact caching</text>
+        <rect x="420" y="202" width="190" height="28" rx="7" fill="#334155"/>
+        <text class="b8cpP" x="434" y="221">needs the proxy</text>
+        <text class="b8cpR" x="630" y="221">a cache pays off if shared</text>
+
+        <text class="b8cpL" x="40" y="255">Observability</text>
+        <rect x="420" y="236" width="190" height="28" rx="7" fill="#334155"/>
+        <text class="b8cpP" x="434" y="255">needs the proxy</text>
+        <text class="b8cpR" x="630" y="255">eval set = the whole estate</text>
+
+        <text class="b8cpL" x="40" y="289">Key management and guardrails</text>
+        <rect x="420" y="270" width="190" height="28" rx="7" fill="#334155"/>
+        <text class="b8cpP" x="434" y="289">needs the proxy</text>
+        <text class="b8cpR" x="630" y="289">distributed keys cannot rotate</text>
+
+        <text class="b8cpN" x="40" y="328">Five of the seven are structurally impossible inside one process, not merely harder.</text>
+        <text class="b8cpN" x="40" y="348">The SDK gives one app many providers. The proxy gives many apps one governed door.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - anything needing a shared view across teams cannot live in the SDK</figcaption>
+    </figure>
+
     <div class="callout win">
       <strong>★ The rule, stated so it settles arguments</strong>
       Anything that needs a <strong>shared view across teams</strong> - budgets, cost attribution, key rotation, audit trail - is <strong>structurally impossible in the SDK</strong>. Not harder. Not a roadmap item. Impossible, because the SDK runs inside one process and there is no place in that process where another team's traffic exists.
@@ -265,6 +324,62 @@
       <summary><span class="mode live">Live</span>The four questions, asked of a rented model<span class="mini">3 min</span><span class="caret">▶</span></summary>
       <div class="body">
         <p>Run b7's registry questions against layer seven and the parallel stops being an analogy and becomes an operational checklist:</p>
+        <figure class="zoomable">
+          <svg viewBox="0 0 880 390" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The same four governance questions asked of the model registry and of the AI gateway. What is running is answered by the artifact behind the alias, or by the model each route resolves to. Where did it come from is answered by lineage to the run and training data, or by which provider, deployment and region. Who approved it is answered by the promotion gate, or by the route config change and who merged it. How do I roll it back is answered by reassigning the alias pointer, or by repointing the route with no application deploy. MLflow, the canonical MLOps tool, now ships an AI gateway, which is the strongest evidence that these are one pattern.">
+            <style>
+              .b8prT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+              .b8prH { font: 700 11px Inter, sans-serif; fill: #3F6212; letter-spacing: .5px; }
+              .b8prQ { font: 700 12px Inter, sans-serif; fill: #FFFFFF; }
+              .b8prA { font: 400 11.5px Inter, sans-serif; fill: #FFFFFF; }
+              .b8prB { font: 700 11.5px Inter, sans-serif; fill: #334155; }
+              .b8prBs { font: 400 11.5px Inter, sans-serif; fill: #64748B; }
+              .b8prN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+            </style>
+            <rect x="0" y="0" width="880" height="390" fill="#F8FAFC"/>
+            <text class="b8prT" x="40" y="28">Layers six and seven are one pattern, asked of two eras of model</text>
+
+            <text class="b8prH" x="40" y="54">REGISTRY · MODELS YOU TRAIN</text>
+            <text class="b8prH" x="440" y="54" text-anchor="middle">THE FOUR QUESTIONS</text>
+            <text class="b8prH" x="570" y="54">GATEWAY · MODELS YOU RENT</text>
+
+            <rect x="40" y="66" width="270" height="40" rx="8" fill="#334155"/>
+            <text class="b8prA" x="56" y="91">the artifact behind the alias</text>
+            <rect x="330" y="66" width="220" height="40" rx="8" fill="#1E293B"/>
+            <text class="b8prQ" x="440" y="91" text-anchor="middle">What is running?</text>
+            <rect x="570" y="66" width="270" height="40" rx="8" fill="#334155"/>
+            <text class="b8prA" x="586" y="91">the model each route resolves to</text>
+
+            <rect x="40" y="118" width="270" height="40" rx="8" fill="#334155"/>
+            <text class="b8prA" x="56" y="143">lineage to run and training data</text>
+            <rect x="330" y="118" width="220" height="40" rx="8" fill="#1E293B"/>
+            <text class="b8prQ" x="440" y="143" text-anchor="middle">Where did it come from?</text>
+            <rect x="570" y="118" width="270" height="40" rx="8" fill="#334155"/>
+            <text class="b8prA" x="586" y="143">which provider, deployment, region</text>
+
+            <rect x="40" y="170" width="270" height="40" rx="8" fill="#334155"/>
+            <text class="b8prA" x="56" y="195">the promotion gate</text>
+            <rect x="330" y="170" width="220" height="40" rx="8" fill="#1E293B"/>
+            <text class="b8prQ" x="440" y="195" text-anchor="middle">Who approved it?</text>
+            <rect x="570" y="170" width="270" height="40" rx="8" fill="#334155"/>
+            <text class="b8prA" x="586" y="195">the route change and who merged it</text>
+
+            <rect x="40" y="222" width="270" height="40" rx="8" fill="#334155"/>
+            <text class="b8prA" x="56" y="247">reassign the alias pointer</text>
+            <rect x="330" y="222" width="220" height="40" rx="8" fill="#1E293B"/>
+            <text class="b8prQ" x="440" y="247" text-anchor="middle">How do I roll it back?</text>
+            <rect x="570" y="222" width="270" height="40" rx="8" fill="#334155"/>
+            <text class="b8prA" x="586" y="247">repoint the route, no app deploy</text>
+
+            <rect x="40" y="284" width="800" height="48" rx="10" fill="#FFFFFF" stroke="#334155"/>
+            <text class="b8prB" x="58" y="306">MLflow, the canonical MLOps tool, now ships an AI gateway.</text>
+            <text class="b8prBs" x="58" y="324">Same governance instinct, same team, two eras of model.</text>
+
+            <text class="b8prN" x="40" y="362">The registry is the chokepoint for models you train; the gateway for models you rent.</text>
+            <text class="b8prN" x="40" y="382">Ask a training pipeline and you get two answers. Ask a serving endpoint, a different two.</text>
+          </svg>
+          <figcaption>🔍 Click to zoom - only one place in each layer answers all four at the same time</figcaption>
+        </figure>
+
         <table class="clean">
           <thead>
             <tr><th>Question</th><th>Registry answer (models you train)</th><th>Gateway answer (models you rent)</th></tr>

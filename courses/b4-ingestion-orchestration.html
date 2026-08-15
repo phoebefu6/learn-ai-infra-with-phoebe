@@ -73,6 +73,73 @@
           <li><strong>Multi-cloud execution</strong> - workers in a network that cannot reach your metadata database.</li>
           <li><strong>Untrusted-tenant execution</strong> - running somebody else's task code without handing them the keys to the platform.</li>
         </ul>
+        <figure class="zoomable">
+          <svg viewBox="0 0 880 370" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A comparison of the Airflow 2 and Airflow 3 execution architectures. In Airflow 2 every worker holds a live connection to the metadata database, the system of record for every DAG, connection and variable, so the blast radius is every worker. In Airflow 3 the Task SDK and Task Execution Interface sit between workers and the metadata database, so tasks never touch it and the blast radius is the API server. Removing that dependency is what made multi-cloud execution and untrusted-tenant execution possible.">
+            <style>
+              .b4blT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+              .b4blHa { font: 700 12.5px Inter, sans-serif; fill: #991B1B; }
+              .b4blHb { font: 700 12.5px Inter, sans-serif; fill: #3F6212; }
+              .b4blW { font: 600 11.5px Inter, sans-serif; fill: #FFFFFF; }
+              .b4blD { font: 700 12px Inter, sans-serif; fill: #FFFFFF; }
+              .b4blDs { font: 400 11px Inter, sans-serif; fill: rgba(255,255,255,.86); }
+              .b4blF { font: 700 11.5px Inter, sans-serif; fill: #334155; }
+              .b4blK { font: 700 11px Inter, sans-serif; fill: #3F6212; letter-spacing: .5px; }
+              .b4blC { font: 700 12px Inter, sans-serif; fill: #3F6212; }
+              .b4blN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+            </style>
+            <rect x="0" y="0" width="880" height="370" fill="#F8FAFC"/>
+            <text class="b4blT" x="40" y="28">The 3.0 break shrank the blast radius, and that is what unlocked the rest</text>
+
+            <rect x="40" y="50" width="390" height="182" rx="12" fill="#FEF2F2" stroke="#FCA5A5"/>
+            <text class="b4blHa" x="58" y="78">✗ Airflow 2 · workers hold a DB connection</text>
+            <rect x="58" y="94" width="120" height="30" rx="6" fill="#64748B"/>
+            <text class="b4blW" x="118" y="113" text-anchor="middle">worker</text>
+            <rect x="58" y="130" width="120" height="30" rx="6" fill="#64748B"/>
+            <text class="b4blW" x="118" y="149" text-anchor="middle">worker</text>
+            <rect x="58" y="166" width="120" height="30" rx="6" fill="#64748B"/>
+            <text class="b4blW" x="118" y="185" text-anchor="middle">worker</text>
+            <g stroke="#991B1B" stroke-width="1.6">
+              <line x1="178" y1="109" x2="248" y2="146"/>
+              <line x1="178" y1="145" x2="248" y2="146"/>
+              <line x1="178" y1="181" x2="248" y2="146"/>
+            </g>
+            <rect x="250" y="108" width="160" height="76" rx="8" fill="#991B1B"/>
+            <text class="b4blD" x="266" y="134">metadata DB</text>
+            <text class="b4blDs" x="266" y="152">the system of record</text>
+            <text class="b4blDs" x="266" y="170">for everything</text>
+            <text class="b4blF" x="58" y="218">blast radius = every worker</text>
+
+            <rect x="450" y="50" width="390" height="182" rx="12" fill="#D9F99D" stroke="#84CC16"/>
+            <text class="b4blHb" x="468" y="78">✓ Airflow 3 · Task Execution Interface</text>
+            <rect x="468" y="94" width="120" height="30" rx="6" fill="#64748B"/>
+            <text class="b4blW" x="528" y="113" text-anchor="middle">worker</text>
+            <rect x="468" y="130" width="120" height="30" rx="6" fill="#64748B"/>
+            <text class="b4blW" x="528" y="149" text-anchor="middle">worker</text>
+            <rect x="468" y="166" width="120" height="30" rx="6" fill="#64748B"/>
+            <text class="b4blW" x="528" y="185" text-anchor="middle">worker</text>
+            <g stroke="#334155" stroke-width="1.6">
+              <line x1="588" y1="109" x2="658" y2="146"/>
+              <line x1="588" y1="145" x2="658" y2="146"/>
+              <line x1="588" y1="181" x2="658" y2="146"/>
+            </g>
+            <rect x="660" y="108" width="160" height="76" rx="8" fill="#334155"/>
+            <text class="b4blD" x="676" y="134">Task SDK + API</text>
+            <text class="b4blDs" x="676" y="152">tasks never touch</text>
+            <text class="b4blDs" x="676" y="170">the metadata DB</text>
+            <text class="b4blF" x="468" y="218">blast radius = the API server</text>
+
+            <text class="b4blK" x="40" y="258">WHAT REMOVING THAT DEPENDENCY MADE SAFE</text>
+            <rect x="40" y="268" width="280" height="34" rx="8" fill="#D9F99D"/>
+            <text class="b4blC" x="180" y="290" text-anchor="middle">multi-cloud execution</text>
+            <rect x="340" y="268" width="320" height="34" rx="8" fill="#D9F99D"/>
+            <text class="b4blC" x="500" y="290" text-anchor="middle">untrusted-tenant execution</text>
+
+            <text class="b4blN" x="40" y="332">In Airflow 2, running a task meant handing it a live connection to the system of record.</text>
+            <text class="b4blN" x="40" y="352">Airflow 3.0 shipped 2025-04-22 - the first architectural break in five years, for security.</text>
+          </svg>
+          <figcaption>🔍 Click to zoom - the metadata database was the narrow waist, reachable from everywhere</figcaption>
+        </figure>
+
         <p>This is the chokepoint lesson from b1 applied to orchestration. The metadata database was the narrow waist, and in Airflow 2 the waist was reachable from everywhere.</p>
       </div>
     </details>
@@ -277,6 +344,54 @@
       <span class="ex-pill">Real world</span>
       <p><strong>A critical-reading exercise you can run in ninety seconds.</strong> Prefect's site claims <strong>"50.7k+ GitHub stars."</strong> The GitHub API says the PrefectHQ/prefect repository has <strong>23,565</strong>. The gap is presumably an organization-wide aggregate across every repo they own, which is a defensible thing to count and a misleading thing to label. Cube's homepage runs the same pattern in the other direction, claiming 18,000 stars when the repo has 20,564 - a stale number nobody updated. The lesson is not that these vendors are dishonest. It is that <strong>vendor stat blocks are frozen marketing artifacts, not telemetry</strong>, and checking one against its own public API takes less time than reading the paragraph around it.</p>
     </div>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two vendor star claims checked against the GitHub API on 2026-08-07. Prefect's site claims more than fifty thousand seven hundred GitHub stars while the PrefectHQ slash prefect repository reports twenty-three thousand five hundred and sixty-five, an overstatement. Cube's homepage claims eighteen thousand while its repository reports twenty thousand five hundred and sixty-four, a stale number understating the truth. The error runs in both directions, which is why vendor stat blocks should be treated as frozen marketing artifacts rather than telemetry.">
+        <style>
+          .b4vsT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .b4vsK { font: 600 11.5px Inter, sans-serif; fill: #334155; }
+          .b4vsL { font: 600 12px Inter, sans-serif; fill: #1E293B; }
+          .b4vsV { font: 700 12px Inter, sans-serif; fill: #FFFFFF; }
+          .b4vsE { font: 700 11.5px Inter, sans-serif; fill: #B45309; }
+          .b4vsB { font: 700 11.5px Inter, sans-serif; fill: #334155; }
+          .b4vsBs { font: 400 11.5px Inter, sans-serif; fill: #64748B; }
+          .b4vsN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+        </style>
+        <rect x="0" y="0" width="880" height="340" fill="#F8FAFC"/>
+        <text class="b4vsT" x="40" y="28">Two vendor star counts, checked against the GitHub API</text>
+
+        <rect x="40" y="42" width="14" height="14" rx="3" fill="#B45309"/>
+        <text class="b4vsK" x="60" y="54">as published on the vendor site</text>
+        <rect x="290" y="42" width="14" height="14" rx="3" fill="#334155"/>
+        <text class="b4vsK" x="310" y="54">GitHub API, fetched 2026-08-07</text>
+
+        <text class="b4vsL" x="270" y="88" text-anchor="end">Prefect site claim</text>
+        <rect x="280" y="70" width="442" height="26" rx="5" fill="#B45309"/>
+        <text class="b4vsV" x="292" y="88">50.7k+ claimed</text>
+
+        <text class="b4vsL" x="270" y="118" text-anchor="end">PrefectHQ/prefect, API</text>
+        <rect x="280" y="100" width="206" height="26" rx="5" fill="#334155"/>
+        <text class="b4vsV" x="292" y="118">23,565 actual</text>
+        <text class="b4vsE" x="732" y="88">overstated</text>
+
+        <text class="b4vsL" x="270" y="166" text-anchor="end">Cube homepage claim</text>
+        <rect x="280" y="148" width="157" height="26" rx="5" fill="#B45309"/>
+        <text class="b4vsV" x="292" y="166">18,000 claimed</text>
+        <text class="b4vsE" x="447" y="166">stale, understated</text>
+
+        <text class="b4vsL" x="270" y="196" text-anchor="end">Cube repo, API</text>
+        <rect x="280" y="178" width="179" height="26" rx="5" fill="#334155"/>
+        <text class="b4vsV" x="292" y="196">20,564 actual</text>
+
+        <rect x="40" y="224" width="800" height="48" rx="10" fill="#FFFFFF" stroke="#334155"/>
+        <text class="b4vsB" x="58" y="246">Vendor stat blocks are frozen marketing artifacts, not telemetry.</text>
+        <text class="b4vsBs" x="58" y="264">Checking one against its own public API takes less time than reading the paragraph.</text>
+
+        <text class="b4vsN" x="40" y="302">The Prefect gap is presumably an organization-wide total across every repo they own.</text>
+        <text class="b4vsN" x="40" y="322">Defensible to count, misleading to label - and the error runs in both directions.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - verify one number against its own API before you quote the paragraph</figcaption>
+    </figure>
   </section>
 
   <!-- ============ HOMEWORK ============ -->

@@ -225,6 +225,71 @@
       </div>
     </details>
 
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 436" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The exit cost of each of the eight layers, and the currency it is priced in. Leaving storage costs eight thousand five hundred and sixty-three dollars per hundred terabytes on AWS and zero on Cloudflare R2, which is priced in dollars. Leaving the catalog means row-level security written in Unity Catalog does not transfer to Polaris. Leaving orchestration means re-authoring every pipeline. Leaving the engine means re-tuning every query. Leaving the semantic layer means redefining every metric, three months to a year of work. Leaving MLOps means re-registering every model and rebuilding the promotion gates. Leaving the gateway means repointing every application and losing the collected traffic. Leaving self-serve means redoing the metadata work. Seven of the eight are priced in work rather than in dollars.">
+        <style>
+          .b10exT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .b10exH { font: 700 11px Inter, sans-serif; fill: #3F6212; letter-spacing: .5px; }
+          .b10exL { font: 700 12px Inter, sans-serif; fill: #1E293B; }
+          .b10exX { font: 400 11.5px Inter, sans-serif; fill: #334155; }
+          .b10exD { font: 700 11.5px Inter, sans-serif; fill: #3F6212; }
+          .b10exW { font: 700 11.5px Inter, sans-serif; fill: #FFFFFF; }
+          .b10exN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+        </style>
+        <rect x="0" y="0" width="880" height="436" fill="#F8FAFC"/>
+        <text class="b10exT" x="40" y="28">What each layer costs to leave, and the currency it is priced in</text>
+
+        <text class="b10exH" x="40" y="54">LAYER</text>
+        <text class="b10exH" x="240" y="54">WHAT LEAVING COSTS</text>
+        <text class="b10exH" x="720" y="54">PRICED IN</text>
+
+        <text class="b10exL" x="40" y="85">1 · Storage</text>
+        <text class="b10exX" x="240" y="85">$8,563 per 100 TB on AWS, $0 on Cloudflare R2</text>
+        <rect x="720" y="67" width="120" height="26" rx="7" fill="#D9F99D"/>
+        <text class="b10exD" x="780" y="85" text-anchor="middle">dollars</text>
+
+        <text class="b10exL" x="40" y="121">2 · Format + catalog</text>
+        <text class="b10exX" x="240" y="121">row-level security in Unity Catalog does not transfer to Polaris</text>
+        <rect x="720" y="103" width="120" height="26" rx="7" fill="#334155"/>
+        <text class="b10exW" x="780" y="121" text-anchor="middle">work</text>
+
+        <text class="b10exL" x="40" y="157">3 · Orchestration</text>
+        <text class="b10exX" x="240" y="157">re-author every pipeline in another tool's model</text>
+        <rect x="720" y="139" width="120" height="26" rx="7" fill="#334155"/>
+        <text class="b10exW" x="780" y="157" text-anchor="middle">work</text>
+
+        <text class="b10exL" x="40" y="193">4 · Engine + transform</text>
+        <text class="b10exX" x="240" y="193">re-tune every query against different execution behaviour</text>
+        <rect x="720" y="175" width="120" height="26" rx="7" fill="#334155"/>
+        <text class="b10exW" x="780" y="193" text-anchor="middle">work</text>
+
+        <text class="b10exL" x="40" y="229">5 · Semantic + BI</text>
+        <text class="b10exX" x="240" y="229">redefine every metric - three months to a year of work</text>
+        <rect x="720" y="211" width="120" height="26" rx="7" fill="#334155"/>
+        <text class="b10exW" x="780" y="229" text-anchor="middle">work</text>
+
+        <text class="b10exL" x="40" y="265">6 · Compute + MLOps</text>
+        <text class="b10exX" x="240" y="265">re-register every model and rebuild the promotion gates</text>
+        <rect x="720" y="247" width="120" height="26" rx="7" fill="#334155"/>
+        <text class="b10exW" x="780" y="265" text-anchor="middle">work</text>
+
+        <text class="b10exL" x="40" y="301">7 · LLM gateway</text>
+        <text class="b10exX" x="240" y="301">repoint every app, and lose the traffic that was your eval set</text>
+        <rect x="720" y="283" width="120" height="26" rx="7" fill="#334155"/>
+        <text class="b10exW" x="780" y="301" text-anchor="middle">work</text>
+
+        <text class="b10exL" x="40" y="337">8 · Self-serve</text>
+        <text class="b10exX" x="240" y="337">redo the metadata work - the gap between 9.50% and 69.23%</text>
+        <rect x="720" y="319" width="120" height="26" rx="7" fill="#334155"/>
+        <text class="b10exW" x="780" y="337" text-anchor="middle">work</text>
+
+        <text class="b10exN" x="40" y="376">Seven of the eight exit costs are priced in work, and work appears on no price list.</text>
+        <text class="b10exN" x="40" y="396">Every other column describes the world if the decision was right. This one, if it was wrong.</text>
+        <text class="b10exN" x="40" y="416">Fill it in and you stop arguing about lock-in as a feeling.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - only one layer's exit is a number you can look up</figcaption>
+    </figure>
+
     <div class="callout win">
       <strong>★ Why the exit-cost column is the one that matters</strong>
       Every other column describes the world if the decision was right. The exit column describes the world if it was wrong, which is the only scenario a sponsor is actually worried about. It also makes lock-in arithmetic instead of rhetoric: <strong>b2's egress economics</strong> put a dollar figure on leaving a storage vendor, and <strong>b3's governance portability</strong> puts a work estimate on leaving a catalog. Fill this column in and you stop arguing about lock-in as a feeling.
@@ -246,6 +311,64 @@
       <div class="step"><p>Flip the <strong>direct-read</strong> lever, watch <strong>+$1,784/month, $21,402/year</strong> appear for exactly the same work on AWS's published egress tiers, and <strong>leave it off.</strong> That single lever is worth more than most cost-optimization programmes.</p></div>
       <div class="step"><p>Then sequence it. Write one line per quarter: <strong>which layer do you fund, and which persona does that unblock?</strong> The ladder already told you the shape - the data engineer needs three layers before anyone notices, the analyst needs five, and nobody is unblocked at all until layer three.</p></div>
     </div>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 436" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The monthly cost band of each of the eight platform layers at the teaching defaults. Storage is one thousand one hundred and seventy-eight dollars, the table format and catalog four hundred, orchestration six hundred, the engine and transform one thousand six hundred, the semantic layer and BI two thousand one hundred, compute and MLOps three thousand five hundred and seventeen which is the largest single line, the LLM gateway four hundred, and self-serve one thousand five hundred. The eight sum to eleven thousand two hundred and ninety-five dollars a month, or one hundred and thirty-five thousand five hundred and forty a year.">
+        <style>
+          .b10ctT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .b10ctK { font: 600 11.5px Inter, sans-serif; fill: #334155; }
+          .b10ctL { font: 600 12px Inter, sans-serif; fill: #1E293B; }
+          .b10ctV { font: 700 12px Inter, sans-serif; fill: #FFFFFF; }
+          .b10ctO { font: 700 12px Inter, sans-serif; fill: #334155; }
+          .b10ctN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+        </style>
+        <rect x="0" y="0" width="880" height="436" fill="#F8FAFC"/>
+        <text class="b10ctT" x="40" y="28">Where the money sits, layer by layer, at the teaching defaults</text>
+
+        <rect x="40" y="42" width="14" height="14" rx="3" fill="#64748B"/>
+        <text class="b10ctK" x="60" y="54">layers 1-2, unblock nobody</text>
+        <rect x="280" y="42" width="14" height="14" rx="3" fill="#334155"/>
+        <text class="b10ctK" x="300" y="54">unblocks a persona</text>
+        <rect x="560" y="42" width="14" height="14" rx="3" fill="#1E293B"/>
+        <text class="b10ctK" x="580" y="54">the largest single line</text>
+
+        <text class="b10ctL" x="240" y="95" text-anchor="end">1 · Storage</text>
+        <rect x="260" y="76" width="161" height="26" rx="5" fill="#64748B"/>
+        <text class="b10ctV" x="272" y="95">$1,178</text>
+
+        <text class="b10ctL" x="240" y="133" text-anchor="end">2 · Format + catalog</text>
+        <rect x="260" y="114" width="55" height="26" rx="5" fill="#64748B"/>
+        <text class="b10ctO" x="325" y="133">$400</text>
+
+        <text class="b10ctL" x="240" y="171" text-anchor="end">3 · Orchestration</text>
+        <rect x="260" y="152" width="82" height="26" rx="5" fill="#334155"/>
+        <text class="b10ctO" x="352" y="171">$600</text>
+
+        <text class="b10ctL" x="240" y="209" text-anchor="end">4 · Engine + transform</text>
+        <rect x="260" y="190" width="218" height="26" rx="5" fill="#334155"/>
+        <text class="b10ctV" x="272" y="209">$1,600</text>
+
+        <text class="b10ctL" x="240" y="247" text-anchor="end">5 · Semantic + BI</text>
+        <rect x="260" y="228" width="287" height="26" rx="5" fill="#334155"/>
+        <text class="b10ctV" x="272" y="247">$2,100</text>
+
+        <text class="b10ctL" x="240" y="285" text-anchor="end">6 · Compute + MLOps</text>
+        <rect x="260" y="266" width="480" height="26" rx="5" fill="#1E293B"/>
+        <text class="b10ctV" x="272" y="285">$3,517</text>
+
+        <text class="b10ctL" x="240" y="323" text-anchor="end">7 · LLM gateway</text>
+        <rect x="260" y="304" width="55" height="26" rx="5" fill="#334155"/>
+        <text class="b10ctO" x="325" y="323">$400</text>
+
+        <text class="b10ctL" x="240" y="361" text-anchor="end">8 · Self-serve</text>
+        <rect x="260" y="342" width="205" height="26" rx="5" fill="#334155"/>
+        <text class="b10ctV" x="272" y="361">$1,500</text>
+
+        <text class="b10ctN" x="40" y="398">Eight rows sum to $11,295 a month, $135,540 a year. Rate cards fetched 2026-08-06/07.</text>
+        <text class="b10ctN" x="40" y="418">At 50 TB the storage line is small and MLOps dominates. At 5 PB the arithmetic inverts.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - run it on your own volumes, because your spend concentrates elsewhere</figcaption>
+    </figure>
 
     <div class="infrabox" data-mode="ladder"></div>
 
